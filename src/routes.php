@@ -1,6 +1,6 @@
 <?php
 // Routes
-$app->get('/', function ($request, $response, $args) {
+$app->get('/', function ($request, $response) {
     // Sample log message
     $this->logger->info("LandPrice '/' route");
     //
@@ -16,5 +16,7 @@ $app->get('/', function ($request, $response, $args) {
         ["福岡県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"]
     ];
     // Render index view
-    return $this->view->render($response, 'top.twig', ["areas" => $areas, "prefectures" => $prefectures]);
+    return $this->view->render($response, 'top.twig', ["areas" => $areas, "leftMenus" => $prefectures]);
 });
+
+$app->get('/{prefecture}', 'Price\PrefectureController:showPricesFor')->setName('prefecture-price');

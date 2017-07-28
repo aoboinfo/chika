@@ -136,7 +136,7 @@
                         <li class="bold"><a class="collapsible-header waves-effect waves-cyan">{{ area }}</a>
                             <div class="collapsible-body">
                                 <ul>
-                                    {% for pref in prefectures[key] %}
+                                    {% for pref in leftMenus[key] %}
                                     <li><a href="{{ base_url() }}/{{ pref }}">{{ pref }}</a></li>
                                     {% endfor %}
                                 </ul>

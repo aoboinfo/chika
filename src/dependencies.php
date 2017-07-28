@@ -36,3 +36,7 @@ $container['db'] = function ($c) {
     }
     return $mysqli;
 };
+// controllers for business in this site
+$container['Price\PrefectureController'] = function ($c) {
+    return new Price\PrefectureController($c['view'], $c['router']);
+};
