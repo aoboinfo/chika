@@ -1,2 +1,8 @@
 {% extends 'layout.twig' %}
 {% block title %}{{ title }}{% endblock %}
+{% block price_target %}{{ price_target }}{% endblock %}
+{% block price_station %}{{ price_target }}{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript" src="fuga.js"></script>
+{% endblock %}

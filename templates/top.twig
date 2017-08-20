@@ -1,3 +1,13 @@
 {% extends 'layout.twig' %}
 {% set title = '日本全国地価' %}
+{% set price_target = '全国' %}
+{% set price_target = '全国' %}
 {% block title %}{{ title }}{% endblock %}
+{% block price_target %}{{ price_target }}{% endblock %}
+{% block price_station %}{{ price_target }}{% endblock %}
+{% block javascript %}
+    {# common javascript #}
+    {{ parent() }}
+    {# javascript for this page #}
+    <script type="text/javascript" src="js/top.js"></script>
+{% endblock %}

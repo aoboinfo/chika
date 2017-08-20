@@ -19,4 +19,4 @@ $app->get('/', function ($request, $response) {
     return $this->view->render($response, 'top.twig', ["areas" => $areas, "leftMenus" => $prefectures]);
 });
 
-$app->get('/{prefecture}', 'Price\PrefectureController:showPricesFor')->setName('prefecture-price');
+$app->get('/{prefecture}', 'Price\PrefectureController:showPricesFor')->setName('prefecture-price'); //setName: url name for later reference.

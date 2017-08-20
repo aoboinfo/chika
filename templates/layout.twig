@@ -133,7 +133,7 @@
                 <li class="no-padding">
                     <ul class="collapsible collapsible-accordion">
                         {% for key, area in areas %}
-                        <li class="bold"><a class="collapsible-header waves-effect waves-cyan">{{ area }}</a>
+                        <li class="bold"><a id="linkArea" class="collapsible-header waves-effect waves-cyan">{{ area }}</a>
                             <div class="collapsible-body">
                                 <ul>
                                     {% for pref in leftMenus[key] %}
@@ -224,7 +224,153 @@
                 <div id="chart-dashboard">
                     <div class="row">
                         <div class="col s12 m8 l8">
+                            <ol class="breadcrumbs">
+                                <li><a href="/">Dashboard</a></li>
+                                <li><a href="#">{% block price_target %}{% endblock %}</a></li>
+                            </ol>
                             <div class="card">
+                                <div class="card-move-up waves-effect waves-block waves-light">
+                                    <div class="move-up cyan darken-1">
+                                        <div>
+                                            <span class="chart-title white-text">地価公示</span>
+                                            <div class="chart-revenue cyan darken-2 white-text">
+                                                <p class="chart-revenue-total">$4,500.85</p>
+                                                <p class="chart-revenue-per"><i class="mdi-navigation-arrow-drop-up"></i> 21.80 %</p>
+                                            </div>
+                                            <div class="switch chart-revenue-switch right">
+                                                <label class="cyan-text text-lighten-5">
+                                                    Month
+                                                    <input type="checkbox">
+                                                    <span class="lever"></span> Year
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="card-action">
+                                            <canvas id="post_price_trending" height="100" class="center-align"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i class="mdi-content-add activator"></i></a>
+                                    <span class="chart-title black-text">地価調査</span>
+                                    <div class="trending-line-chart-wrapper">
+                                        <canvas id="trending-line-chart" height="100"></canvas>
+                                    </div>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title grey-text text-darken-4">Revenue by Month <i class="mdi-navigation-close right"></i></span>
+                                    <table class="responsive-table">
+                                        <thead>
+                                        <tr>
+                                            <th data-field="id">ID</th>
+                                            <th data-field="month">Month</th>
+                                            <th data-field="item-sold">Item Sold</th>
+                                            <th data-field="item-price">Item Price</th>
+                                            <th data-field="total-profit">Total Profit</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>January</td>
+                                            <td>122</td>
+                                            <td>100</td>
+                                            <td>$122,00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>February</td>
+                                            <td>122</td>
+                                            <td>100</td>
+                                            <td>$122,00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>March</td>
+                                            <td>122</td>
+                                            <td>100</td>
+                                            <td>$122,00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>April</td>
+                                            <td>122</td>
+                                            <td>100</td>
+                                            <td>$122,00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>May</td>
+                                            <td>122</td>
+                                            <td>100</td>
+                                            <td>$122,00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>June</td>
+                                            <td>122</td>
+                                            <td>100</td>
+                                            <td>$122,00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td>July</td>
+                                            <td>122</td>
+                                            <td>100</td>
+                                            <td>$122,00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8</td>
+                                            <td>August</td>
+                                            <td>122</td>
+                                            <td>100</td>
+                                            <td>$122,00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>9</td>
+                                            <td>Septmber</td>
+                                            <td>122</td>
+                                            <td>100</td>
+                                            <td>$122,00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>Octomber</td>
+                                            <td>122</td>
+                                            <td>100</td>
+                                            <td>$122,00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>11</td>
+                                            <td>November</td>
+                                            <td>122</td>
+                                            <td>100</td>
+                                            <td>$122,00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>12</td>
+                                            <td>December</td>
+                                            <td>122</td>
+                                            <td>100</td>
+                                            <td>$122,00.00</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m4 l4">
+                            <ol class="breadcrumbs">
+                                <li><a href="#">駅周辺地価ランキング</a></li>
+                                <li><a href="#">{% block price_station %}{% endblock %}</a></li>
+                            </ol>
+                            <div class="card">
+                                <div class="card-move-up teal waves-effect waves-block waves-light">
+                                    <div class="move-up">
+                                        <p class="margin white-text">Browser Stats</p>
+                                        <canvas id="trending-radar-chart" height="114"></canvas>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -424,7 +570,9 @@
 <script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
 <script type="text/javascript" src="js/plugins.min.js"></script>
 <script src="http://js.api.olp.yahooapis.jp/OpenLocalPlatform/V1/jsapi?appid=bvmPo3axg64fHgqVn6AemhUN60KOyTMPT3K1YYn9NmdpjEzTMTYOQ0UWXGIqz1c-" type="text/javascript" charset="UTF-8"></script>
-{% block javascript %} {% endblock %}
-
+{% block javascript %}
+    {# put common javascript here #}
+    <script type="text/javascript" src="js/site_common.js"></script>
+{% endblock %}
 </body>
 </html>
