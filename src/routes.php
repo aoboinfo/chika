@@ -20,3 +20,13 @@ $app->get('/', function ($request, $response) {
 });
 
 $app->get('/{prefecture}', 'Price\PrefectureController:showPricesFor')->setName('prefecture-price'); //setName: url name for later reference.
+//get price history at country, prefecture, id level
+/*$app->get('/avgs/[{city}/[{id}]]', function ($request, $response, $args) {
+    $prefecture = $request->getAttribute('city');
+    $itemID = $request->getAttribute('id');
+    $response->getBody()->write("Hello, $prefecture" . " " . $itemID);
+
+    return $response;
+});*/
+//
+$app->get('/avgs/[{prefecture}/[{id}]]', 'Service\PostedPriceService:historyPriceOf');

@@ -40,3 +40,7 @@ $container['db'] = function ($c) {
 $container['Price\PrefectureController'] = function ($c) {
     return new Price\PrefectureController($c['view'], $c['router'], $c['db']);
 };
+//Service for output json data of Draw on page.
+$container['Service\PostedPriceService'] = function ($c) {
+    return new Service\PostedPriceService($c['router'], $c['db']);
+};
