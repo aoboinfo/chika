@@ -28,7 +28,6 @@
 
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <!-- Let browser know website is optimized for mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -71,7 +70,7 @@
                 </div>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light translation-button" data-activates="translation-dropdown"><span class="language-select">公示＆調査</span></a></li>
-                    <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light toggle-fullscreen"><i class="mdi-action-settings-overscan"></i></a></li>
+                    <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light toggle-fullscreen"><i class="material-icons">settings_overscan</i></a></li>
                     <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light notification-button" data-activates="notifications-dropdown"><i class="mdi-social-notifications"><small class="notification-badge">5</small></i></a></li>
                     <li><a href="#" data-activates="chat-out" class="waves-effect waves-block waves-light chat-collapse"><i class="mdi-communication-chat"></i></a></li>
                 </ul>
@@ -230,20 +229,9 @@
                             </ol>
                             <div class="card">
                                 <div class="card-move-up waves-effect waves-block waves-light">
-                                    <div class="move-up cyan darken-1">
+                                    <div class="move-up green lighten-3">
                                         <div>
-                                            <span class="chart-title white-text">地価公示</span>
-                                            <div class="chart-revenue cyan darken-2 white-text">
-                                                <p class="chart-revenue-total">$4,500.85</p>
-                                                <p class="chart-revenue-per"><i class="mdi-navigation-arrow-drop-up"></i> 21.80 %</p>
-                                            </div>
-                                            <div class="switch chart-revenue-switch right">
-                                                <label class="cyan-text text-lighten-5">
-                                                    Month
-                                                    <input type="checkbox">
-                                                    <span class="lever"></span> Year
-                                                </label>
-                                            </div>
+                                            <span class="chart-title black-text">地価公示</span>
                                         </div>
                                         <div class="card-action">
                                             <canvas id="post_price_trending" height="100" class="center-align"></canvas>
@@ -254,7 +242,7 @@
                                     <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i class="mdi-content-add activator"></i></a>
                                     <span class="chart-title black-text">地価調査</span>
                                     <div class="trending-line-chart-wrapper">
-                                        <canvas id="trending-line-chart" height="100"></canvas>
+                                        <canvas id="survey_price_trendding" height="100"></canvas>
                                     </div>
                                 </div>
                                 <div class="card-reveal">
@@ -365,11 +353,69 @@
                                 <li><a href="#">{% block price_station %}{% endblock %}</a></li>
                             </ol>
                             <div class="card">
-                                <div class="card-move-up teal waves-effect waves-block waves-light">
+                                <div class="card-move-up teal lighten-2 waves-effect waves-block waves-light">
                                     <div class="move-up">
-                                        <p class="margin white-text">Browser Stats</p>
-                                        <canvas id="trending-radar-chart" height="114"></canvas>
+                                        <p class="margin white-text">高価格ランキング　トップ10</p>
                                     </div>
+                                    <table class="bordered white-text">
+                                        <thead>
+                                         <tr>
+                                            <th data-field="id">順位</th>
+                                            <th data-field="name">駅名</th>
+                                            <th data-field="price">地価平均</th>
+                                            <th data-field="tubo_price">坪単価平均</th>
+                                            <th data-field="rate">前年比</th>
+                                         </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for station  in  stationTop %}
+                                            <tr>
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ station.station }}</td>
+                                                <td>{{ station.price }}</td>
+                                                <td>{{ station.priceOfTubo }}</td>
+                                                {% if station.changeRate > 0 %}
+                                                    <td>+{{ station.changeRate }}%</td>
+                                                {% else %}
+                                                    <td>-{{ station.changeRate }}%</td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-move-up teal lighten-2 waves-effect waves-block waves-light">
+                                    <div class="move-up">
+                                        <p class="margin white-text">低価格ランキング　トップ10</p>
+                                    </div>
+                                    <table class="bordered white-text">
+                                        <thead>
+                                        <tr>
+                                            <th data-field="id">順位</th>
+                                            <th data-field="name">駅名</th>
+                                            <th data-field="price">地価平均</th>
+                                            <th data-field="tubo_price">坪単価平均</th>
+                                            <th data-field="rate">前年比</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for station  in  stationTop %}
+                                            <tr>
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ station.station }}</td>
+                                                <td>{{ station.price }}</td>
+                                                <td>{{ station.priceOfTubo }}</td>
+                                                {% if station.changeRate > 0 %}
+                                                    <td>+{{ station.changeRate }}%</td>
+                                                {% else %}
+                                                    <td>-{{ station.changeRate }}%</td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -569,7 +615,7 @@
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
 <script type="text/javascript" src="js/plugins.min.js"></script>
-<script type="text/javascript" src="js/Chart.min.js"></script>
+<script type="text/javascript" src="js/chart.min.js"></script>
 <script src="http://js.api.olp.yahooapis.jp/OpenLocalPlatform/V1/jsapi?appid=bvmPo3axg64fHgqVn6AemhUN60KOyTMPT3K1YYn9NmdpjEzTMTYOQ0UWXGIqz1c-" type="text/javascript" charset="UTF-8"></script>
 {% block javascript %}
     {# put common javascript here #}

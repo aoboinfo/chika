@@ -1,4 +1,6 @@
 <?php
+use Price\LandPrice;
+
 // Routes
 $app->get('/', function ($request, $response) {
     // Sample log message
@@ -16,7 +18,22 @@ $app->get('/', function ($request, $response) {
         ["福岡県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"]
     ];
     // Render index view
-    return $this->view->render($response, 'top.twig', ["areas" => $areas, "leftMenus" => $prefectures]);
+    $stationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0/3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from post_price where price1 <> 0 group by near_station order by price0";
+    //The top 20 stations
+    $stationTop10 = $this->db->query($stationQuery . " desc limit 10");
+    $stationsDesc = array();
+    //$avgPricesAsc = array();
+    while ($row = mysqli_fetch_assoc($stationTop10)) {
+        $landPrice = new LandPrice();
+        $landPrice->setStation($row["near_station"]);
+        $landPrice->setPrice($row["price_jp"]);
+        $landPrice->setPriceOfTubo($row["price_tubo"]);
+        $landPrice->setChangeRate($row["rate"]);
+        $stationsDesc[] = $landPrice;
+    }
+    $stationTop10->close();
+    //
+    return $this->view->render($response, 'top.twig', ["areas" => $areas, "leftMenus" => $prefectures, "stationTop"=>$stationsDesc]);
 });
 
 $app->get('/{prefecture}', 'Price\PrefectureController:showPricesFor')->setName('prefecture-price'); //setName: url name for later reference.
@@ -30,3 +47,4 @@ $app->get('/{prefecture}', 'Price\PrefectureController:showPricesFor')->setName(
 });*/
 //
 $app->get('/avgs/[{prefecture}/[{id}]]', 'Service\PostedPriceService:historyPriceOf');
+$app->get('/station/[{prefecture}/[{stationName}]]', 'Service\PostedPriceService:stationPrice');

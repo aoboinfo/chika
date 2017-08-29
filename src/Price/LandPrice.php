@@ -20,6 +20,24 @@ class LandPrice
     protected $status;
     protected $constructure;
     protected $usage;
+    //
+    protected $priceOfTubo; //坪単価
+
+    /**
+     * @return mixed
+     */
+    public function getPriceOfTubo()
+    {
+        return $this->priceOfTubo;
+    }
+
+    /**
+     * @param mixed $priceOfTubo
+     */
+    public function setPriceOfTubo($priceOfTubo)
+    {
+        $this->priceOfTubo = $priceOfTubo;
+    }
 
     /**
      * @return mixed
