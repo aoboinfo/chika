@@ -15,13 +15,56 @@ class PostedPriceService
 {
     private $router;
     private $db;
+    private $recCount;
+
+    /**
+     * @return mixed
+     */
+    public function getRecCount()
+    {
+        return $this->recCount;
+    }
+
+    /**
+     * @param mixed $recCount
+     */
+    public function setRecCount($recCount)
+    {
+        $this->recCount = $recCount;
+    }
 
     public function __construct(Router $router, Mysqli $db)
     {
         $this->db = $db;
         $this->router = $router;
     }
+    public function historyPriceL2 ($request, $response, $params) {
+        $prefecture = $request->getAttribute('prefecture');
+        $itemID = $request->getAttribute('id');
+        $queryStr = "";
+        if (is_null($prefecture) && is_null($itemID)) { //
+            $queryStr = "select year, ROUND(AVG(price)) as avg_price from survey_his where price <> 0 group by year order by year";
+        } else if (!is_null($prefecture) && is_null($itemID)) { //
+            $queryStr = "select ROUND(AVG(price)) as avg_price, year from survey_his where price <> 0 and prefecture = '" . $prefecture . "' group by year order by year";
+        } else {//
 
+        }
+        $allHistory = $this->db->query($queryStr);
+        $labels = array();
+        $prices = array();
+        while ($row = mysqli_fetch_assoc($allHistory)) {
+            $labels[] = $row["year"];
+            $prices[] = $row["avg_price"];
+        }
+        $allHistory->close();
+        //
+        $result = ["labels"=>$labels, "prices"=>$prices];
+        //
+        $res = $response->withJson($result)
+            ->withHeader('Content-type', 'application/json');
+        return $res;
+
+    }
     public function historyPriceOf ($request, $response, $params) {
        // $cities = $this->db->query("select distinct city from posted_price where address like '" . $params['prefecture'] . "%'");
         $prefecture = $request->getAttribute('prefecture');
@@ -43,6 +86,7 @@ class PostedPriceService
             $prices[] = $row["avg_price"];
         }
         $allHistory->close();
+        $this->setRecCount(count($labels));
         //
         $result = ["labels"=>$labels, "prices"=>$prices];
         //

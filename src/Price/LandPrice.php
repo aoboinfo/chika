@@ -18,7 +18,7 @@ class LandPrice
     protected $station;
     protected $distanceFromStation;
     protected $status;
-    protected $constructure;
+    protected $structure;
     protected $usage;
     //
     protected $priceOfTubo; //坪単価
@@ -154,17 +154,17 @@ class LandPrice
     /**
      * @return mixed
      */
-    public function getConstructure()
+    public function getStructure()
     {
-        return $this->constructure;
+        return $this->structure;
     }
 
     /**
-     * @param mixed $constructure
+     * @param mixed $structure
      */
-    public function setConstructure($constructure)
+    public function setStructure($structure)
     {
-        $this->constructure = $constructure;
+        $this->structure = $structure;
     }
 
     /**

@@ -228,120 +228,37 @@
                                 <li><a href="#">{% block price_target %}{% endblock %}</a></li>
                             </ol>
                             <div class="card">
-                                <div class="card-move-up waves-effect waves-block waves-light">
-                                    <div class="move-up green lighten-3">
-                                        <div>
-                                            <span class="chart-title black-text">地価公示</span>
-                                        </div>
-                                        <div class="card-action">
-                                            <canvas id="post_price_trending" height="100" class="center-align"></canvas>
-                                        </div>
+                                <div class="card-content green lighten-3">
+                                    <span class="chart-title black-text">地価公示</span>
+                                    <div class="trending-line-chart-wrapper">
+                                        <canvas id="post_price_trending" height="80"></canvas>
                                     </div>
                                 </div>
                                 <div class="card-content">
                                     <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i class="mdi-content-add activator"></i></a>
                                     <span class="chart-title black-text">地価調査</span>
                                     <div class="trending-line-chart-wrapper">
-                                        <canvas id="survey_price_trendding" height="100"></canvas>
+                                        <canvas id="survey_price_trendding" height="80"></canvas>
                                     </div>
                                 </div>
                                 <div class="card-reveal">
-                                    <span class="card-title grey-text text-darken-4">Revenue by Month <i class="mdi-navigation-close right"></i></span>
+                                    <span class="card-title grey-text text-darken-4">地価平均一覧表<i class="mdi-navigation-close right"></i></span>
                                     <table class="responsive-table">
                                         <thead>
                                         <tr>
-                                            <th data-field="id">ID</th>
-                                            <th data-field="month">Month</th>
-                                            <th data-field="item-sold">Item Sold</th>
-                                            <th data-field="item-price">Item Price</th>
-                                            <th data-field="total-profit">Total Profit</th>
+                                             <th data-field="year">年度</th>
+                                             <th data-field="month">地価公示平均</th>
+                                             <th data-field="item-sold">地価調査平均</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>January</td>
-                                            <td>122</td>
-                                            <td>100</td>
-                                            <td>$122,00.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>February</td>
-                                            <td>122</td>
-                                            <td>100</td>
-                                            <td>$122,00.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>March</td>
-                                            <td>122</td>
-                                            <td>100</td>
-                                            <td>$122,00.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>April</td>
-                                            <td>122</td>
-                                            <td>100</td>
-                                            <td>$122,00.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>May</td>
-                                            <td>122</td>
-                                            <td>100</td>
-                                            <td>$122,00.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>June</td>
-                                            <td>122</td>
-                                            <td>100</td>
-                                            <td>$122,00.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>July</td>
-                                            <td>122</td>
-                                            <td>100</td>
-                                            <td>$122,00.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>8</td>
-                                            <td>August</td>
-                                            <td>122</td>
-                                            <td>100</td>
-                                            <td>$122,00.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>9</td>
-                                            <td>Septmber</td>
-                                            <td>122</td>
-                                            <td>100</td>
-                                            <td>$122,00.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>10</td>
-                                            <td>Octomber</td>
-                                            <td>122</td>
-                                            <td>100</td>
-                                            <td>$122,00.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>11</td>
-                                            <td>November</td>
-                                            <td>122</td>
-                                            <td>100</td>
-                                            <td>$122,00.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>12</td>
-                                            <td>December</td>
-                                            <td>122</td>
-                                            <td>100</td>
-                                            <td>$122,00.00</td>
-                                        </tr>
+                                        {% for price_av in avgPrices %}
+                                            <tr>
+                                                <td>{{ price_av.year }}</td>
+                                                <td>A</td>
+                                                <td>B</td>
+                                            </tr>
+                                        {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -376,6 +293,8 @@
                                                 <td>{{ station.priceOfTubo }}</td>
                                                 {% if station.changeRate > 0 %}
                                                     <td>+{{ station.changeRate }}%</td>
+                                                {% elseif station.changeRate == 0 %}
+                                                    <td>{{ station.changeRate }}%</td>
                                                 {% else %}
                                                     <td>-{{ station.changeRate }}%</td>
                                                 {% endif %}
@@ -401,7 +320,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for station  in  stationTop %}
+                                        {% for station  in  stationLow %}
                                             <tr>
                                                 <td>{{ loop.index }}</td>
                                                 <td>{{ station.station }}</td>
@@ -409,6 +328,8 @@
                                                 <td>{{ station.priceOfTubo }}</td>
                                                 {% if station.changeRate > 0 %}
                                                     <td>+{{ station.changeRate }}%</td>
+                                                {% elseif station.changeRate == 0 %}
+                                                    <td>{{ station.changeRate }}%</td>
                                                 {% else %}
                                                     <td>-{{ station.changeRate }}%</td>
                                                 {% endif %}

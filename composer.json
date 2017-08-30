@@ -34,7 +34,8 @@
             "Tests\\": "tests/",
             "Price\\": "src/Price",
             "Service\\": "src/Service",
-            "LandPrice\\": "src/LandPrice"
+            "LandPrice\\": "src/LandPrice",
+            "AveragePrice\\": "src/AveragePrice"
         }
     },
 	"scripts": {

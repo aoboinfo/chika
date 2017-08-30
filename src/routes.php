@@ -1,5 +1,6 @@
 <?php
 use Price\LandPrice;
+use Price\AveragePrice;
 
 // Routes
 $app->get('/', function ($request, $response) {
@@ -22,7 +23,7 @@ $app->get('/', function ($request, $response) {
     //The top 20 stations
     $stationTop10 = $this->db->query($stationQuery . " desc limit 10");
     $stationsDesc = array();
-    //$avgPricesAsc = array();
+    //
     while ($row = mysqli_fetch_assoc($stationTop10)) {
         $landPrice = new LandPrice();
         $landPrice->setStation($row["near_station"]);
@@ -33,7 +34,51 @@ $app->get('/', function ($request, $response) {
     }
     $stationTop10->close();
     //
-    return $this->view->render($response, 'top.twig', ["areas" => $areas, "leftMenus" => $prefectures, "stationTop"=>$stationsDesc]);
+    $stationLow10 = $this->db->query($stationQuery .  " limit 10");
+    $stationAsc = array();
+    //
+    while ($row = mysqli_fetch_assoc($stationLow10)) {
+        $landPrice = new LandPrice();
+        $landPrice->setStation($row["near_station"]);
+        $landPrice->setPrice($row["price_jp"]);
+        $landPrice->setPriceOfTubo($row["price_tubo"]);
+        $landPrice->setChangeRate($row["rate"]);
+        $stationAsc[] = $landPrice;
+    }
+    $stationLow10->close();
+
+    //posted average price/year
+    $posted_avg_qry = "select year as my, FORMAT(ROUND(AVG(price)),0) as mavg from posted_his where price <> 0 group by year order by my";
+    $posted_avg = $this->db->query($posted_avg_qry);
+    //
+    $averagePrices = array();
+    //
+    while ($row = mysqli_fetch_row($posted_avg)) {
+        $averagePrice = new AveragePrice();
+        $averagePrice->setYear($row["my"]);
+        $averagePrice->setPostedPrice($row["mavg"]);
+        $this->logger->info("avgPrice:" . $row["my"] . "/" . $row["mavg"]);
+        $averagePrices[] = $averagePrice;
+    }
+    $posted_avg->close();
+
+    $survey_avg = $this->db->query("select year, FORMAT(ROUND(AVG(price)),0) as avg_price from survey_his where price <> 0 group by year order by year");
+    $index = 0;
+    while ($row = mysqli_fetch_row($survey_avg)) {
+        $averagePrice = $averagePrices[$index];
+        $averagePrice->setSurveyPrice($row["avg_price"]);
+        $index++;
+    }
+    $survey_avg->close();
+    //
+    return $this->view->render($response, 'top.twig',
+        [
+            "areas" => $areas,
+            "leftMenus" => $prefectures,
+            "stationTop" => $stationsDesc,
+            "stationLow" => $stationAsc
+        ]
+    );
 });
 
 $app->get('/{prefecture}', 'Price\PrefectureController:showPricesFor')->setName('prefecture-price'); //setName: url name for later reference.
@@ -47,4 +92,5 @@ $app->get('/{prefecture}', 'Price\PrefectureController:showPricesFor')->setName(
 });*/
 //
 $app->get('/avgs/[{prefecture}/[{id}]]', 'Service\PostedPriceService:historyPriceOf');
+$app->get('/avg2/[{prefecture}/[{id}]]', 'Service\PostedPriceService:historyPriceL2');
 $app->get('/station/[{prefecture}/[{stationName}]]', 'Service\PostedPriceService:stationPrice');

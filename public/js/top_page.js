@@ -12,7 +12,7 @@ window.onload = function () {
 
     drawAvgPrice(
         'bar',
-        "http://www.chika.com/avgs/",
+        "http://www.chika.com/avg2/",
         document.getElementById("survey_price_trendding"),
         'rgb(25, 118, 210)', //background color
         'rgb(25, 118, 210)' //border color
