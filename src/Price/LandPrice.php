@@ -17,11 +17,27 @@ class LandPrice
     protected $address;
     protected $station;
     protected $distanceFromStation;
-    protected $status;
     protected $structure;
-    protected $usage;
+    protected $currentUsage;
     //
     protected $priceOfTubo; //坪単価
+    protected $id;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     /**
      * @return mixed
@@ -134,23 +150,6 @@ class LandPrice
     {
         $this->distanceFromStation = $distanceFromStation;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param mixed $status
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-    }
-
     /**
      * @return mixed
      */
@@ -170,17 +169,19 @@ class LandPrice
     /**
      * @return mixed
      */
-    public function getUsage()
+    public function getCurrentUsage()
     {
-        return $this->usage;
+        return $this->currentUsage;
     }
 
     /**
-     * @param mixed $usage
+     * @param mixed $currentUsage
      */
-    public function setUsage($usage)
+    public function setCurrentUsage($currentUsage)
     {
-        $this->usage = $usage;
+        $this->currentUsage = $currentUsage;
     }
+
+
 
 }

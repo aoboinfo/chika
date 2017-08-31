@@ -231,38 +231,42 @@
                                 <div class="card-content green lighten-3">
                                     <span class="chart-title black-text">地価公示</span>
                                     <div class="trending-line-chart-wrapper">
-                                        <canvas id="post_price_trending" height="80"></canvas>
+                                        <canvas id="post_price_trending" height="90"></canvas>
                                     </div>
                                 </div>
                                 <div class="card-content">
                                     <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i class="mdi-content-add activator"></i></a>
                                     <span class="chart-title black-text">地価調査</span>
                                     <div class="trending-line-chart-wrapper">
-                                        <canvas id="survey_price_trendding" height="80"></canvas>
+                                        <canvas id="survey_price_trendding" height="90"></canvas>
                                     </div>
                                 </div>
                                 <div class="card-reveal">
-                                    <span class="card-title grey-text text-darken-4">地価平均一覧表<i class="mdi-navigation-close right"></i></span>
+                                    <span class="card-title grey-text text-darken-4">各年度地価平均一覧表<i class="mdi-navigation-close right"></i></span>
                                     <table class="responsive-table">
                                         <thead>
                                         <tr>
                                              <th data-field="year">年度</th>
-                                             <th data-field="month">地価公示平均</th>
-                                             <th data-field="item-sold">地価調査平均</th>
+                                             <th data-field="posted_price_m">地価公示(円/m²)</th>
+                                             <th data-field="survey_price_m">地価調査(円/m²)</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for price_av in avgPrices %}
+                                        {% for avgPrice in avgPrices %}
                                             <tr>
-                                                <td>{{ price_av.year }}</td>
-                                                <td>A</td>
-                                                <td>B</td>
+                                                <td>{{ avgPrice.year }}</td>
+                                                <td>{{ avgPrice.postedPrice }}</td>
+                                                {% if avgPrice.surveyPrice !='' %}
+                                                    <td>{{ avgPrice.surveyPrice }}</td>
+                                                {% endif %}
                                             </tr>
                                         {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
+                            <!-- this block is used for different section -->
+                            {% block category %}{% endblock %}
                         </div>
                         <div class="col s12 m4 l4">
                             <ol class="breadcrumbs">
@@ -272,7 +276,7 @@
                             <div class="card">
                                 <div class="card-move-up teal lighten-2 waves-effect waves-block waves-light">
                                     <div class="move-up">
-                                        <p class="margin white-text">高価格ランキング　トップ10</p>
+                                        <p class="margin white-text">地価公示高価格ランキング　トップ10</p>
                                     </div>
                                     <table class="bordered white-text">
                                         <thead>
@@ -307,7 +311,7 @@
                             <div class="card">
                                 <div class="card-move-up teal lighten-2 waves-effect waves-block waves-light">
                                     <div class="move-up">
-                                        <p class="margin white-text">低価格ランキング　トップ10</p>
+                                        <p class="margin white-text">地価公示・低価格ランキング　トップ10</p>
                                     </div>
                                     <table class="bordered white-text">
                                         <thead>

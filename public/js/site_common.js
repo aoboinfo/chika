@@ -14,7 +14,7 @@ function drawAvgPrice(type, targetUrl, chartObj, backgroundColor, borderColor) {
                     data: {
                         labels: result.labels,
                         datasets: [{
-                            label: "平均地価（円/m²）",
+                            label: "地価平均（円/m²）",
                             backgroundColor: backgroundColor,
                             borderColor: borderColor,
                             data: result.prices
