@@ -40,6 +40,21 @@ function drawPriceChangeRate(targetUrl, chartObj) {
                                     fontColor:"white",
                                     fontSize: 17
                                 }
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        fontColor: "white",
+                                        fontSize: 17
+                                    }
+                                }],
+                                xAxes: [{
+                                    ticks: {
+                                        fontColor: "white",
+                                        stepSize: 1,
+                                        fontSize: 14
+                                    }
+                                }]
                             }
                         }
                     }
