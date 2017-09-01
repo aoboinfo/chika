@@ -94,43 +94,39 @@ class PostedPriceService
             ->withHeader('Content-type', 'application/json');
         return $res;
     }
-    //Price information for station.
-    public function stationPrice ($request, $response, $params) {
+    //Price information for changeRate.
+    public function changeRate ($request, $response, $params) {
         $prefecture = $request->getAttribute('prefecture');
-        $stationName = $request->getAttribute('stationName');
+        $cityName = $request->getAttribute('city');
         //
-        $queryStrDesc = ""; //降順
-        $queryStrAsc = ""; //昇順
-        //
-        if (is_null($prefecture)) {
-            $queryStrDesc = "select near_station, avg(price0) as price from post_price group by near_station order by price desc";
-            $queryStrAsc = "select near_station, avg(price0) as price from post_price group by near_station order by price";
-        } else if (!is_null($prefecture) && is_null($stationName)) {
-            $queryStrDesc = "select near_station, avg(price0) as price from post_price where address like '" . $prefecture . "%' group by near_station order by price desc";
-            $queryStrAsc = "select near_station, avg(price0) as price from post_price where address like '" . $prefecture . "%' group by near_station order by price";
-        } else {
+        $changeRatePost = null;
+        $changeRateSurvey = null;
+        $postChangeRateQuery = "select a.prefecture as label, format(100*(avg(a.price) - avg(b.price))/avg(b.price), 2) as rate from posted_his as a inner join posted_his as b on a.id = b.id";
+        $surveyChangeRateQuery = "select a.prefecture, format(100*(avg(a.price) - avg(b.price))/avg(b.price), 2) as rate from survey_his as a inner join survey_his as b on a.id = b.id";
+        if (is_null($prefecture) && is_null($cityName)) {
+            $changeRatePost = $this->db->query($postChangeRateQuery . " where a.year = 2017 and b.year = 2016 and b.price <> 0 group by a.prefecture order by a.prefecture desc");
+            $changeRateSurvey = $this->db->query($surveyChangeRateQuery . " where a.year = 2016 and b.year = 2015 and b.price <> 0 group by a.prefecture order by a.prefecture desc");
+        } else if (!is_null($prefecture) && is_null($cityName)) {//for prefecture
+
+        } else {//for city
 
         }
-        $stationPricesDesc = $this->db->query($queryStrDesc);
-        $stationsDesc = array();
-        $avgPricesDesc = array();
-        while ($row = mysqli_fetch_assoc($stationPricesDesc)) {
-            $stationsDesc[] = $row["near_station"];
-            $avgPricesDesc[] = $row["price"];
+        $labels = array();
+        $ratesPost = array();
+        while ($row = mysqli_fetch_assoc($changeRatePost)) {
+            $labels[] = $row["label"];
+            $ratesPost[] = $row["rate"];
+        }
+        $changeRatePost->close();
+        //
+        $ratesSurvey = array();
+        while ($row = mysqli_fetch_assoc($changeRateSurvey)) {
+            $ratesSurvey[] = $row["rate"];
         }
         //
-        $stationPricesAsc = $this->db->query($queryStrAsc);
-        $stationsAsc = array();
-        $avgPricesAsc = array();
-        while ($row = mysqli_fetch_assoc($stationPricesAsc)) {
-            $stationsAsc[] = $row["near_station"];
-            $avgPricesAsc[] = $row["price"];
-        }
-
-        $result = ["stationDesc"=> $stationsDesc, "priceDesc" =>$avgPricesDesc, "stationAsc" =>$stationsAsc, "priceAsc"=>$avgPricesAsc];
-        //
+        $result = ["labels" => $labels, "postRates" => $ratesPost, "surveyRates"=>$ratesSurvey];
         $res = $response->withJson($result)
-            ->withHeader('Content-type', 'application/json');
+            ->withHeader('Content-type', 'application/json;charset=utf-8');
         return $res;
     }
 

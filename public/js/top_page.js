@@ -17,4 +17,9 @@ window.onload = function () {
         'rgb(25, 118, 210)', //background color
         'rgb(25, 118, 210)' //border color
     );
+    changeRateDataSets[0].backgroundColor = 'rgb(255, 99, 132)';
+    changeRateDataSets[0].borderColor = 'rgb(255, 99, 132)';
+    changeRateDataSets[1].backgroundColor = 'rgb(25, 118, 210)';
+    changeRateDataSets[1].borderColor = 'rgb(25, 118, 210)';
+    drawPriceChangeRate('http://www.chika.com/changeRate/', document.getElementById("price_change_rate"));
 }

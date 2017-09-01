@@ -16,4 +16,4 @@ $app->get('/{prefecture}', 'Price\PrefectureController:showPricesFor')->setName(
 //
 $app->get('/avgs/[{prefecture}/[{id}]]', 'Service\PostedPriceService:historyPriceOf');
 $app->get('/avg2/[{prefecture}/[{id}]]', 'Service\PostedPriceService:historyPriceL2');
-$app->get('/station/[{prefecture}/[{stationName}]]', 'Service\PostedPriceService:stationPrice');
+$app->get('/changeRate/[{prefecture}/[{city}]]', 'Service\PostedPriceService:changeRate');

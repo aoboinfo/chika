@@ -231,14 +231,14 @@
                                 <div class="card-content green lighten-3">
                                     <span class="chart-title black-text">地価公示</span>
                                     <div class="trending-line-chart-wrapper">
-                                        <canvas id="post_price_trending" height="90"></canvas>
+                                        <canvas id="post_price_trending" height="95"></canvas>
                                     </div>
                                 </div>
                                 <div class="card-content">
                                     <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i class="mdi-content-add activator"></i></a>
                                     <span class="chart-title black-text">地価調査</span>
                                     <div class="trending-line-chart-wrapper">
-                                        <canvas id="survey_price_trendding" height="90"></canvas>
+                                        <canvas id="survey_price_trendding" height="95"></canvas>
                                     </div>
                                 </div>
                                 <div class="card-reveal">
@@ -274,7 +274,7 @@
                                 <li><a href="#">{% block price_station %}{% endblock %}</a></li>
                             </ol>
                             <div class="card">
-                                <div class="card-move-up teal lighten-2 waves-effect waves-block waves-light">
+                                <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
                                     <div class="move-up">
                                         <p class="margin white-text">地価公示高価格ランキング　トップ10</p>
                                     </div>
@@ -309,7 +309,7 @@
                                 </div>
                             </div>
                             <div class="card">
-                                <div class="card-move-up teal lighten-2 waves-effect waves-block waves-light">
+                                <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
                                     <div class="move-up">
                                         <p class="margin white-text">地価公示・低価格ランキング　トップ10</p>
                                     </div>
@@ -345,6 +345,8 @@
                             </div>
                         </div>
                     </div>
+                    {% block rateArea %} {% endblock %}
+                    {% block mapArea %} {% endblock %}
                 </div>
                 <!--chart dashboard end-->
                 <!-- //////////////////////////////////////////////////////////////////////////// -->

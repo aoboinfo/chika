@@ -1,6 +1,56 @@
 /**
  * Created by shutoukin on 2017/08/19.
  */
+/**
+ * Draw price change rate.
+ */
+var changeRateDataSets = [
+    {
+        label:'地価公示(H29)',
+        backgroundColor:'',
+        borderColor:'',
+        borderWidth:1,
+        data:null
+    }, {
+        label:'地価調査(H28)',
+        backgroundColor:'',
+        borderColor:'',
+        borderWidth:1,
+        data:null
+    }
+]; //global data for two type bars
+
+function drawPriceChangeRate(targetUrl, chartObj) {
+    $.ajax (
+        {
+            url : targetUrl,
+            type: "GET",
+            success: function (result) {
+                changeRateDataSets[0].data = result.postRates;
+                changeRateDataSets[1].data = result.surveyRates;
+                var rateChart = new Chart(chartObj.getContext("2d"), {
+                        type: 'bar',
+                        data: {
+                            labels: result.labels,
+                            datasets:changeRateDataSets
+                        },
+                        options: {
+                            legend: {
+                                labels: {
+                                    fontColor:"white",
+                                    fontSize: 17
+                                }
+                            }
+                        }
+                    }
+                );
+            }
+        }
+    );
+}
+/*
+* Drawing bar for average prices of every year.
+* */
 function drawAvgPrice(type, targetUrl, chartObj, backgroundColor, borderColor) {
     $.ajax(
         {

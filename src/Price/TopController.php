@@ -93,24 +93,55 @@ class TopController
             $index++;
         }
         $survey_avg->close();
+        /*Ranking area*/
+        $postedQuery10 = "select prefecture, round(avg(price)) as pre_price, round(avg(price) * 3.305785) as tubo_price  from posted_his where year = 2017 group by prefecture order by pre_price";
         //top 10 prefecture
-        $top10PrefecturyQry = $this->db->query("select prefecture, round(avg(price)) as pre_price from posted_his where year = 2017 group by prefecture order by pre_price desc limit 10");
+        $top10PrefectureQry = $this->db->query($postedQuery10 . " desc limit 10");
         $postedTop10Pref = array();
-        while ($row = mysqli_fetch_assoc($top10PrefecturyQry)) {
+        while ($row = mysqli_fetch_assoc($top10PrefectureQry)) {
             $landPrice = new LandPrice();
             $landPrice->setPrice("¥" . number_format($row["pre_price"]));
             $landPrice->setAddress($row["prefecture"]);
+            $landPrice->setPriceOfTubo("¥" . number_format($row["tubo_price"]));
             $postedTop10Pref[] = $landPrice;
         }
+        $top10PrefectureQry->close();
         //low 10 prefecture
-        $low10PrefecturyQry = $this->db->query("select prefecture, round(avg(price)) as pre_price from posted_his where year = 2017 group by prefecture order by pre_price limit 10");
+        $low10PrefecturyQry = $this->db->query($postedQuery10 . " limit 10");
         $postedLow10Pref = array();
         while ($row = mysqli_fetch_assoc($low10PrefecturyQry)) {
             $landPrice = new LandPrice();
             $landPrice->setPrice("¥" . number_format($row["pre_price"]));
             $landPrice->setAddress($row["prefecture"]);
+            $landPrice->setPriceOfTubo("¥" . number_format($row["tubo_price"]));
             $postedLow10Pref[] = $landPrice;
         }
+        $low10PrefecturyQry->close();
+        //
+        $survey10Query = "select prefecture, round(avg(price)) as pre_price, round(avg(price) * 3.305785) as tubo_price from survey_his where year = 2016 group by prefecture order by pre_price";
+        //
+        $top10SurveyPrefectureQry = $this->db->query($survey10Query . " desc limit 10");
+        $surveyTop10Pref = array();
+        while ($row = mysqli_fetch_assoc($top10SurveyPrefectureQry)) {
+            $landPrice = new LandPrice();
+            $landPrice->setPrice("¥" . number_format($row["pre_price"]));
+            $landPrice->setAddress($row["prefecture"]);
+            $landPrice->setPriceOfTubo("¥" . number_format($row["tubo_price"]));
+            $surveyTop10Pref[] = $landPrice;
+        }
+        $top10SurveyPrefectureQry->close();
+        //
+        $low10SurveyPrefectureQry = $this->db->query($survey10Query . " limit 10");
+        $surveyLow10Pref = array();
+        while ($row = mysqli_fetch_assoc($low10SurveyPrefectureQry)) {
+            $landPrice = new LandPrice();
+            $landPrice->setPrice("¥" . number_format($row["pre_price"]));
+            $landPrice->setAddress($row["prefecture"]);
+            $landPrice->setPriceOfTubo("¥" . number_format($row["tubo_price"]));
+            $surveyLow10Pref[] = $landPrice;
+        }
+        $low10SurveyPrefectureQry->close();
+
         //render the top page
         return $this->view->render($response, 'top.twig',
             [
@@ -120,7 +151,9 @@ class TopController
                 "stationLow" => $stationAsc,
                 "avgPrices" => $averagePrices,
                 "postTopPref" => $postedTop10Pref,
-                "postLowPref" => $postedLow10Pref
+                "postLowPref" => $postedLow10Pref,
+                "surveyTopPref" => $surveyTop10Pref,
+                "surveyLowPref" => $surveyLow10Pref
             ]
         );
     }
