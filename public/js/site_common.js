@@ -4,7 +4,7 @@
 /**
  * Draw price change rate.
  */
-var changeRateDataSets = [
+var changeRateDataSets = [//global data for two type bars
     {
         label:'地価公示(H29)',
         backgroundColor:'',
@@ -18,7 +18,23 @@ var changeRateDataSets = [
         borderWidth:1,
         data:null
     }
-]; //global data for two type bars
+];
+
+var landPriceDataSets = [
+    {
+        label:'地価公示',
+        backgroundColor:'',
+        borderColor:'',
+        borderWidth:1,
+        data:null
+    }, {
+        label:'地価調査',
+        backgroundColor:'',
+        borderColor:'',
+        borderWidth:1,
+        data:null
+    }
+];
 
 function drawPriceChangeRate(targetUrl, chartObj) {
     $.ajax (
@@ -66,24 +82,21 @@ function drawPriceChangeRate(targetUrl, chartObj) {
 /*
 * Drawing bar for average prices of every year.
 * */
-function drawAvgPrice(type, targetUrl, chartObj, backgroundColor, borderColor) {
+function drawAvgPrice(type, targetUrl, chartObj) {
     $.ajax(
         {
             url : targetUrl,
             type : "GET",
             success: function (result) {
+                landPriceDataSets[0].data = result.postPrices;
+                landPriceDataSets[1].data = result.surveyPrices;
                 var chart = new Chart(chartObj.getContext("2d"), {
                     // The type of chart we want to create
                     type: type,
                     // The data for our dataset
                     data: {
                         labels: result.labels,
-                        datasets: [{
-                            label: "地価平均（円/m²）",
-                            backgroundColor: backgroundColor,
-                            borderColor: borderColor,
-                            data: result.prices
-                        }]
+                        datasets:landPriceDataSets
                     },
                     //Configuration options go here
                     options: {

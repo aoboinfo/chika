@@ -69,26 +69,42 @@ class PostedPriceService
        // $cities = $this->db->query("select distinct city from posted_price where address like '" . $params['prefecture'] . "%'");
         $prefecture = $request->getAttribute('prefecture');
         $itemID = $request->getAttribute('id');
-        $queryStr = "";
-
+        //
+        $commonQuery = "select year, ROUND(AVG(price)) as avg_price from";
+        $postPriceQuery = ""; //公示
+        $surveyPriceQuery = ""; //調査
+        //
         if (is_null($prefecture) && is_null($itemID)) { //
-            $queryStr = "select year, ROUND(AVG(price)) as avg_price from posted_his where price <> 0 group by year order by year";
+            $postPriceQuery = $commonQuery . " posted_his where price <> 0 group by year order by year";
+            $surveyPriceQuery = $commonQuery . " survey_his where price <> 0 group by year order by year";
         } else if (!is_null($prefecture) && is_null($itemID)) { //
-            $queryStr = "select ROUND(AVG(price)) as avg_price, year from posted_his where price <> 0 and prefecture = '" . $prefecture . "' group by year order by year";
+            $postPriceQuery = $commonQuery . " posted_his where price <> 0 and prefecture = '" . $prefecture . "' group by year order by year";
+            $surveyPriceQuery = $commonQuery . " survey_his where price <> 0 and prefecture = '" . $prefecture . "' group by year order by year";
         } else {//
 
         }
-        $allHistory = $this->db->query($queryStr);
+        //post prices
+        $postHistory = $this->db->query($postPriceQuery);
         $labels = array();
-        $prices = array();
-        while ($row = mysqli_fetch_assoc($allHistory)) {
+        $postPrices = array();
+        while ($row = mysqli_fetch_assoc($postHistory)) {
             $labels[] = $row["year"];
-            $prices[] = $row["avg_price"];
+            $postPrices[] = $row["avg_price"];
         }
-        $allHistory->close();
+        $postHistory->close();
         $this->setRecCount(count($labels));
         //
-        $result = ["labels"=>$labels, "prices"=>$prices];
+        //survey prices
+        $surveyHistory = $this->db->query($surveyPriceQuery);
+        $surveyPrices = array();
+        while ($row = mysqli_fetch_assoc($surveyHistory)) {
+            $surveyPrices[] = $row["avg_price"];
+        }
+        for ($i = count($surveyPrices); $i < $this->getRecCount(); $i++) {
+            $surveyPrices[] = "0";
+        }
+        //
+        $result = ["labels"=>$labels, "postPrices"=>$postPrices, "surveyPrices"=>$surveyPrices];
         //
         $res = $response->withJson($result)
             ->withHeader('Content-type', 'application/json');
