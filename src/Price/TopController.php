@@ -42,10 +42,10 @@ class TopController
             ["徳島県","香川県","愛媛県","高知県"],
             ["福岡県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"]
         ];
-        // Render index view
-        $stationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from post_price where price1 <> 0 group by near_station order by price0";
-        //The top 20 stations
-        $stationTop10 = $this->db->query($stationQuery . " desc limit 10");
+        //Render index view
+        $postStationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from post_price where price1 <> 0 group by near_station order by price0";
+        //The top 10 stations
+        $stationTop10 = $this->db->query($postStationQuery . " desc limit 10");
         $stationsDesc = array();
         //
         while ($row = mysqli_fetch_assoc($stationTop10)) {
@@ -58,7 +58,7 @@ class TopController
         }
         $stationTop10->close();
         //
-        $stationLow10 = $this->db->query($stationQuery .  " limit 10");
+        $stationLow10 = $this->db->query($postStationQuery .  " limit 10");
         $stationAsc = array();
         //
         while ($row = mysqli_fetch_assoc($stationLow10)) {
@@ -70,6 +70,33 @@ class TopController
             $stationAsc[] = $landPrice;
         }
         $stationLow10->close();
+        //survey station
+        $surveyStationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from survey_price where price1 <> 0 group by near_station order by price0";
+        //The top 10 stations
+        $surveyStationTop10 = $this->db->query($surveyStationQuery . " desc limit 10");
+        $surveyStationsDesc = array();
+        while ($row = mysqli_fetch_assoc($surveyStationTop10)) {
+            $landPrice = new LandPrice();
+            $landPrice->setStation($row["near_station"]);
+            $landPrice->setPrice($row["price_jp"]);
+            $landPrice->setPriceOfTubo($row["price_tubo"]);
+            $landPrice->setChangeRate($row["rate"]);
+            $surveyStationsDesc[] = $landPrice;
+        }
+        $surveyStationTop10->close();
+
+        $surveyStationLow10 = $this->db->query($surveyStationQuery . " limit 10");
+        $surveyStationsAsc = array();
+        //
+        while ($row = mysqli_fetch_assoc($surveyStationLow10)) {
+            $landPrice = new LandPrice();
+            $landPrice->setStation($row["near_station"]);
+            $landPrice->setPrice($row["price_jp"]);
+            $landPrice->setPriceOfTubo($row["price_tubo"]);
+            $landPrice->setChangeRate($row["rate"]);
+            $surveyStationsAsc[] = $landPrice;
+        }
+        $surveyStationLow10->close();
         //
         //posted average price/year
         $posted_avg = $this->db->query("select year, FORMAT(ROUND(AVG(price)),0) as avg_price from posted_his where price <> 0 group by year order by year");
@@ -149,11 +176,13 @@ class TopController
                 "leftMenus" => $prefectures,
                 "stationTop" => $stationsDesc,
                 "stationLow" => $stationAsc,
+                "surveyStationTop" => $surveyStationsDesc,
+                "surveyStationLow" => $surveyStationsAsc,
                 "avgPrices" => $averagePrices,
                 "postTopPref" => $postedTop10Pref,
                 "postLowPref" => $postedLow10Pref,
                 "surveyTopPref" => $surveyTop10Pref,
-                "surveyLowPref" => $surveyLow10Pref
+                "surveyLowPref" => $surveyLow10Pref,
             ]
         );
     }

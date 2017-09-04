@@ -45,6 +45,12 @@
     <link href="{{ base_url() }}/css/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="{{ base_url() }}/css/jquery-jvectormap.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="{{ base_url() }}/css/chartist.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+
+    <style>
+        .aoboAds {width:320px; height:100px;}
+        @media(min-width:500px) {.aoboAds {width:468px;height:60px;}}
+        @media(min-width:800px) {.aoboAds {width:728px;height:90px;}}　
+    </style>
 </head>
 <body>
 <!-- Start Page Loading -->
@@ -264,82 +270,15 @@
                             <!-- this block is used for different section -->
                             {% block category %}{% endblock %}
                         </div>
+                        <!-- The left 1/3 section area  -->
                         <div class="col s12 m4 l4">
-                            <ol class="breadcrumbs">
-                                <li><a href="#">駅周辺地価ランキング</a></li>
-                                <li><a href="#">{% block price_station %}{% endblock %}</a></li>
-                            </ol>
-                            <div class="card">
-                                <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
-                                    <div class="move-up">
-                                        <p class="margin white-text">地価公示高価格ランキング　トップ10</p>
-                                    </div>
-                                    <table class="bordered white-text">
-                                        <thead>
-                                         <tr>
-                                            <th data-field="id">順位</th>
-                                            <th data-field="name">駅名</th>
-                                            <th data-field="price">地価平均</th>
-                                            <th data-field="tubo_price">坪単価平均</th>
-                                            <th data-field="rate">前年比</th>
-                                         </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for station  in  stationTop %}
-                                            <tr>
-                                                <td>{{ loop.index }}</td>
-                                                <td>{{ station.station }}</td>
-                                                <td>{{ station.price }}</td>
-                                                <td>{{ station.priceOfTubo }}</td>
-                                                {% if station.changeRate > 0 %}
-                                                    <td>+{{ station.changeRate }}%</td>
-                                                {% elseif station.changeRate == 0 %}
-                                                    <td>{{ station.changeRate }}%</td>
-                                                {% else %}
-                                                    <td>-{{ station.changeRate }}%</td>
-                                                {% endif %}
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
-                                    <div class="move-up">
-                                        <p class="margin white-text">地価公示・低価格ランキング　トップ10</p>
-                                    </div>
-                                    <table class="bordered white-text">
-                                        <thead>
-                                        <tr>
-                                            <th data-field="id">順位</th>
-                                            <th data-field="name">駅名</th>
-                                            <th data-field="price">地価平均</th>
-                                            <th data-field="tubo_price">坪単価平均</th>
-                                            <th data-field="rate">前年比</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for station  in  stationLow %}
-                                            <tr>
-                                                <td>{{ loop.index }}</td>
-                                                <td>{{ station.station }}</td>
-                                                <td>{{ station.price }}</td>
-                                                <td>{{ station.priceOfTubo }}</td>
-                                                {% if station.changeRate > 0 %}
-                                                    <td>+{{ station.changeRate }}%</td>
-                                                {% elseif station.changeRate == 0 %}
-                                                    <td>{{ station.changeRate }}%</td>
-                                                {% else %}
-                                                    <td>-{{ station.changeRate }}%</td>
-                                                {% endif %}
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div>
+                                {% block leftSection0 %}{% endblock %}
                             </div>
                             {% block googleAds %} {% endblock %}
+                            <div>
+                                {% block leftSection1 %}{% endblock %}
+                            </div>
                         </div>
                     </div>
                     {% block rateArea %} {% endblock %}
