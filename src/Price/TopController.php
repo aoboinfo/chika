@@ -168,6 +168,40 @@ class TopController
             $surveyLow10Pref[] = $landPrice;
         }
         $low10SurveyPrefectureQry->close();
+        //
+        $postedPriceOfAll = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from post_price order by price0 desc limit 6");
+        $topPostPrice = array();
+        while ($row = mysqli_fetch_assoc($postedPriceOfAll)) {
+            $landPrice = new LandPrice();
+            $landPrice->setId($row["id"]);
+            $landPrice->setPrice("¥" . number_format($row["price0"]));
+            $landPrice->setChangeRate($row["rate"]);
+            $landPrice->setAddress($row["address"]);
+            $landPrice->setStation($row["near_station"]);
+            $landPrice->setDistanceFromStation($row["distance_station"]);
+            $landPrice->setCurrentUsage($row["current_use"]);
+            $landPrice->setStructure($row["build_structure"]);
+            $landPrice->setCityPlan($row["city_plan"]);
+            $topPostPrice[] = $landPrice;
+        }
+        $postedPriceOfAll->close();
+        //
+        $surveyPriceOfAll = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from survey_price order by price0 desc limit 7");
+        $topSurveyPrice = array();
+        while ($row = mysqli_fetch_assoc($surveyPriceOfAll)) {
+            $landPrice = new LandPrice();
+            $landPrice->setId($row["id"]);
+            $landPrice->setPrice("¥" . number_format($row["price0"]));
+            $landPrice->setChangeRate($row["rate"]);
+            $landPrice->setAddress($row["address"]);
+            $landPrice->setStation($row["near_station"]);
+            $landPrice->setDistanceFromStation($row["distance_station"]);
+            $landPrice->setCurrentUsage($row["current_use"]);
+            $landPrice->setStructure($row["build_structure"]);
+            $landPrice->setCityPlan($row["city_plan"]);
+            $topSurveyPrice[] = $landPrice;
+        }
+        $surveyPriceOfAll->close();
 
         //render the top page
         return $this->view->render($response, 'top.twig',
@@ -183,6 +217,8 @@ class TopController
                 "postLowPref" => $postedLow10Pref,
                 "surveyTopPref" => $surveyTop10Pref,
                 "surveyLowPref" => $surveyLow10Pref,
+                "topPostPrices" => $topPostPrice,
+                "topSurveyPrices" => $topSurveyPrice
             ]
         );
     }

@@ -10,14 +10,14 @@
             <div class="card">
                 <div class="card-move-up blue darken-1 waves-effect waves-block waves-light">
                     <div class="move-up">
-                        <p class="margin white-text">地価公示・都道府県上位ランキング</p>
+                        <h5 class="margin white-text">地価公示・都道府県上位ランキング</h5>
                     </div>
                     <table class="bordered white-text">
                         <thead>
                         <th data-field="id">順位</th>
                         <th data-field="rate">都道府県</th>
-                        <th data-field="name">地価平均</th>
-                        <th data-field="name">坪単価平均</th>
+                        <th data-field="price">地価平均</th>
+                        <th data-field="tubo_price">坪単価平均</th>
                         </thead>
                         <tbody>
                         {% for postedPref  in  postTopPref %}
@@ -37,14 +37,14 @@
             <div class="card">
                 <div class="card-move-up blue darken-1 waves-effect waves-block waves-light">
                     <div class="move-up">
-                        <p class="margin white-text">地価公示・都道府県下位ランキング</p>
+                        <h5 class="margin white-text">地価公示・都道府県下位ランキング</h5>
                     </div>
                     <table class="bordered white-text">
                         <thead>
                             <th data-field="id">順位</th>
                             <th data-field="rate">都道府県</th>
-                            <th data-field="name">地価平均</th>
-                            <th data-field="name">坪単価平均</th>
+                            <th data-field="price">地価平均</th>
+                            <th data-field="tubo_price">坪単価平均</th>
                         </thead>
                         <tbody>
                         {% for postedPref  in  postLowPref %}
@@ -66,14 +66,14 @@
             <div class="card">
                 <div class="card-move-up deep-purple darken-4 waves-effect waves-block waves-light">
                     <div class="move-up">
-                        <p class="margin white-text">地価調査・都道府県上位ランキング</p>
+                        <h5 class="margin white-text">地価調査・都道府県上位ランキング</h5>
                     </div>
                     <table class="bordered white-text">
                         <thead>
                         <th data-field="id">順位</th>
                         <th data-field="rate">都道府県</th>
-                        <th data-field="name">地価平均</th>
-                        <th data-field="name">坪単価平均</th>
+                        <th data-field="price">地価平均</th>
+                        <th data-field="tubo_price">坪単価平均</th>
                         </thead>
                         <tbody>
                         {% for pref  in  surveyTopPref %}
@@ -93,14 +93,14 @@
             <div class="card">
                 <div class="card-move-up deep-purple darken-4 waves-effect waves-block waves-light">
                     <div class="move-up">
-                        <p class="margin white-text">地価調査・都道府県下位ランキング</p>
+                        <h5 class="margin white-text">地価調査・都道府県下位ランキング</h5>
                     </div>
                     <table class="bordered white-text">
                         <thead>
                         <th data-field="id">順位</th>
                         <th data-field="rate">都道府県</th>
-                        <th data-field="name">地価平均</th>
-                        <th data-field="name">坪単価平均</th>
+                        <th data-field="price">地価平均</th>
+                        <th data-field="tubo_price">坪単価平均</th>
                         </thead>
                         <tbody>
                         {% for pref  in  surveyLowPref %}
@@ -122,20 +122,80 @@
             <div class="card">
                 <div class="card-move-up cyan darken-4 waves-effect waves-block waves-light">
                     <div class="move-up">
-                        <p class="margin white-text">地価公示・都道府県上位ランキング</p>
+                        <h5 class="margin white-text">地価公示・上位ランキング</h5>
                     </div>
                     <table class="bordered white-text">
+                        <thead>
+                         <th data-field="id">順位</th>
+                         <th data-field="price">価格</th>
+                         <th data-field="rate">前年比(%)</th>
+                         <th data-field="place">住所表示</th>
+                         <th data-field="station">最寄駅</th>
+                         <th data-field="distance">駅から距離(m)</th>
+                         <th data-field="structure">建物構造</th>
+                         <th data-field="usage">利用現況</th>
+                         <th data-field="cityPlan">用途地域</th>
+                        </thead>
+                        <tbody>
+                        {% for postTop in topPostPrices %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ postTop.price }}円/㎡</td>
+                                {% if postTop.changeRate != null %}
+                                    <td>{{ postTop.changeRate }}%</td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                                <td>{{ postTop.address }}</td>
+                                <td>{{ postTop.station }}</td>
+                                <td>{{ postTop.distanceFromStation }}m</td>
+                                <td>{{ postTop.structure }}</td>
+                                <td>{{ postTop.currentUsage }}</td>
+                                <td>{{ postTop.cityPlan }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
         <div class="col s12 m12 l12">
-            <div>
+            <div class="card">
                 <div class="card-move-up pink darken-4 waves-effect waves-block waves-light">
                     <div class="move-up">
-                        <p class="margin white-text">地価調査・都道府県上位ランキング</p>
+                        <h5 class="margin white-text">地価調査・上位ランキング</h5>
                     </div>
                     <table class="bordered white-text">
+                        <thead>
+                        <th data-field="id">順位</th>
+                        <th data-field="price">価格</th>
+                        <th data-field="rate">前年比(%)</th>
+                        <th data-field="place">住所表示</th>
+                        <th data-field="station">最寄駅</th>
+                        <th data-field="distance">駅から距離(m)</th>
+                        <th data-field="structure">建物構造</th>
+                        <th data-field="usage">利用現況</th>
+                        <th data-field="cityPlan">用途地域</th>
+                        </thead>
+                        <tbody>
+                        {% for surveyTop in topSurveyPrices %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ surveyTop.price }}円/㎡</td>
+                                {% if surveyTop.changeRate != null %}
+                                    <td>{{ surveyTop.changeRate }}%</td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                                <td>{{ surveyTop.address }}</td>
+                                <td>{{ surveyTop.station }}</td>
+                                <td>{{ surveyTop.distanceFromStation }}m</td>
+                                <td>{{ surveyTop.structure }}</td>
+                                <td>{{ surveyTop.currentUsage }}</td>
+                                <td>{{ surveyTop.cityPlan }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -150,7 +210,7 @@
     <div class="card">
         <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
             <div class="move-up">
-                <p class="margin white-text">地価公示・高価格ランキング　トップ10</p>
+                <h5 class="margin white-text">地価公示・高価格ランキング　トップ10</h5>
             </div>
             <table class="bordered white-text">
                 <thead>
@@ -185,7 +245,7 @@
     <div class="card">
         <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
             <div class="move-up">
-                <p class="margin white-text">地価公示・低価格ランキング　トップ10</p>
+                <h5 class="margin white-text">地価公示・低価格ランキング　トップ10</h5>
             </div>
             <table class="bordered white-text">
                 <thead>
@@ -218,12 +278,11 @@
         </div>
     </div>
 {% endblock %}
-
 {% block leftSection1 %}
     <div class="card">
         <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
             <div class="move-up">
-                <p class="margin white-text">地価調査・高価格ランキング　トップ10</p>
+                <h5 class="margin white-text">地価調査・高価格ランキング　トップ10</h5>
             </div>
             <table class="bordered white-text">
                 <thead>
@@ -258,7 +317,7 @@
     <div class="card">
         <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
             <div class="move-up">
-                <p class="margin white-text">地価調査・低価格ランキング　トップ10</p>
+                <h5 class="margin white-text">地価調査・低価格ランキング　トップ10</h5>
             </div>
             <table class="bordered white-text">
                 <thead>

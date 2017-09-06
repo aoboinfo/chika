@@ -2,6 +2,21 @@
 {% block title %}{{ title }}{% endblock %}
 {% block price_target %}{{ price_target }}{% endblock %}
 {% block price_station %}{{ price_target }}{% endblock %}
+
+{% block mapArea %}
+<div class="row">
+    <div class="col s12 m12 l12">
+        <div class="map-card">
+            <div class="card">
+                <div class="card-image waves-effect waves-block waves-light">
+                    <div id="map-canvas"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
 {% block javascript %}
     {{ parent() }}
     <script type="text/javascript" src="js/prefecture.js"></script>

@@ -4,6 +4,8 @@
 /**
  * Draw price change rate.
  */
+var map = new Y.Map("map-canvas");
+//
 var changeRateDataSets = [//global data for two type bars
     {
         label:'地価公示(H29)',
@@ -22,13 +24,13 @@ var changeRateDataSets = [//global data for two type bars
 
 var landPriceDataSets = [
     {
-        label:'地価公示',
+        label:'地価公示(H29)',
         backgroundColor:'',
         borderColor:'',
         borderWidth:1,
         data:null
     }, {
-        label:'地価調査',
+        label:'地価調査(H28)',
         backgroundColor:'',
         borderColor:'',
         borderWidth:1,
@@ -102,7 +104,7 @@ function drawAvgPrice(type, targetUrl, chartObj) {
                     options: {
                         legend: {
                             labels: {
-                                fontSize: 12
+                                fontSize: 17
                             }
                         },
                         scales: {
@@ -142,6 +144,26 @@ function drawAvgPrice(type, targetUrl, chartObj) {
                         }
                     }
                 });
+            }
+        }
+    );
+}
+
+function showMap(targetUrl) {
+    $.ajax (
+        {
+            url : targetUrl,
+            type: "GET",
+            success: function (json) {
+                var markers = [];
+                json.result.forEach(function (value) {
+                    var lat = value.lat;
+                    var lng = value.lng;
+                    var rate = value.changeRate;
+                    var marker = new Y.Marker(new Y.LatLng(lat, lng));
+                    markers.push( marker );
+                });
+                map.addFeatures( markers );
             }
         }
     );

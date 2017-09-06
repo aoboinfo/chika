@@ -11,6 +11,8 @@ namespace Service;
 use Slim\Router;
 use Mysqli;
 
+use Price\LandPrice as LandPrice;
+
 class PostedPriceService
 {
     private $router;
@@ -142,6 +144,35 @@ class PostedPriceService
         //
         $result = ["labels" => $labels, "postRates" => $ratesPost, "surveyRates"=>$ratesSurvey];
         $res = $response->withJson($result)
+            ->withHeader('Content-type', 'application/json;charset=utf-8');
+        return $res;
+    }
+    //items on map
+    public function itemsOnMap ($request, $response, $params) {
+        $prefecture = $request->getAttribute('prefecture');
+        $cityName = $request->getAttribute('city');
+
+        $pointsOnMap = null;
+        if (is_null($prefecture) && is_null($cityName)) {
+            $pointsOnMap = $this->db->query("select lat, lng, price0, price1 from post_price");
+        } else if (!is_null($prefecture) && is_null($cityName)) {//for prefecture
+
+        } else {//for city
+
+        }
+        $result = array();
+        while ($row = mysqli_fetch_assoc($pointsOnMap)) {
+            $landPrice = new LandPrice();
+            $landPrice->setLat($row["lat"]);
+            $landPrice->setLng($row["lng"]);
+            $landPrice->setChangeRate($row["price0"] - $row["price1"]);
+            $result[] = $landPrice;
+        }
+        //
+        if ($pointsOnMap != null) {
+            $pointsOnMap->close();
+        }
+        $res = $response->withJson(["result"=> $result])
             ->withHeader('Content-type', 'application/json;charset=utf-8');
         return $res;
     }

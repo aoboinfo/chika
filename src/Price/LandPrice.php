@@ -19,10 +19,60 @@ class LandPrice
     protected $distanceFromStation;
     protected $structure;
     protected $currentUsage;
+    protected $cityPlan;
     //
     protected $priceOfTubo; //坪単価
     protected $id;
+    //
+    protected $lat;
+    protected $lng;
 
+    /**
+     * @return mixed
+     */
+    public function getLat()
+    {
+        return $this->lat;
+    }
+
+    /**
+     * @param mixed $lat
+     */
+    public function setLat($lat)
+    {
+        $this->lat = $lat;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLng()
+    {
+        return $this->lng;
+    }
+
+    /**
+     * @param mixed $lng
+     */
+    public function setLng($lng)
+    {
+        $this->lng = $lng;
+    }
+    /**
+     * @return mixed
+     */
+    public function getCityPlan()
+    {
+        return $this->cityPlan;
+    }
+
+    /**
+     * @param mixed $cityPlan
+     */
+    public function setCityPlan($cityPlan)
+    {
+        $this->cityPlan = $cityPlan;
+    }
     /**
      * @return mixed
      */
@@ -38,7 +88,6 @@ class LandPrice
     {
         $this->id = $id;
     }
-
     /**
      * @return mixed
      */
@@ -62,7 +111,6 @@ class LandPrice
     {
         return $this->type;
     }
-
     /**
      * @param mixed $type
      */
