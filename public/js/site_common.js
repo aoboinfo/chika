@@ -156,12 +156,19 @@ function showMap(targetUrl) {
             type: "GET",
             success: function (json) {
                 var markers = [];
-                json.result.forEach(function (value) {
+                json.mapItems.forEach(function (value) {
                     var lat = value.lat;
                     var lng = value.lng;
-                    var rate = value.changeRate;
-                    var marker = new Y.Marker(new Y.LatLng(lat, lng));
-                    markers.push( marker );
+                    var changed = Number(value.dif);
+                    var icon = null;
+                    if (changed > 0) {
+                        icon = new Y.Icon('img/up.png');
+                    } else if (changed < 0){
+                        icon = new Y.Icon('img/down.png');
+                    } else {
+                        icon = new Y.Icon('img/equal.png');
+                    }
+                    markers.push( new Y.Marker(new Y.LatLng(lat, lng), {icon: icon}) );
                 });
                 map.addFeatures( markers );
             }

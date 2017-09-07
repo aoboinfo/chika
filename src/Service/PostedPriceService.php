@@ -9,14 +9,16 @@
 namespace Service;
 
 use Slim\Router;
+use Monolog\Logger;
 use Mysqli;
-
-use Price\LandPrice as LandPrice;
+use Price\LandPrice;
 
 class PostedPriceService
 {
     private $router;
     private $db;
+    private $logger;
+
     private $recCount;
 
     /**
@@ -35,10 +37,11 @@ class PostedPriceService
         $this->recCount = $recCount;
     }
 
-    public function __construct(Router $router, Mysqli $db)
+    public function __construct(Router $router, Mysqli $db, Logger $logger)
     {
         $this->db = $db;
         $this->router = $router;
+        $this->logger = $logger;
     }
     public function historyPriceL2 ($request, $response, $params) {
         $prefecture = $request->getAttribute('prefecture');
@@ -151,29 +154,33 @@ class PostedPriceService
     public function itemsOnMap ($request, $response, $params) {
         $prefecture = $request->getAttribute('prefecture');
         $cityName = $request->getAttribute('city');
-
-        $pointsOnMap = null;
+        //
+        $mapItemQueryString = '';
         if (is_null($prefecture) && is_null($cityName)) {
-            $pointsOnMap = $this->db->query("select lat, lng, price0, price1 from post_price");
+            $mapItemQueryString = "select lat, lng, price0, price1 from post_price";
         } else if (!is_null($prefecture) && is_null($cityName)) {//for prefecture
-
+            $mapItemQueryString = "select lat, lng, price0, price1 from post_price where address like '" . $prefecture . "%'";
         } else {//for city
 
         }
-        $result = array();
+        //$this->logger->info("LandPrice://" . $mapItemQueryString);
+        //
+        $pointsOnMap = $this->db->query($mapItemQueryString);
+        //
+        $mapItems = array();
+        //Must not use class for json in Json only output.
         while ($row = mysqli_fetch_assoc($pointsOnMap)) {
-            $landPrice = new LandPrice();
-            $landPrice->setLat($row["lat"]);
-            $landPrice->setLng($row["lng"]);
-            $landPrice->setChangeRate($row["price0"] - $row["price1"]);
-            $result[] = $landPrice;
+            $landPrice = ["lat"=>$row["lat"], "lng"=>$row["lng"], "dif" => $row["price0"] - $row["price1"]];
+            $mapItems[] = $landPrice;
         }
         //
         if ($pointsOnMap != null) {
             $pointsOnMap->close();
         }
-        $res = $response->withJson(["result"=> $result])
-            ->withHeader('Content-type', 'application/json;charset=utf-8');
+        //
+        //$data = array('name' => 'Bob', 'age' => 40);
+        $res = $response->withJson(["mapItems"=> $mapItems])
+                        ->withHeader('Content-type', 'application/json;charset=utf-8');
         return $res;
     }
 

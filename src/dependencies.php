@@ -45,5 +45,5 @@ $container['Price\PrefectureController'] = function ($c) {
 };
 //Service for output json data of Draw on page.
 $container['Service\PostedPriceService'] = function ($c) {
-    return new Service\PostedPriceService($c['router'], $c['db']);
+    return new Service\PostedPriceService($c['router'], $c['db'], $c['logger']);
 };
