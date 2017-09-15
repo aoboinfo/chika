@@ -125,10 +125,15 @@ class PostedPriceService
         $postChangeRateQuery = "select a.prefecture as label, format(100*(avg(a.price) - avg(b.price))/avg(b.price), 2) as rate from posted_his as a inner join posted_his as b on a.id = b.id";
         $surveyChangeRateQuery = "select a.prefecture, format(100*(avg(a.price) - avg(b.price))/avg(b.price), 2) as rate from survey_his as a inner join survey_his as b on a.id = b.id";
         if (is_null($prefecture) && is_null($cityName)) {
-            $changeRatePost = $this->db->query($postChangeRateQuery . " where a.year = 2017 and b.year = 2016 and b.price <> 0 group by a.prefecture order by a.prefecture desc");
-            $changeRateSurvey = $this->db->query($surveyChangeRateQuery . " where a.year = 2016 and b.year = 2015 and b.price <> 0 group by a.prefecture order by a.prefecture desc");
+            $changeRatePost = $this->db->query($postChangeRateQuery . " where a.year = 2017 and b.year = 2016 and b.price <> 0 group by a.prefecture order by a.prefecture");
+            $changeRateSurvey = $this->db->query($surveyChangeRateQuery . " where a.year = 2016 and b.year = 2015 and b.price <> 0 group by a.prefecture order by a.prefecture");
         } else if (!is_null($prefecture) && is_null($cityName)) {//for prefecture
-
+            $postChangeRateQuery = "select c.city as label, format(100*(avg(a.price) - avg(b.price))/avg(b.price), 2) as rate from posted_his as a inner join posted_his as b on a.id = b.id
+                                      inner join posted_price as c on c.id = a.id where a.year = 2017 and b.year = 2016 and b.price <> 0 and c.address like '" . $prefecture . "%' group by c.city order by c.city";
+            $surveyChangeRateQuery = "select c.city as label, format(100*(avg(a.price) - avg(b.price))/avg(b.price), 2) as rate from survey_his as a inner join survey_his as b on a.id = b.id
+                                      inner join surveyed_price as c on c.id = a.id where a.year = 2016 and b.year = 2015 and b.price <> 0 and c.address like '" . $prefecture . "%' group by c.city order by c.city";
+            $changeRatePost = $this->db->query($postChangeRateQuery);
+            $changeRateSurvey = $this->db->query($surveyChangeRateQuery);
         } else {//for city
 
         }

@@ -104,7 +104,6 @@ class TopController
         $averagePrices = array();
         //
         while ($row = mysqli_fetch_assoc($posted_avg)) {
-            //$this->logger->info("avgPrice:" . $row["year"] . "/" . $row["avg_price"]);
             $averagePrice = new AveragePrice();
             $averagePrice->setYear($row["year"]);
             $averagePrice->setPostedPrice($row["avg_price"]);
@@ -112,7 +111,7 @@ class TopController
         }
         $posted_avg->close();
         //
-        $survey_avg = $this->db->query("select year, FORMAT(ROUND(AVG(price)),0) as avg_price from survey_his where price <> 0 group by year order by year");
+        $survey_avg = $this->db->query("select FORMAT(ROUND(AVG(price)),0) as avg_price from survey_his where price <> 0 group by year order by year");
         $index = 0;
         while ($row = mysqli_fetch_assoc($survey_avg)) {
             $averagePrice = $averagePrices[$index];

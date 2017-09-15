@@ -1,22 +1,408 @@
 {% extends 'layout.twig' %}
 {% block title %}{{ title }}{% endblock %}
 {% block price_target %}{{ price_target }}{% endblock %}
-{% block price_station %}{{ price_target }}{% endblock %}
 
-{% block mapArea %}
-<div class="row">
-    <div class="col s12 m12 l12">
-        <div class="map-card">
+{% block avgPriceYearArea %}
+    <div class="card-content">
+        <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i class="mdi-content-add activator"></i></a>
+    </div>
+    <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4">各年度地価平均一覧表<i class="mdi-navigation-close right"></i></span>
+        <table class="responsive-table">
+            <thead>
+            <tr>
+                <th data-field="year">年度</th>
+                <th data-field="posted_price_m">地価公示(円/m²)</th>
+                <th data-field="survey_price_m">地価調査(円/m²)</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for avgPrice in avgPrices %}
+                <tr>
+                    <td>{{ avgPrice.year }}</td>
+                    <td>{{ avgPrice.postedPrice }}</td>
+                    {% if avgPrice.surveyPrice !='' %}
+                        <td>{{ avgPrice.surveyPrice }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block category %}
+    <div class="row">
+        <div class="col s12 m6 l6">
             <div class="card">
-                <div class="card-image waves-effect waves-block waves-light">
-                    <div id="map-canvas"></div>
+                <div class="card-move-up blue darken-1 waves-effect waves-block waves-light">
+                    <div class="move-up">
+                        <h5 class="margin white-text">地価公示・市町村上位ランキング</h5>
+                    </div>
+                    <table class="bordered white-text">
+                        <thead>
+                        <th data-field="id">順位</th>
+                        <th data-field="rate">都道府県</th>
+                        <th data-field="price">地価平均</th>
+                        <th data-field="tubo_price">坪単価平均</th>
+                        </thead>
+                        <tbody>
+                        {% for postedPref  in  postTopPref %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ postedPref.address }}</td>
+                                <td>{{ postedPref.price }}円/㎡</td>
+                                <td>{{ postedPref.priceOfTubo }}円/坪</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6 l6">
+            <div class="card">
+                <div class="card-move-up blue darken-1 waves-effect waves-block waves-light">
+                    <div class="move-up">
+                        <h5 class="margin white-text">地価公示・市町村下位ランキング</h5>
+                    </div>
+                    <table class="bordered white-text">
+                        <thead>
+                        <th data-field="id">順位</th>
+                        <th data-field="rate">都道府県</th>
+                        <th data-field="price">地価平均</th>
+                        <th data-field="tubo_price">坪単価平均</th>
+                        </thead>
+                        <tbody>
+                        {% for postedPref  in  postLowPref %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ postedPref.address }}</td>
+                                <td>{{ postedPref.price }}円/㎡</td>
+                                <td>{{ postedPref.priceOfTubo }}円/坪</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col s12 m6 l6">
+            <div class="card">
+                <div class="card-move-up deep-purple darken-4 waves-effect waves-block waves-light">
+                    <div class="move-up">
+                        <h5 class="margin white-text">地価調査・市町村上位ランキング</h5>
+                    </div>
+                    <table class="bordered white-text">
+                        <thead>
+                        <th data-field="id">順位</th>
+                        <th data-field="rate">都道府県</th>
+                        <th data-field="price">地価平均</th>
+                        <th data-field="tubo_price">坪単価平均</th>
+                        </thead>
+                        <tbody>
+                        {% for pref  in  surveyTopPref %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ pref.address }}</td>
+                                <td>{{ pref.price }}円/㎡</td>
+                                <td>{{ pref.priceOfTubo }}円/坪</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6 l6">
+            <div class="card">
+                <div class="card-move-up deep-purple darken-4 waves-effect waves-block waves-light">
+                    <div class="move-up">
+                        <h5 class="margin white-text">地価調査・市町村下位ランキング</h5>
+                    </div>
+                    <table class="bordered white-text">
+                        <thead>
+                        <th data-field="id">順位</th>
+                        <th data-field="rate">都道府県</th>
+                        <th data-field="price">地価平均</th>
+                        <th data-field="tubo_price">坪単価平均</th>
+                        </thead>
+                        <tbody>
+                        {% for pref  in  surveyLowPref %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ pref.address }}</td>
+                                <td>{{ pref.price }}円/㎡</td>
+                                <td>{{ pref.priceOfTubo }}円/坪</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="card">
+                <div class="card-move-up cyan darken-4 waves-effect waves-block waves-light">
+                    <div class="move-up">
+                        <h5 class="margin white-text">地価公示・上位ランキング</h5>
+                    </div>
+                    <table class="bordered white-text">
+                        <thead>
+                        <th data-field="id">順位</th>
+                        <th data-field="price">価格</th>
+                        <th data-field="rate">前年比(%)</th>
+                        <th data-field="place">住所表示</th>
+                        <th data-field="station">最寄駅</th>
+                        <th data-field="distance">駅から距離(m)</th>
+                        <th data-field="structure">建物構造</th>
+                        <th data-field="usage">利用現況</th>
+                        <th data-field="cityPlan">用途地域</th>
+                        </thead>
+                        <tbody>
+                        {% for postTop in topPostPrices %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ postTop.price }}円/㎡</td>
+                                {% if postTop.changeRate != null %}
+                                    <td>{{ postTop.changeRate }}%</td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                                <td>{{ postTop.address }}</td>
+                                <td>{{ postTop.station }}</td>
+                                <td>{{ postTop.distanceFromStation }}m</td>
+                                <td>{{ postTop.structure }}</td>
+                                <td>{{ postTop.currentUsage }}</td>
+                                <td>{{ postTop.cityPlan }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m12 l12">
+            <div class="card">
+                <div class="card-move-up pink darken-4 waves-effect waves-block waves-light">
+                    <div class="move-up">
+                        <h5 class="margin white-text">地価調査・上位ランキング</h5>
+                    </div>
+                    <table class="bordered white-text">
+                        <thead>
+                        <th data-field="id">順位</th>
+                        <th data-field="price">価格</th>
+                        <th data-field="rate">前年比(%)</th>
+                        <th data-field="place">住所表示</th>
+                        <th data-field="station">最寄駅</th>
+                        <th data-field="distance">駅から距離(m)</th>
+                        <th data-field="structure">建物構造</th>
+                        <th data-field="usage">利用現況</th>
+                        <th data-field="cityPlan">用途地域</th>
+                        </thead>
+                        <tbody>
+                        {% for surveyTop in topSurveyPrices %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ surveyTop.price }}円/㎡</td>
+                                {% if surveyTop.changeRate != null %}
+                                    <td>{{ surveyTop.changeRate }}%</td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                                <td>{{ surveyTop.address }}</td>
+                                <td>{{ surveyTop.station }}</td>
+                                <td>{{ surveyTop.distanceFromStation }}m</td>
+                                <td>{{ surveyTop.structure }}</td>
+                                <td>{{ surveyTop.currentUsage }}</td>
+                                <td>{{ surveyTop.cityPlan }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
-
+{% block rightSection0 %}
+    <ol class="breadcrumbs">
+        <li><a href="#">駅周辺地価ランキング</a></li>
+        <li><a href="#">{% block price_station %}{{ price_target }}{% endblock %}</a></li>
+    </ol>
+    <div class="card">
+        <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
+            <div class="move-up">
+                <h5 class="margin white-text">地価公示・高価格ランキング</h5>
+            </div>
+            <table class="bordered white-text">
+                <thead>
+                <tr>
+                    <th data-field="id">順位</th>
+                    <th data-field="name">駅名</th>
+                    <th data-field="price">地価平均</th>
+                    <th data-field="tubo_price">坪単価平均</th>
+                    <th data-field="rate">前年比</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for station  in  stationTop %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ station.station }}</td>
+                        <td>{{ station.price }}</td>
+                        <td>{{ station.priceOfTubo }}</td>
+                        {% if station.changeRate > 0 %}
+                            <td>+{{ station.changeRate }}%</td>
+                        {% elseif station.changeRate == 0 %}
+                            <td>{{ station.changeRate }}%</td>
+                        {% else %}
+                            <td>-{{ station.changeRate }}%</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
+            <div class="move-up">
+                <h5 class="margin white-text">地価公示・低価格ランキング</h5>
+            </div>
+            <table class="bordered white-text">
+                <thead>
+                <tr>
+                    <th data-field="id">順位</th>
+                    <th data-field="name">駅名</th>
+                    <th data-field="price">地価平均</th>
+                    <th data-field="tubo_price">坪単価平均</th>
+                    <th data-field="rate">前年比</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for station  in  stationLow %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ station.station }}</td>
+                        <td>{{ station.price }}</td>
+                        <td>{{ station.priceOfTubo }}</td>
+                        {% if station.changeRate > 0 %}
+                            <td>+{{ station.changeRate }}%</td>
+                        {% elseif station.changeRate == 0 %}
+                            <td>{{ station.changeRate }}%</td>
+                        {% else %}
+                            <td>-{{ station.changeRate }}%</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block rightSection1 %}
+    <div class="card">
+        <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
+            <div class="move-up">
+                <h5 class="margin white-text">地価調査・高価格ランキング</h5>
+            </div>
+            <table class="bordered white-text">
+                <thead>
+                <tr>
+                    <th data-field="id">順位</th>
+                    <th data-field="name">駅名</th>
+                    <th data-field="price">地価平均</th>
+                    <th data-field="tubo_price">坪単価平均</th>
+                    <th data-field="rate">前年比</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for station  in  surveyStationTop %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ station.station }}</td>
+                        <td>{{ station.price }}</td>
+                        <td>{{ station.priceOfTubo }}</td>
+                        {% if station.changeRate > 0 %}
+                            <td>+{{ station.changeRate }}%</td>
+                        {% elseif station.changeRate == 0 %}
+                            <td>{{ station.changeRate }}%</td>
+                        {% else %}
+                            <td>-{{ station.changeRate }}%</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
+            <div class="move-up">
+                <h5 class="margin white-text">地価調査・低価格ランキング</h5>
+            </div>
+            <table class="bordered white-text">
+                <thead>
+                <tr>
+                    <th data-field="id">順位</th>
+                    <th data-field="name">駅名</th>
+                    <th data-field="price">地価平均</th>
+                    <th data-field="tubo_price">坪単価平均</th>
+                    <th data-field="rate">前年比</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for station  in  surveyStationLow %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ station.station }}</td>
+                        <td>{{ station.price }}</td>
+                        <td>{{ station.priceOfTubo }}</td>
+                        {% if station.changeRate > 0 %}
+                            <td>+{{ station.changeRate }}%</td>
+                        {% elseif station.changeRate == 0 %}
+                            <td>{{ station.changeRate }}%</td>
+                        {% else %}
+                            <td>-{{ station.changeRate }}%</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block rateArea %}
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="card">
+                <div class="card-content purple darken-3">
+                    <span class="chart-title white-text">対前年変動率(%)</span>
+                    <div class="trending-line-chart-wrapper">
+                        <canvas id="price_change_rate" height="95"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block googleAds %}
+    <div class="card">
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- LandPriceTop -->
+        <ins class="adsbygoogle aoboAds"
+             style="display:inline-block"
+             data-ad-client="ca-pub-2770900584946061"
+             data-ad-slot="5901050259"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+{% endblock %}
 {% block javascript %}
     {{ parent() }}
     <script type="text/javascript" src="js/prefecture.js"></script>

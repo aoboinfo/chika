@@ -4,6 +4,34 @@
 {% set price_target = '全国' %}
 {% block title %}{{ title }}{% endblock %}
 {% block price_target %}{{ price_target }}{% endblock %}
+{% block avgPriceYearArea %}
+    <div class="card-content">
+        <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i class="mdi-content-add activator"></i></a>
+    </div>
+    <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4">各年度地価平均一覧表<i class="mdi-navigation-close right"></i></span>
+        <table class="responsive-table">
+            <thead>
+            <tr>
+                <th data-field="year">年度</th>
+                <th data-field="posted_price_m">地価公示(円/m²)</th>
+                <th data-field="survey_price_m">地価調査(円/m²)</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for avgPrice in avgPrices %}
+                <tr>
+                    <td>{{ avgPrice.year }}</td>
+                    <td>{{ avgPrice.postedPrice }}</td>
+                    {% if avgPrice.surveyPrice !='' %}
+                        <td>{{ avgPrice.surveyPrice }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
 {% block category %}
     <div class="row">
         <div class="col s12 m6 l6">
@@ -202,7 +230,7 @@
         </div>
     </div>
 {% endblock %}
-{% block leftSection0 %}
+{% block rightSection0 %}
     <ol class="breadcrumbs">
         <li><a href="#">駅周辺地価ランキング</a></li>
         <li><a href="#">{% block price_station %}{{ price_target }}{% endblock %}</a></li>
@@ -210,7 +238,7 @@
     <div class="card">
         <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
             <div class="move-up">
-                <h5 class="margin white-text">地価公示・高価格ランキング　トップ10</h5>
+                <h5 class="margin white-text">地価公示・高価格ランキング</h5>
             </div>
             <table class="bordered white-text">
                 <thead>
@@ -245,7 +273,7 @@
     <div class="card">
         <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
             <div class="move-up">
-                <h5 class="margin white-text">地価公示・低価格ランキング　トップ10</h5>
+                <h5 class="margin white-text">地価公示・低価格ランキング</h5>
             </div>
             <table class="bordered white-text">
                 <thead>
@@ -278,11 +306,11 @@
         </div>
     </div>
 {% endblock %}
-{% block leftSection1 %}
+{% block rightSection1 %}
     <div class="card">
         <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
             <div class="move-up">
-                <h5 class="margin white-text">地価調査・高価格ランキング　トップ10</h5>
+                <h5 class="margin white-text">地価調査・高価格ランキング</h5>
             </div>
             <table class="bordered white-text">
                 <thead>
@@ -317,7 +345,7 @@
     <div class="card">
         <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
             <div class="move-up">
-                <h5 class="margin white-text">地価調査・低価格ランキング　トップ10</h5>
+                <h5 class="margin white-text">地価調査・低価格ランキング</h5>
             </div>
             <table class="bordered white-text">
                 <thead>
