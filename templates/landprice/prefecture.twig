@@ -46,12 +46,12 @@
                         <th data-field="tubo_price">坪単価平均</th>
                         </thead>
                         <tbody>
-                        {% for postedPref  in  postTopPref %}
+                        {% for postedCity  in  postTopCity %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ postedPref.address }}</td>
-                                <td>{{ postedPref.price }}円/㎡</td>
-                                <td>{{ postedPref.priceOfTubo }}円/坪</td>
+                                <td>{{ postedCity.address }}</td>
+                                <td>{{ postedCity.price }}円/㎡</td>
+                                <td>{{ postedCity.priceOfTubo }}円/坪</td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -73,12 +73,12 @@
                         <th data-field="tubo_price">坪単価平均</th>
                         </thead>
                         <tbody>
-                        {% for postedPref  in  postLowPref %}
+                        {% for postedCity  in  postLowCity %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ postedPref.address }}</td>
-                                <td>{{ postedPref.price }}円/㎡</td>
-                                <td>{{ postedPref.priceOfTubo }}円/坪</td>
+                                <td>{{ postedCity.address }}</td>
+                                <td>{{ postedCity.price }}円/㎡</td>
+                                <td>{{ postedCity.priceOfTubo }}円/坪</td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -102,12 +102,12 @@
                         <th data-field="tubo_price">坪単価平均</th>
                         </thead>
                         <tbody>
-                        {% for pref  in  surveyTopPref %}
+                        {% for city  in  surveyTopCity %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ pref.address }}</td>
-                                <td>{{ pref.price }}円/㎡</td>
-                                <td>{{ pref.priceOfTubo }}円/坪</td>
+                                <td>{{ city.address }}</td>
+                                <td>{{ city.price }}円/㎡</td>
+                                <td>{{ city.priceOfTubo }}円/坪</td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -129,12 +129,12 @@
                         <th data-field="tubo_price">坪単価平均</th>
                         </thead>
                         <tbody>
-                        {% for pref  in  surveyLowPref %}
+                        {% for city  in  surveyLowCity %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ pref.address }}</td>
-                                <td>{{ pref.price }}円/㎡</td>
-                                <td>{{ pref.priceOfTubo }}円/坪</td>
+                                <td>{{ city.address }}</td>
+                                <td>{{ city.price }}円/㎡</td>
+                                <td>{{ city.priceOfTubo }}円/坪</td>
                             </tr>
                         {% endfor %}
                         </tbody>

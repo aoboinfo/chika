@@ -185,7 +185,7 @@ class TopController
         }
         $postedPriceOfAll->close();
         //
-        $surveyPriceOfAll = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from survey_price order by price0 desc limit 7");
+        $surveyPriceOfAll = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from survey_price order by price0 desc limit 6");
         $topSurveyPrice = array();
         while ($row = mysqli_fetch_assoc($surveyPriceOfAll)) {
             $landPrice = new LandPrice();

@@ -104,7 +104,6 @@ class PrefectureController
             $averagePrices[] = $averagePrice;
         }
         $posted_avg->close();
-        //
         $survey_avg = $this->db->query("select FORMAT(ROUND(AVG(price)),0) as avg_price from survey_his where price <> 0 and prefecture = '" . $prefecture . "' group by year order by year");
         $index = 0;
         while ($row = mysqli_fetch_assoc($survey_avg)) {
@@ -113,6 +112,89 @@ class PrefectureController
             $index++;
         }
         $survey_avg->close();
+        /*Ranking area*/
+        $postedQuery10 = "select city, round(avg(price0)) as pre_price, round(avg(price0) * 3.305785) as tubo_price  from post_price where address like '" . $prefecture ."%' group by city order by pre_price";
+        //top 10 city
+        $top10CityQry = $this->db->query($postedQuery10 . " desc limit 10");
+        $postedTop10City = array();
+        while ($row = mysqli_fetch_assoc($top10CityQry)) {
+            $landPrice = new LandPrice();
+            $landPrice->setPrice("¥" . number_format($row["pre_price"]));
+            $landPrice->setAddress($row["city"]);
+            $landPrice->setPriceOfTubo("¥" . number_format($row["tubo_price"]));
+            $postedTop10City[] = $landPrice;
+        }
+        $top10CityQry->close();
+        //low 10 prefecture
+        $low10CityQry = $this->db->query($postedQuery10 . " limit 10");
+        $postedLow10City = array();
+        while ($row = mysqli_fetch_assoc($low10CityQry)) {
+            $landPrice = new LandPrice();
+            $landPrice->setPrice("¥" . number_format($row["pre_price"]));
+            $landPrice->setAddress($row["city"]);
+            $landPrice->setPriceOfTubo("¥" . number_format($row["tubo_price"]));
+            $postedLow10City[] = $landPrice;
+        }
+        $low10CityQry->close();
+        //
+        $surveyQuery10 = "select city, round(avg(price0)) as pre_price, round(avg(price0) * 3.305785) as tubo_price  from survey_price where address like '" . $prefecture ."%' group by city order by pre_price";
+        //top 10 city
+        $surveyTop10CityQry = $this->db->query($postedQuery10 . " desc limit 10");
+        $surveyedTop10City = array();
+        while ($row = mysqli_fetch_assoc($surveyTop10CityQry)) {
+            $landPrice = new LandPrice();
+            $landPrice->setPrice("¥" . number_format($row["pre_price"]));
+            $landPrice->setAddress($row["city"]);
+            $landPrice->setPriceOfTubo("¥" . number_format($row["tubo_price"]));
+            $surveyedTop10City[] = $landPrice;
+        }
+        $surveyTop10CityQry->close();
+        //low 10 prefecture
+        $surveyedLow10CityQry = $this->db->query($postedQuery10 . " limit 10");
+        $surveyedLow10City = array();
+        while ($row = mysqli_fetch_assoc($surveyedLow10CityQry)) {
+            $landPrice = new LandPrice();
+            $landPrice->setPrice("¥" . number_format($row["pre_price"]));
+            $landPrice->setAddress($row["city"]);
+            $landPrice->setPriceOfTubo("¥" . number_format($row["tubo_price"]));
+            $surveyedLow10City[] = $landPrice;
+        }
+        $surveyedLow10CityQry->close();
+        //
+        $postedPriceOfPrefecture = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from post_price where address like '" . $prefecture . "%' order by price0 desc limit 6");
+        $topPostPrice = array();
+        while ($row = mysqli_fetch_assoc($postedPriceOfPrefecture)) {
+            $landPrice = new LandPrice();
+            $landPrice->setId($row["id"]);
+            $landPrice->setPrice("¥" . number_format($row["price0"]));
+            $landPrice->setChangeRate($row["rate"]);
+            $landPrice->setAddress($row["address"]);
+            $landPrice->setStation($row["near_station"]);
+            $landPrice->setDistanceFromStation($row["distance_station"]);
+            $landPrice->setCurrentUsage($row["current_use"]);
+            $landPrice->setStructure($row["build_structure"]);
+            $landPrice->setCityPlan($row["city_plan"]);
+            $topPostPrice[] = $landPrice;
+        }
+        $postedPriceOfPrefecture->close();
+        //
+        $surveyPriceOfPrefecture = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from survey_price where address like '" . $prefecture . "%' order by price0 desc limit 6");
+        $topSurveyPrice = array();
+        while ($row = mysqli_fetch_assoc($surveyPriceOfPrefecture)) {
+            $landPrice = new LandPrice();
+            $landPrice->setId($row["id"]);
+            $landPrice->setPrice("¥" . number_format($row["price0"]));
+            $landPrice->setChangeRate($row["rate"]);
+            $landPrice->setAddress($row["address"]);
+            $landPrice->setStation($row["near_station"]);
+            $landPrice->setDistanceFromStation($row["distance_station"]);
+            $landPrice->setCurrentUsage($row["current_use"]);
+            $landPrice->setStructure($row["build_structure"]);
+            $landPrice->setCityPlan($row["city_plan"]);
+            $topSurveyPrice[] = $landPrice;
+        }
+        $surveyPriceOfPrefecture->close();
+
 
         $this->view->render($response, 'landprice/prefecture.twig',
             [
@@ -125,9 +207,20 @@ class PrefectureController
                 "stationLow" => $stationAsc,
                 "surveyStationTop" => $surveyStationsDesc,
                 "surveyStationLow" => $surveyStationsAsc,
-                "avgPrices" => $averagePrices
+                "avgPrices" => $averagePrices,
+                "postTopCity" => $postedTop10City,
+                "postLowCity" => $postedLow10City,
+                "surveyTopCity" => $surveyedTop10City,
+                "surveyLowCity" => $surveyedLow10City,
+                "topPostPrices" => $topPostPrice,
+                "topSurveyPrices" => $topSurveyPrice
             ]
         );
+    }
+
+    public function showPricesForCity ($request, $response, $params) {
+        $prefecture = $params['prefecture'];
+        $city = $params['city'];
     }
 
 }
