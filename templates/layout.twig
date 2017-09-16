@@ -136,19 +136,7 @@
                 <li class="bold active"><a href="/" class="waves-effect waves-cyan"><i class="mdi-action-dashboard"></i> Dashboard</a></li>
                 <li class="li-hover"><div class="divider"></div></li>
                 <li class="no-padding">
-                    <ul class="collapsible collapsible-accordion">
-                        {% for key, area in areas %}
-                        <li class="bold"><a id="linkArea" class="collapsible-header waves-effect waves-cyan">{{ area }}</a>
-                            <div class="collapsible-body">
-                                <ul>
-                                    {% for pref in leftMenus[key] %}
-                                    <li><a href="{{ base_url() }}/{{ pref }}">{{ pref }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </li>
-                        {% endfor %}
-                    </ul>
+                    {% block leftDropMenu %} {% endblock %}
                 </li>
                 <li class="li-hover"><div class="divider"></div></li>
                 <li class="no-padding">

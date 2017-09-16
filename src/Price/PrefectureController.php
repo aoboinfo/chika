@@ -198,11 +198,11 @@ class PrefectureController
 
         $this->view->render($response, 'landprice/prefecture.twig',
             [
-                "posted_title"=> $params['prefecture'],
-                "areas" => [$params['prefecture']],
-                "price_target" => $params['prefecture'],
+                "posted_title"=> $prefecture,
+                "areas" => [$prefecture],
+                "price_target" => $prefecture,
                 "leftMenus" => [$result],
-                "title"=> $params['prefecture'] . "地価",
+                "title"=> $prefecture . "地価",
                 "stationTop" => $stationsDesc,
                 "stationLow" => $stationAsc,
                 "surveyStationTop" => $surveyStationsDesc,

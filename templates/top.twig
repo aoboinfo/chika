@@ -4,6 +4,21 @@
 {% set price_target = '全国' %}
 {% block title %}{{ title }}{% endblock %}
 {% block price_target %}{{ price_target }}{% endblock %}
+{% block leftDropMenu %}
+    <ul class="collapsible collapsible-accordion">
+        {% for key, area in areas %}
+            <li class="bold"><a id="linkArea" class="collapsible-header waves-effect waves-cyan">{{ area }}</a>
+                <div class="collapsible-body">
+                    <ul>
+                        {% for pref in leftMenus[key] %}
+                            <li><a href="{{ base_url() }}/{{ pref }}">{{ pref }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
 {% block avgPriceYearArea %}
     <div class="card-content">
         <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i class="mdi-content-add activator"></i></a>
