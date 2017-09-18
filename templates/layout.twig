@@ -437,15 +437,15 @@
 </footer>
 <!-- END FOOTER -->
 <!--Import jQuery before materialize.js-->
-<script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/materialize.min.js"></script>
-<script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
-<script type="text/javascript" src="js/plugins.min.js"></script>
-<script type="text/javascript" src="js/chart.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/js/jquery.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/js/materialize.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/js/plugins.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/js/chart.min.js"></script>
 <script src="http://js.api.olp.yahooapis.jp/OpenLocalPlatform/V1/jsapi?appid=bvmPo3axg64fHgqVn6AemhUN60KOyTMPT3K1YYn9NmdpjEzTMTYOQ0UWXGIqz1c-" type="text/javascript" charset="UTF-8"></script>
 {% block javascript %}
     {# put common javascript here #}
-    <script type="text/javascript" src="js/site_common.js"></script>
+    <script type="text/javascript" src="{{ base_url() }}/js/site_common.js"></script>
 {% endblock %}
 </body>
 </html>

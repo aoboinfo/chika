@@ -221,6 +221,16 @@ class PrefectureController
     public function showPricesForCity ($request, $response, $params) {
         $prefecture = $params['prefecture'];
         $city = $params['city'];
+        /*$response->getBody()->write("Hello, $prefecture/$city");
+
+        return $response;*/
+
+        $this->view->render($response, 'landprice/city.twig',
+            [
+                "posted_title"=> $prefecture . "/" . $city,
+                "price_target" => $prefecture . "/" . $city
+            ]
+        );
     }
 
 }
