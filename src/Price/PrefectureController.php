@@ -200,7 +200,7 @@ class PrefectureController
             [
                 "posted_title"=> $prefecture,
                 "areas" => [$prefecture],
-                "price_target" => $prefecture,
+                "prefecture" => $prefecture,
                 "leftMenus" => [$result],
                 "title"=> $prefecture . "地価",
                 "stationTop" => $stationsDesc,
@@ -228,7 +228,8 @@ class PrefectureController
         $this->view->render($response, 'landprice/city.twig',
             [
                 "posted_title"=> $prefecture . "/" . $city,
-                "price_target" => $prefecture . "/" . $city
+                "prefecture" => $prefecture,
+                "city" => $city
             ]
         );
     }

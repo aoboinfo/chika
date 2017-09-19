@@ -1,9 +1,11 @@
 {% extends 'layout.twig' %}
 {% set title = '日本全国地価' %}
 {% set price_target = '全国' %}
-{% set price_target = '全国' %}
+{% set price_all = '全国' %}
 {% block title %}{{ title }}{% endblock %}
-{% block price_target %}{{ price_target }}{% endblock %}
+{% block content_link %}
+    <li><a href="{{ base_url() }}/">{{ price_all }}</a></li>
+{% endblock %}
 {% block leftDropMenu %}
     <ul class="collapsible collapsible-accordion">
         {% for key, area in areas %}

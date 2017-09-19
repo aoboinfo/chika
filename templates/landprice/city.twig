@@ -1,6 +1,10 @@
 {% extends 'layout.twig' %}
 {% block title %}{{ title }}{% endblock %}
 {% block price_target %}{{ price_target }}{% endblock %}
+{% block content_link %}
+    <li><a href="{{ base_url() }}/{{ prefecture }}">{{ prefecture }}</a></li>
+    <li><a href="{{ base_url() }}/{{ prefecture }}/{{ city }}">{{ city }}</a></li>
+{% endblock %}
 
 {% block javascript %}
     {{ parent() }}
