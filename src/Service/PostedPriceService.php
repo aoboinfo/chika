@@ -43,50 +43,29 @@ class PostedPriceService
         $this->router = $router;
         $this->logger = $logger;
     }
-    public function historyPriceL2 ($request, $response, $params) {
-        $prefecture = $request->getAttribute('prefecture');
-        $itemID = $request->getAttribute('id');
-        $queryStr = "";
-        if (is_null($prefecture) && is_null($itemID)) { //
-            $queryStr = "select year, ROUND(AVG(price)) as avg_price from survey_his where price <> 0 group by year order by year";
-        } else if (!is_null($prefecture) && is_null($itemID)) { //
-            $queryStr = "select ROUND(AVG(price)) as avg_price, year from survey_his where price <> 0 and prefecture = '" . $prefecture . "' group by year order by year";
-        } else {//
-
-        }
-        $allHistory = $this->db->query($queryStr);
-        $labels = array();
-        $prices = array();
-        while ($row = mysqli_fetch_assoc($allHistory)) {
-            $labels[] = $row["year"];
-            $prices[] = $row["avg_price"];
-        }
-        $allHistory->close();
-        //
-        $result = ["labels"=>$labels, "prices"=>$prices];
-        //
-        $res = $response->withJson($result)
-            ->withHeader('Content-type', 'application/json');
-        return $res;
-
-    }
     public function historyPriceOf ($request, $response, $params) {
        // $cities = $this->db->query("select distinct city from posted_price where address like '" . $params['prefecture'] . "%'");
         $prefecture = $request->getAttribute('prefecture');
-        $itemID = $request->getAttribute('id');
+        $city = $request->getAttribute('city');
         //
         $commonQuery = "select year, ROUND(AVG(price)) as avg_price from";
         $postPriceQuery = ""; //公示
         $surveyPriceQuery = ""; //調査
         //
-        if (is_null($prefecture) && is_null($itemID)) { //
+        if (is_null($prefecture) && is_null($city)) { //
             $postPriceQuery = $commonQuery . " posted_his where price <> 0 group by year order by year";
             $surveyPriceQuery = $commonQuery . " survey_his where price <> 0 group by year order by year";
-        } else if (!is_null($prefecture) && is_null($itemID)) { //
+        } else if (!is_null($prefecture) && is_null($city)) { //
             $postPriceQuery = $commonQuery . " posted_his where price <> 0 and prefecture = '" . $prefecture . "' group by year order by year";
             $surveyPriceQuery = $commonQuery . " survey_his where price <> 0 and prefecture = '" . $prefecture . "' group by year order by year";
         } else {//
-
+            $postPriceQuery = "select a.year, round(avg(a.price)) as avg_price from posted_his as a inner join posted_price as b on a.id = b.id";
+            $postPriceQuery = $postPriceQuery . " where a.prefecture = '" . $prefecture . "' and b.city = '" . $city .  "'";
+            $postPriceQuery = $postPriceQuery . " and a.price <> 0 group by a.year order by a.year";
+            //
+            $surveyPriceQuery = "select a.year, round(avg(a.price)) as avg_price from survey_his as a inner join surveyed_price as b on a.id = b.id";
+            $surveyPriceQuery = $surveyPriceQuery . " where a.prefecture = '" . $prefecture . "' and b.city = '" . $city .  "'";
+            $surveyPriceQuery = $surveyPriceQuery . " and a.price <> 0 group by a.year order by a.year";
         }
         //post prices
         $postHistory = $this->db->query($postPriceQuery);
@@ -158,35 +137,36 @@ class PostedPriceService
     //items on map
     public function itemsOnMap ($request, $response, $params) {
         $prefecture = $request->getAttribute('prefecture');
-        $cityName = $request->getAttribute('city');
-        //
-        $mapItemQueryString = '';
-        if (is_null($prefecture) && is_null($cityName)) {
-            $mapItemQueryString = "select lat, lng, price0, price1 from post_price";
-        } else if (!is_null($prefecture) && is_null($cityName)) {//for prefecture
-            $mapItemQueryString = "select lat, lng, price0, price1 from post_price where address like '" . $prefecture . "%'";
-        } else {//for city
+        $city = $request->getAttribute('city');
+        $postedItems = array();
+        $surveyedItems = array();
+        if (!is_null($prefecture) && !is_null($city)) {//for prefecture
+            $mapItemPosted = "select lat, lng, price0, price1, address from post_price where city = '" . $city . "' and address like '" . $prefecture . "%'";
+            $postedOnMap = $this->db->query($mapItemPosted);
+            //Must not use class for json in Json only output.
+            while ($row = mysqli_fetch_assoc($postedOnMap)) {
+                $landPrice = ["lat"=>$row["lat"], "lng"=>$row["lng"], "price0"=>$row["price0"], "price1"=>$row["price1"], "address"=>$row["address"]];
+                $postedItems[] = $landPrice;
+            }
+            $postedOnMap->close();
+            //
+            $mapItemSurveyed = "select lat, lng, price0, price1, address from survey_price where city = '" . $city . "' and address like '" . $prefecture . "%'";
+            $surveyedOnMap = $this->db->query($mapItemSurveyed);
+            //Must not use class for json in Json only output.
+            while ($row = mysqli_fetch_assoc($surveyedOnMap)) {
+                $landPrice = ["lat"=>$row["lat"], "lng"=>$row["lng"], "price0"=>$row["price0"], "price1"=>$row["price1"], "address"=>$row["address"]];
+                $surveyedItems[] = $landPrice;
+            }
+            $surveyedOnMap->close();
+            //
+            $res = $response->withJson(["postedItems"=> $postedItems, "surveyedItems"=>$surveyedItems])
+                ->withHeader('Content-type', 'application/json;charset=utf-8');
 
+            return $res;
+        } else {//for city
+            return $response;
         }
-        //$this->logger->info("LandPrice://" . $mapItemQueryString);
-        //
-        $pointsOnMap = $this->db->query($mapItemQueryString);
-        //
-        $mapItems = array();
-        //Must not use class for json in Json only output.
-        while ($row = mysqli_fetch_assoc($pointsOnMap)) {
-            $landPrice = ["lat"=>$row["lat"], "lng"=>$row["lng"], "dif" => $row["price0"] - $row["price1"]];
-            $mapItems[] = $landPrice;
-        }
-        //
-        if ($pointsOnMap != null) {
-            $pointsOnMap->close();
-        }
-        //
-        //$data = array('name' => 'Bob', 'age' => 40);
-        $res = $response->withJson(["mapItems"=> $mapItems])
-                        ->withHeader('Content-type', 'application/json;charset=utf-8');
-        return $res;
+
     }
 
 }

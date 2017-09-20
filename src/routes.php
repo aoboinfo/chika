@@ -15,7 +15,6 @@ $app->get('/{prefecture}/{city}', 'Price\PrefectureController:showPricesForCity'
     return $response;
 });*/
 //
-$app->get('/avgs/[{prefecture}/[{id}]]', 'Service\PostedPriceService:historyPriceOf');
-$app->get('/avg2/[{prefecture}/[{id}]]', 'Service\PostedPriceService:historyPriceL2');
+$app->get('/avgs/[{prefecture}/[{city}]]', 'Service\PostedPriceService:historyPriceOf');
 $app->get('/changeRate/[{prefecture}/[{city}]]', 'Service\PostedPriceService:changeRate');
 $app->get('/mapItems/[{prefecture}/[{city}]]', 'Service\PostedPriceService:itemsOnMap');
