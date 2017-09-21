@@ -93,7 +93,7 @@ class PrefectureController
         $surveyStationLow10->close();
         //
         //posted average price/year
-        $posted_avg = $this->db->query("select year, FORMAT(ROUND(AVG(price)),0) as avg_price from posted_his where price <> 0 and prefecture = '" . $prefecture . "' group by year order by year");
+        $posted_avg = $this->db->query("select year, FORMAT(ROUND(AVG(price)),0) as avg_price from posted_his where price <> 0 and prefecture = '" . mb_substr($prefecture, 0, 3) . "' group by year order by year");
         //
         $averagePrices = array();
         //
@@ -104,7 +104,7 @@ class PrefectureController
             $averagePrices[] = $averagePrice;
         }
         $posted_avg->close();
-        $survey_avg = $this->db->query("select FORMAT(ROUND(AVG(price)),0) as avg_price from survey_his where price <> 0 and prefecture = '" . $prefecture . "' group by year order by year");
+        $survey_avg = $this->db->query("select FORMAT(ROUND(AVG(price)),0) as avg_price from survey_his where price <> 0 and prefecture = '" . mb_substr($prefecture, 0, 3) . "' group by year order by year");
         $index = 0;
         while ($row = mysqli_fetch_assoc($survey_avg)) {
             $averagePrice = $averagePrices[$index];
@@ -221,9 +221,21 @@ class PrefectureController
     public function showPricesForCity ($request, $response, $params) {
         $prefecture = $params['prefecture'];
         $city = $params['city'];
-        /*$response->getBody()->write("Hello, $prefecture/$city");
+        //map contents
+        $postedItemsOfCity = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from post_price where city = '" . $city . "' and address like '" . $prefecture . "%' order by price0 desc");
+        $surveyItemsOfCity = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from survey_price where city = '" . $city . "' and address like '" . $prefecture . "%' order by price0 desc");
 
-        return $response;*/
+        while ($row = mysqli_fetch_assoc($postedItemsOfCity)) {
+
+
+        }
+        $postedItemsOfCity->close();
+
+        while ($row = mysqli_fetch_assoc($surveyItemsOfCity)) {
+
+
+        }
+        $surveyItemsOfCity->close();
 
         $this->view->render($response, 'landprice/city.twig',
             [

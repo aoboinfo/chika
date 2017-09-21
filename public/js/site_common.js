@@ -148,7 +148,31 @@ function drawAvgPrice(type, targetUrl, chartObj) {
         }
     );
 }
+function addItemMarkersToMap(priceType, value, markers) {
+    var price0 = Number(value.price0); //latest price
+    var price1 = Number(value.price1); //the price year before latest.
+    var icon = null;
+    if (price0 - price1 > 0) {
+        icon = new Y.Icon('../../img/up.png');
+    } else if (price0 - price1  < 0){
+        icon = new Y.Icon('../../img/down.png');
+    } else {
+        icon = new Y.Icon('../../img/equal.png');
+    }
+    var changeStr = "&nbsp;&nbsp;変動なし";
+    if (price1 != 0) {
+        var changeRate = Math.round(100 * (price0 - price1)/price1)/100;
+        if (changeRate > 0) {
+            changeStr = "&nbsp;&nbsp;+" + changeRate + "%";
+        } else if (changeRate < 0) {
+            changeStr =  "&nbsp;&nbsp;" + changeRate + "%";
+        }
+    }
 
+    var marker = new Y.Marker(new Y.LatLng(value.lat, value.lng), {icon: icon});
+    marker.title = priceType + "："+ price0.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' }) + '円/m²' + changeStr + "<br>" + value.address;
+    markers.push(marker);
+}
 function showMap(targetUrl) {
     //console.log(targetUrl);
     $.ajax (
@@ -163,33 +187,10 @@ function showMap(targetUrl) {
                 json.postedItems.forEach(function (value) {
                     var lat = value.lat;
                     var lng = value.lng;
-                    var price0 = Number(value.price0); //latest price
-                    var price1 = Number(value.price1); //the price year before latest.
-                    var icon = null;
-                    if (price0 - price1 > 0) {
-                        icon = new Y.Icon('../../img/up.png');
-                    } else if (price0 - price1  < 0){
-                        icon = new Y.Icon('../../img/down.png');
-                    } else {
-                        icon = new Y.Icon('../../img/equal.png');
-                    }
-                    var changeStr = "&nbsp;&nbsp;変動なし";
-                    if (price1 != 0) {
-                        var changeRate = Math.round(100 * (price0 - price1)/price1)/100;
-                        if (changeRate > 0) {
-                            changeStr = "&nbsp;&nbsp;+" + changeRate + "%";
-                        } else if (changeRate < 0) {
-                            changeStr =  "&nbsp;&nbsp;" + changeRate + "%";
-                        }
-                    }
-
-                    var marker = new Y.Marker(new Y.LatLng(lat, lng), {icon: icon});
-                    marker.title = price0.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' }) + '円/m²' + changeStr + "<br>" + value.address;
-                    markers.push(marker);
+                    addItemMarkersToMap("地価公示", value, markers);
                     //
                     lats = lats + parseFloat(lat);
                     lngs = lngs + parseFloat(lng);
-
                     i++;
                 });
                 //console.log("i:" + i);
@@ -202,9 +203,15 @@ function showMap(targetUrl) {
                 // 地図の種類を切り換えるコントローラーを表示
                 map.addControl(new Y.LayerSetControl());
                 map.addControl(new Y.SliderZoomControlVertical());
-                map.addControl(new Y.SearchControl());
                 map.addControl(new Y.CenterMarkControl());
                 map.addControl(new Y.ScaleControl());
+                map.addFeatures(markers);
+                //Clear the marker array
+                markers = [];
+                json.surveyedItems.forEach(function (value) {
+                    //
+                    addItemMarkersToMap("地価調査", value, markers);
+                });
                 map.addFeatures(markers);
             }
         }
