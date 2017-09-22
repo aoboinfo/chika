@@ -4,7 +4,8 @@
 /**
  * Draw price change rate.
  */
-var map = new Y.Map("map-canvas");
+var mapDiv = document.getElementById("map-canvas");
+var map = null;
 //
 var changeRateDataSets = [//global data for two type bars
     {
@@ -148,16 +149,16 @@ function drawAvgPrice(type, targetUrl, chartObj) {
         }
     );
 }
-function addItemMarkersToMap(priceType, value, markers) {
+function addItemMarkersToMap(priceType, value) {
     var price0 = Number(value.price0); //latest price
     var price1 = Number(value.price1); //the price year before latest.
     var icon = null;
     if (price0 - price1 > 0) {
-        icon = new Y.Icon('../../img/up.png');
+        icon = '../../img/up.png';
     } else if (price0 - price1  < 0){
-        icon = new Y.Icon('../../img/down.png');
+        icon = '../../img/down.png';
     } else {
-        icon = new Y.Icon('../../img/equal.png');
+        icon = '../../img/equal.png';
     }
     var changeStr = "&nbsp;&nbsp;変動なし";
     if (price1 != 0) {
@@ -168,49 +169,60 @@ function addItemMarkersToMap(priceType, value, markers) {
             changeStr =  "&nbsp;&nbsp;" + changeRate + "%";
         }
     }
-
-    var marker = new Y.Marker(new Y.LatLng(value.lat, value.lng), {icon: icon});
-    marker.title = priceType + "："+ price0.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' }) + '円/m²' + changeStr + "<br>" + value.address;
-    markers.push(marker);
+    /* InfoWindowクラスのオブジェクトを作成 */
+    var infoWindow = new google.maps.InfoWindow();
+    /* 指定したオプションを使用してマーカーを作成 */
+    var marker = new google.maps.Marker({position:new google.maps.LatLng(value.lat,value.lng), map:map,icon:icon});
+    /* addListener を使ってイベントリスナを追加 */
+    /* 地図上のmarkerがクリックされると｛｝内の処理を実行。*/
+    google.maps.event.addListener(marker, 'click', function() {
+        /* InfoWindowOptionsオブジェクトを指定します。*/
+        infoWindow.setContent(priceType + "："+ price0.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' }) + '円/m²' + changeStr + "<br>" + value.address);
+        /* マーカーに情報ウィンドウを表示 */
+        infoWindow.open(map,marker);
+    });
 }
 function showMap(targetUrl) {
     //console.log(targetUrl);
+    var markers = [];
     $.ajax (
         {
             url : targetUrl,
             type: "GET",
             success: function (json) {
-                var markers = [];
                 var i = 0;
                 var lats = 0.0;
                 var lngs = 0.0;
                 json.postedItems.forEach(function (value) {
                     var lat = value.lat;
                     var lng = value.lng;
-                    addItemMarkersToMap("地価公示", value, markers);
                     //
                     lats = lats + parseFloat(lat);
                     lngs = lngs + parseFloat(lng);
                     i++;
                 });
-                //console.log("i:" + i);
-                //console.log("latlng:" + lats + "/" + lngs);
-                map.drawMap(
-                    new Y.LatLng(lats/i, lngs/i),
-                    15,  //ズームレベルは16
-                    Y.LayerSetId.NORMAL  //通常の地図を表示
-                );
-                // 地図の種類を切り換えるコントローラーを表示
-                map.addControl(new Y.LayerSetControl());
-                map.addControl(new Y.SliderZoomControlVertical());
-                map.addControl(new Y.CenterMarkControl());
-                map.addControl(new Y.ScaleControl());
-                map.addFeatures(markers);
-                //Clear the marker array
-                markers = [];
+                console.log("i:" + i);
+                console.log("latlng:" + lats + "/" + lngs);
+                map = new google.maps.Map( mapDiv, {
+                    center: new google.maps.LatLng(lats/i, lngs/i),
+                    zoom:13,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    mapTypeControl: false,
+                    scrollwheel: false,
+                    draggable: true,
+                    styles: [{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#e0efef"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"hue":"#1900ff"},{"color":"#c0e8e8"}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":100},{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"visibility":"on"},{"lightness":700}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#7dcdcd"}]}],
+                    mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+                    navigationControl: false,
+                    navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
+                });
+                //post
+                json.postedItems.forEach(function (value) {
+                    addItemMarkersToMap("地価公示", value);
+                });
+                //survey
                 json.surveyedItems.forEach(function (value) {
                     //
-                    addItemMarkersToMap("地価調査", value, markers);
+                    addItemMarkersToMap("地価調査", value);
                 });
                 map.addFeatures(markers);
             }
