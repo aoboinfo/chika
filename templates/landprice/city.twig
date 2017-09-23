@@ -22,7 +22,77 @@
                         </h4>
                     </div>
                     <div class="card-reveal">
-                        <span class="card-title grey-text text-darken-4">{{ prefecture }}/{{ city }}<i class="mdi-navigation-close right"></i></span>
+                        <span class="card-title grey-text text-darken-4">{{ prefecture }}/{{ city }} <i class="mdi-navigation-close right"></i></span>
+                        <div id="postArea">
+                            <span class="card-title grey-text text-darken-4">地価公示</span>
+                            <table class="responsive-table">
+                                <thead>
+                                <th data-field="id">順位</th>
+                                <th data-field="price">価格</th>
+                                <th data-field="rate">前年比(%)</th>
+                                <th data-field="place">住所表示</th>
+                                <th data-field="station">最寄駅</th>
+                                <th data-field="distance">駅から距離(m)</th>
+                                <th data-field="structure">建物構造</th>
+                                <th data-field="usage">利用現況</th>
+                                <th data-field="cityPlan">用途地域</th>
+                                </thead>
+                                <tbody>
+                                {% for price in postedPrices %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ price.price }}円/㎡</td>
+                                        {% if price.changeRate != null %}
+                                            <td>{{ price.changeRate }}%</td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+                                        <td>{{ price.address }}</td>
+                                        <td>{{ price.station }}</td>
+                                        <td>{{ price.distanceFromStation }}m</td>
+                                        <td>{{ price.structure }}</td>
+                                        <td>{{ price.currentUsage }}</td>
+                                        <td>{{ price.cityPlan }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="surveyArea">
+                            <span class="card-title grey-text text-darken-4">地価調査</span>
+                            <table class="responsive-table">
+                                <thead>
+                                <th data-field="id">順位</th>
+                                <th data-field="price">価格</th>
+                                <th data-field="rate">前年比(%)</th>
+                                <th data-field="place">住所表示</th>
+                                <th data-field="station">最寄駅</th>
+                                <th data-field="distance">駅から距離(m)</th>
+                                <th data-field="structure">建物構造</th>
+                                <th data-field="usage">利用現況</th>
+                                <th data-field="cityPlan">用途地域</th>
+                                </thead>
+                                <tbody>
+                                {% for price in surveyPrices %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ price.price }}円/㎡</td>
+                                        {% if price.changeRate != null %}
+                                            <td>{{ price.changeRate }}%</td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+                                        <td>{{ price.address }}</td>
+                                        <td>{{ price.station }}</td>
+                                        <td>{{ price.distanceFromStation }}m</td>
+                                        <td>{{ price.structure }}</td>
+                                        <td>{{ price.currentUsage }}</td>
+                                        <td>{{ price.cityPlan }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

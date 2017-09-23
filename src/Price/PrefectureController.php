@@ -236,7 +236,7 @@ class PrefectureController
             $landPrice->setCurrentUsage($row["current_use"]);
             $landPrice->setStructure($row["build_structure"]);
             $landPrice->setCityPlan($row["city_plan"]);
-            $postResultOfCity = $landPrice;
+            $postResultOfCity[] = $landPrice;
         }
         $postedItemsOfCity->close();
 
@@ -252,7 +252,7 @@ class PrefectureController
             $landPrice->setCurrentUsage($row["current_use"]);
             $landPrice->setStructure($row["build_structure"]);
             $landPrice->setCityPlan($row["city_plan"]);
-            $surveyResultOfCity = $landPrice;
+            $surveyResultOfCity[] = $landPrice;
 
         }
         $surveyItemsOfCity->close();
