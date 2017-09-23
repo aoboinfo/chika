@@ -224,15 +224,35 @@ class PrefectureController
         //map contents
         $postedItemsOfCity = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from post_price where city = '" . $city . "' and address like '" . $prefecture . "%' order by price0 desc");
         $surveyItemsOfCity = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from survey_price where city = '" . $city . "' and address like '" . $prefecture . "%' order by price0 desc");
-
+        $postResultOfCity = array();
         while ($row = mysqli_fetch_assoc($postedItemsOfCity)) {
-
-
+            $landPrice = new LandPrice();
+            $landPrice->setId($row["id"]);
+            $landPrice->setPrice("¥" . number_format($row["price0"]));
+            $landPrice->setChangeRate($row["rate"]);
+            $landPrice->setAddress($row["address"]);
+            $landPrice->setStation($row["near_station"]);
+            $landPrice->setDistanceFromStation($row["distance_station"]);
+            $landPrice->setCurrentUsage($row["current_use"]);
+            $landPrice->setStructure($row["build_structure"]);
+            $landPrice->setCityPlan($row["city_plan"]);
+            $postResultOfCity = $landPrice;
         }
         $postedItemsOfCity->close();
 
+        $surveyResultOfCity = array();
         while ($row = mysqli_fetch_assoc($surveyItemsOfCity)) {
-
+            $landPrice = new LandPrice();
+            $landPrice->setId($row["id"]);
+            $landPrice->setPrice("¥" . number_format($row["price0"]));
+            $landPrice->setChangeRate($row["rate"]);
+            $landPrice->setAddress($row["address"]);
+            $landPrice->setStation($row["near_station"]);
+            $landPrice->setDistanceFromStation($row["distance_station"]);
+            $landPrice->setCurrentUsage($row["current_use"]);
+            $landPrice->setStructure($row["build_structure"]);
+            $landPrice->setCityPlan($row["city_plan"]);
+            $surveyResultOfCity = $landPrice;
 
         }
         $surveyItemsOfCity->close();
@@ -241,7 +261,9 @@ class PrefectureController
             [
                 "posted_title"=> $prefecture . "/" . $city,
                 "prefecture" => $prefecture,
-                "city" => $city
+                "city" => $city,
+                "postedPrices" => $postResultOfCity,
+                "surveyPrices" => $surveyResultOfCity
             ]
         );
     }

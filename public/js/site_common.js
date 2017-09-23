@@ -180,6 +180,8 @@ function addItemMarkersToMap(priceType, value) {
         infoWindow.setContent(priceType + "："+ price0.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' }) + '円/m²' + changeStr + "<br>" + value.address);
         /* マーカーに情報ウィンドウを表示 */
         infoWindow.open(map,marker);
+        //add the detail information under the map.
+
     });
 }
 function showMap(targetUrl) {
