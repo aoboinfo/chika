@@ -153,21 +153,21 @@ function addItemMarkersToMap(priceType, value) {
     var price0 = Number(value.price0); //latest price
     var price1 = Number(value.price1); //the price year before latest.
     var icon = null;
-    if (price0 - price1 > 0) {
-        icon = '../../img/up.png';
-    } else if (price0 - price1  < 0){
-        icon = '../../img/down.png';
-    } else {
-        icon = '../../img/equal.png';
-    }
-    var changeStr = "&nbsp;&nbsp;変動なし";
+    var changeStr = '';
     if (price1 != 0) {
-        var changeRate = Math.round(100 * (price0 - price1)/price1)/100;
+        var changeRate = Math.round(100 * (price0 - price1)/price1);
         if (changeRate > 0) {
             changeStr = "&nbsp;&nbsp;+" + changeRate + "%";
+            icon = '../../img/up.png';
         } else if (changeRate < 0) {
             changeStr =  "&nbsp;&nbsp;" + changeRate + "%";
+            icon = '../../img/down.png';
+        } else {
+            changeStr = "&nbsp;&nbsp;変動なし";
+            icon = '../../img/equal.png';
         }
+    } else {
+        icon = '../../img/equal.png';
     }
     /* InfoWindowクラスのオブジェクトを作成 */
     var infoWindow = new google.maps.InfoWindow();

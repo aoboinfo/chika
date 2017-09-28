@@ -24,7 +24,7 @@
                     <div class="card-reveal">
                         <span class="card-title grey-text text-darken-4">{{ prefecture }}/{{ city }} <i class="mdi-navigation-close right"></i></span>
                         <div id="postArea">
-                            <span class="card-title grey-text text-darken-4">地価公示</span>
+                            <span class="card-title grey-text text-darken-4 center-align">地価公示</span>
                             <table class="responsive-table">
                                 <thead>
                                 <th data-field="id">順位</th>
@@ -59,7 +59,7 @@
                             </table>
                         </div>
                         <div id="surveyArea">
-                            <span class="card-title grey-text text-darken-4">地価調査</span>
+                            <span class="card-title grey-text text-darken-4 center-align">地価調査</span>
                             <table class="responsive-table">
                                 <thead>
                                 <th data-field="id">順位</th>
@@ -96,6 +96,84 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+{% endblock %}
+{% block rightSection0 %}
+    <ol class="breadcrumbs">
+        <li><a href="#">駅周辺地価</a></li>
+        <li><a href="#">{% block price_station %}{{ city }}{% endblock %}</a></li>
+    </ol>
+    <div class="card">
+        <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
+            <div class="move-up">
+                <h5 class="margin white-text">地価公示ランキング</h5>
+            </div>
+            <table class="bordered white-text">
+                <thead>
+                <tr>
+                    <th data-field="id">順位</th>
+                    <th data-field="name">駅名</th>
+                    <th data-field="price">地価平均</th>
+                    <th data-field="tubo_price">坪単価平均</th>
+                    <th data-field="rate">前年比</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for station  in  stationTop %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ station.station }}</td>
+                        <td>{{ station.price }}</td>
+                        <td>{{ station.priceOfTubo }}</td>
+                        {% if station.changeRate > 0 %}
+                            <td>+{{ station.changeRate }}%</td>
+                        {% elseif station.changeRate == 0 %}
+                            <td>{{ station.changeRate }}%</td>
+                        {% else %}
+                            <td>-{{ station.changeRate }}%</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block rightSection1 %}
+    <div class="card">
+        <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
+            <div class="move-up">
+                <h5 class="margin white-text">地価調査ランキング</h5>
+            </div>
+            <table class="bordered white-text">
+                <thead>
+                <tr>
+                    <th data-field="id">順位</th>
+                    <th data-field="name">駅名</th>
+                    <th data-field="price">地価平均</th>
+                    <th data-field="tubo_price">坪単価平均</th>
+                    <th data-field="rate">前年比</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for station  in  surveyStationTop %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ station.station }}</td>
+                        <td>{{ station.price }}</td>
+                        <td>{{ station.priceOfTubo }}</td>
+                        {% if station.changeRate > 0 %}
+                            <td>+{{ station.changeRate }}%</td>
+                        {% elseif station.changeRate == 0 %}
+                            <td>{{ station.changeRate }}%</td>
+                        {% else %}
+                            <td>-{{ station.changeRate }}%</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}
