@@ -256,6 +256,38 @@ class PrefectureController
 
         }
         $surveyItemsOfCity->close();
+        //station
+        $postStationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from post_price where price1 <> 0 and city = '" . $city . "' and address like '" . $prefecture . "%' group by near_station order by price0";
+        $postQueryResult = $this->db->query($postStationQuery . " desc");
+        //
+        $postStations = array();
+        //
+        while ($row = mysqli_fetch_assoc($postQueryResult)) {
+            $landPrice = new LandPrice();
+            $landPrice->setStation($row["near_station"]);
+            $landPrice->setPrice($row["price_jp"]);
+            $landPrice->setPriceOfTubo($row["price_tubo"]);
+            $landPrice->setChangeRate($row["rate"]);
+            $postStations[] = $landPrice;
+        }
+        $postQueryResult->close();
+
+        $surveyStationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from survey_price where price1 <> 0 and city = '" . $city . "' and address like '" . $prefecture . "%' group by near_station order by price0";
+        $surveyQueryResult = $this->db->query($surveyStationQuery . " desc");
+        //
+        $surveyStations = array();
+        //
+        while ($row = mysqli_fetch_assoc($surveyQueryResult)) {
+            $landPrice = new LandPrice();
+            $landPrice->setStation($row["near_station"]);
+            $landPrice->setPrice($row["price_jp"]);
+            $landPrice->setPriceOfTubo($row["price_tubo"]);
+            $landPrice->setChangeRate($row["rate"]);
+            $surveyStations[] = $landPrice;
+        }
+        $postQueryResult->close();
+        //
+        $postPricesQuery =
 
         $this->view->render($response, 'landprice/city.twig',
             [
@@ -263,7 +295,9 @@ class PrefectureController
                 "prefecture" => $prefecture,
                 "city" => $city,
                 "postedPrices" => $postResultOfCity,
-                "surveyPrices" => $surveyResultOfCity
+                "surveyPrices" => $surveyResultOfCity,
+                "postStations" => $postStations,
+                "surveyStations" => $surveyStations
             ]
         );
     }

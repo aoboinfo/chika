@@ -5,7 +5,23 @@
     <li><a href="{{ base_url() }}/{{ prefecture }}">{{ prefecture }}</a></li>
     <li><a href="{{ base_url() }}/{{ prefecture }}/{{ city }}">{{ city }}</a></li>
 {% endblock %}
-
+{% block category %}
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="card">
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- LandPriceTop -->
+                <ins class="adsbygoogle aoboAds"
+                     style="display:inline-block"
+                     data-ad-client="ca-pub-2770900584946061"
+                     data-ad-slot="5901050259"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 {% block mapArea %}
     <div class="row">
         <div class="col s12 m12 l12">
@@ -24,11 +40,11 @@
                     <div class="card-reveal">
                         <span class="card-title grey-text text-darken-4">{{ prefecture }}/{{ city }} <i class="mdi-navigation-close right"></i></span>
                         <div id="postArea">
-                            <span class="card-title grey-text text-darken-4 center-align">地価公示</span>
+                            <span class="card-title text-darken-4 center-align">-- 地価公示 --</span>
                             <table class="responsive-table">
                                 <thead>
                                 <th data-field="id">順位</th>
-                                <th data-field="price">価格</th>
+                                <th data-field="price">価格(円/㎡)</th>
                                 <th data-field="rate">前年比(%)</th>
                                 <th data-field="place">住所表示</th>
                                 <th data-field="station">最寄駅</th>
@@ -41,7 +57,7 @@
                                 {% for price in postedPrices %}
                                     <tr>
                                         <td>{{ loop.index }}</td>
-                                        <td>{{ price.price }}円/㎡</td>
+                                        <td>{{ price.price }}</td>
                                         {% if price.changeRate != null %}
                                             <td>{{ price.changeRate }}%</td>
                                         {% else %}
@@ -59,11 +75,11 @@
                             </table>
                         </div>
                         <div id="surveyArea">
-                            <span class="card-title grey-text text-darken-4 center-align">地価調査</span>
+                            <span class="card-title text-darken-4 center-align">-- 地価調査 --</span>
                             <table class="responsive-table">
                                 <thead>
                                 <th data-field="id">順位</th>
-                                <th data-field="price">価格</th>
+                                <th data-field="price">価格(円/㎡)</th>
                                 <th data-field="rate">前年比(%)</th>
                                 <th data-field="place">住所表示</th>
                                 <th data-field="station">最寄駅</th>
@@ -76,7 +92,7 @@
                                 {% for price in surveyPrices %}
                                     <tr>
                                         <td>{{ loop.index }}</td>
-                                        <td>{{ price.price }}円/㎡</td>
+                                        <td>{{ price.price }}</td>
                                         {% if price.changeRate != null %}
                                             <td>{{ price.changeRate }}%</td>
                                         {% else %}
@@ -114,13 +130,13 @@
                 <tr>
                     <th data-field="id">順位</th>
                     <th data-field="name">駅名</th>
-                    <th data-field="price">地価平均</th>
-                    <th data-field="tubo_price">坪単価平均</th>
+                    <th data-field="price">地価平均(円/m²)</th>
+                    <th data-field="tubo_price">坪単価平均(円/坪)</th>
                     <th data-field="rate">前年比</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for station  in  stationTop %}
+                {% for station  in  postStations %}
                     <tr>
                         <td>{{ loop.index }}</td>
                         <td>{{ station.station }}</td>
@@ -151,13 +167,13 @@
                 <tr>
                     <th data-field="id">順位</th>
                     <th data-field="name">駅名</th>
-                    <th data-field="price">地価平均</th>
-                    <th data-field="tubo_price">坪単価平均</th>
+                    <th data-field="price">地価平均(円/m²)</th>
+                    <th data-field="tubo_price">坪単価平均(円/坪)</th>
                     <th data-field="rate">前年比</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for station  in  surveyStationTop %}
+                {% for station  in  surveyStations %}
                     <tr>
                         <td>{{ loop.index }}</td>
                         <td>{{ station.station }}</td>
