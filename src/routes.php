@@ -18,3 +18,4 @@ $app->get('/{prefecture}/{city}', 'Price\PrefectureController:showPricesForCity'
 $app->get('/avgs/[{prefecture}/[{city}]]', 'Service\PostedPriceService:historyPriceOf');
 $app->get('/changeRate/[{prefecture}/[{city}]]', 'Service\PostedPriceService:changeRate');
 $app->get('/mapItems/[{prefecture}/[{city}]]', 'Service\PostedPriceService:itemsOnMap');
+$app->get('/listingCityPlan/{prefecture}/[{city}]', 'Service\PostedPriceService:itemsForCityPlanAndUsage');

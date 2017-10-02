@@ -4,6 +4,21 @@
 /**
  * Draw price change rate.
  */
+window.chartColors = {
+    red: 'rgb(255, 99, 132)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 205, 86)',
+    green: 'rgb(75, 192, 192)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(201, 203, 207)',
+    pink: 'rgb(255, 105, 180)',
+    teal: 'rgb(0, 128, 128)',
+    brown: 'rgb(128, 0, 0)',
+    olive: 'rgb(128, 128, 0)',
+    peru: 'rgb(205, 133, 63)',
+    cyan:  'rgb(0, 255, 255)'
+};
 var mapDiv = document.getElementById("map-canvas");
 var map = null;
 //
@@ -226,7 +241,7 @@ function showMap(targetUrl) {
                     //
                     addItemMarkersToMap("地価調査", value);
                 });
-                map.addFeatures(markers);
+                //map.addFeatures(markers);
             }
         }
     );

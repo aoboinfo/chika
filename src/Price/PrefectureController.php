@@ -285,10 +285,8 @@ class PrefectureController
             $landPrice->setChangeRate($row["rate"]);
             $surveyStations[] = $landPrice;
         }
-        $postQueryResult->close();
+        $surveyQueryResult->close();
         //
-        $postPricesQuery =
-
         $this->view->render($response, 'landprice/city.twig',
             [
                 "posted_title"=> $prefecture . "/" . $city,

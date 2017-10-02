@@ -8,16 +8,34 @@
 {% block category %}
     <div class="row">
         <div class="col s12 m12 l12">
-            <div class="card">
-                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                <!-- LandPriceTop -->
-                <ins class="adsbygoogle aoboAds"
-                     style="display:inline-block"
-                     data-ad-client="ca-pub-2770900584946061"
-                     data-ad-slot="5901050259"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
+            <div id="post_doughnut" class="card">
+                <span class="card-title text-darken-4 center-align">-- 地価公示 --</span>
+                <div class="col s6 m6 l6">
+                    <div id="doughnut-chart-wrapper">
+                        <canvas id="doughnut-cityPlan-post" height="200"></canvas>
+                    </div>
+                </div>
+                <div class="col s6 m6 l6">
+                    <div id="doughnut-chart-wrapper">
+                        <canvas id="doughnut-chart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div id="survey_doughnut" class="card">
+                <div class="col s6 m6 l6">
+                    <div id="doughnut-chart-wrapper">
+                        <canvas id="doughnut-cityPlan-post" height="400"></canvas>
+                        <div class="doughnut-chart-status">4500</div>
+                    </div>
+                </div>
+                <div class="col s6 m6 l6">
+                    <div id="doughnut-chart-wrapper">
+                        <canvas id="doughnut-chart" height="400"></canvas>
+                        <div class="doughnut-chart-status">4500
+                            <p class="ultra-small center-align">Sold</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -193,7 +211,19 @@
         </div>
     </div>
 {% endblock %}
-
+{% block googleAds %}
+    <div class="card">
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- LandPriceTop -->
+        <ins class="adsbygoogle aoboAds"
+             style="display:inline-block"
+             data-ad-client="ca-pub-2770900584946061"
+             data-ad-slot="5901050259"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+{% endblock %}
 {% block javascript %}
     {{ parent() }}
     <script type="text/javascript" src="{{ base_url() }}/js/city.js"></script>
