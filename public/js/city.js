@@ -17,6 +17,7 @@ var doughnutColor = [
     window.chartColors.peru,
     window.chartColors.cyan
 ];
+var MAX_REC_DOUGHNUT = 13;
 
 var postUsageConfig = {
     type: 'doughnut',
@@ -35,7 +36,7 @@ var postUsageConfig = {
         },
         title: {
             display: true,
-            text: '利用現況'
+            text: '地価公示：利用現況'
         },
         animation: {
             animateScale: true,
@@ -61,7 +62,7 @@ var postCityPlanConfig = {
         },
         title: {
             display: true,
-            text: '都市計画区域区分'
+            text: '地価公示：都市計画区域区分'
         },
         animation: {
             animateScale: true,
@@ -70,7 +71,57 @@ var postCityPlanConfig = {
     }
 };
 
-var surveyCityPlanConfig = postUsageConfig;
+var surveyUsageConfig = {
+    type: 'doughnut',
+    data: {
+        datasets: [{
+            data: [],
+            backgroundColor:[],
+            label: 'Dataset 1'
+        }],
+        labels: []
+    },
+    options: {
+        responsive: true,
+        legend: {
+            position: 'right',
+        },
+        title: {
+            display: true,
+            text: '利用現況'
+        },
+        animation: {
+            animateScale: true,
+            animateRotate: true
+        }
+    }
+};
+
+var surveyUCityPlanConfig = {
+    type: 'doughnut',
+    data: {
+        datasets: [{
+            data: [],
+            backgroundColor:[],
+            label: 'Dataset 1'
+        }],
+        labels: []
+    },
+    options: {
+        responsive: true,
+        legend: {
+            position: 'right',
+        },
+        title: {
+            display: true,
+            text: '都市計画区域区分'
+        },
+        animation: {
+            animateScale: true,
+            animateRotate: true
+        }
+    }
+};
 
 window.onload = function () {
     var urlsValues = decodeURIComponent(window.location.href).split("/");
@@ -90,9 +141,12 @@ window.onload = function () {
     //Draw Doughnut on the city town page
     //
     urlsValues.splice(3, 1, "listingCityPlan"); //exchange with mapItems
-    //draw doughnut for post city plan.
-    var ctx = document.getElementById("doughnut-cityPlan-post").getContext("2d");
-    window.myDoughnut = new Chart(ctx, postUsageConfig);
+    //draw doughnut for post current usage.
+    var ctx0 = document.getElementById("doughnut-usage-post").getContext("2d");
+    window.postedUsageDoughnut = new Chart(ctx0, postUsageConfig);
+    var ctx1 = document.getElementById("doughnut-cityPlan-chart").getContext("2d");
+    window.postedCityPlanDoughnut = new Chart(ctx1, postCityPlanConfig);
+
     $.ajax(
         {
             url : urlsValues.join("/"),
@@ -101,16 +155,31 @@ window.onload = function () {
                 for (var i = 0; i < json.postedUsages.length; i++) {
                     var usage = json.postedUsages[i].usage;
                     var count = json.postedUsages[i].count;
-                    if (i == 13) {
+                    if (i == MAX_REC_DOUGHNUT) {
                         break;
                     }
+                    console.log(usage + "/" + count);
                     postUsageConfig.data.labels.push(usage);
                     postUsageConfig.data.datasets.forEach(function(dataset) {
                         dataset.data.push(count);
                         dataset.backgroundColor.push(doughnutColor[i]);
                     });
                 }
-                window.myDoughnut.update();
+                window.postedUsageDoughnut.update();
+                for (var i = 0; i < json.postedCityPlans.length; i++) {
+                    var cityPlan = json.postedCityPlans[i].cityPlan;
+                    var count = json.postedCityPlans[i].count;
+                    if (i == MAX_REC_DOUGHNUT) {
+                        break;
+                    }
+                    postCityPlanConfig.data.labels.push(cityPlan);
+                    postCityPlanConfig.data.datasets.forEach(function(dataset) {
+                        dataset.data.push(count);
+                        dataset.backgroundColor.push(doughnutColor[i]);
+                    });
+                }
+                window.postedCityPlanDoughnut.update();
+
 
             }
         }

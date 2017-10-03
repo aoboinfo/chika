@@ -175,6 +175,8 @@ class PostedPriceService
         //
         $postedUsages = array();
         $surveyedUsages = array();
+        $postedCityPlans = array();
+        $surveyedCityPlans = array();
         //
         if (!is_null($prefecture) && is_null($city)) {
             $postedCityPlanPrefecture = $this->db->query("select current_use, count(*) as u_count from posted_price where address like '" . $prefecture . "%' group by current_use order by u_count desc");
@@ -194,19 +196,35 @@ class PostedPriceService
             $surveyedCityPlanPrefecture->close();
 
         } else if (!is_null($prefecture) && !is_null($city)) {//for city
-            $postedCityPlanCity = $this->db->query("select current_use, count(*) as u_count from posted_price where address like '" . $prefecture . "%' and city = '" . $city . "' group by current_use order by u_count desc");
-            while($row = mysqli_fetch_assoc($postedCityPlanCity)) {
+            $postedUsageCity = $this->db->query("select current_use, count(*) as u_count from posted_price where address like '" . $prefecture . "%' and city = '" . $city . "' group by current_use order by u_count desc");
+            while($row = mysqli_fetch_assoc($postedUsageCity)) {
                 $cityPlan = ["usage" => $row["current_use"], "count" => $row["u_count"]];
                 //
                 $postedUsages[] = $cityPlan;
             }
+            $postedUsageCity->close();
+            //
+            $postedCityPlanCity = $this->db->query("select city_plan, count(*) as u_count from posted_price where address like '" . $prefecture . "%' and city = '" . $city . "' group by city_plan order by u_count desc");
+            while($row = mysqli_fetch_assoc($postedCityPlanCity)) {
+                $cityPlan = ["cityPlan" => $row["city_plan"], "count" => $row["u_count"]];
+                //
+                $postedCityPlans[] = $cityPlan;
+            }
             $postedCityPlanCity->close();
             //
-            $surveyedCityPlanCity = $this->db->query("select current_use, count(*) as u_count from surveyed_price where address like '" . $prefecture . "%' and city = '" . $city . "' group by current_use order by u_count desc");
-            while($row = mysqli_fetch_assoc($surveyedCityPlanCity)) {
+            $surveyedUsageCity = $this->db->query("select current_use, count(*) as u_count from surveyed_price where address like '" . $prefecture . "%' and city = '" . $city . "' group by current_use order by u_count desc");
+            while($row = mysqli_fetch_assoc($surveyedUsageCity)) {
                 $cityPlan = ["usage" => $row["current_use"], "count" => $row["u_count"]];
                 //
                 $surveyedUsages[] = $cityPlan;
+            }
+            $surveyedUsageCity->close();
+            //
+            $surveyedCityPlanCity = $this->db->query("select city_plan, count(*) as u_count from surveyed_price where address like '" . $prefecture . "%' and city = '" . $city . "' group by city_plan order by u_count desc");
+            while($row = mysqli_fetch_assoc($surveyedCityPlanCity)) {
+                $cityPlan = ["cityPlan" => $row["city_plan"], "count" => $row["u_count"]];
+                //
+                $surveyedCityPlans[] = $cityPlan;
             }
             $surveyedCityPlanCity->close();
 
@@ -216,7 +234,7 @@ class PostedPriceService
                 ->write('No result');
             return $res;
         }
-        $res = $response->withJson(["postedUsages"=> $postedUsages, "surveyedUsages"=>$surveyedUsages])
+        $res = $response->withJson(["postedUsages"=> $postedUsages, "surveyedUsages"=>$surveyedUsages,"postedCityPlans" => $postedCityPlans,"surveyedCityPlans"=>$surveyedCityPlans])
             ->withHeader('Content-type', 'application/json;charset=utf-8');
         return $res;
 
