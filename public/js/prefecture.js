@@ -15,4 +15,19 @@ window.onload = function () {
     changeRateDataSets[1].backgroundColor = 'rgb(25, 118, 210)';
     changeRateDataSets[1].borderColor = 'rgb(25, 118, 210)';
     drawPriceChangeRate('changeRate/' + prefectureName.substring(0, 3) + '/', document.getElementById("price_change_rate"));
+    //Set current usage and city plan menu.
+    //console.log('listingCityPlan/' + prefectureName.substring(0, 3) + '/');
+    $.ajax(
+        {
+            url : 'listingCityPlan/' + prefectureName.substring(0, 3) + '/',
+            type: "GET",
+            success: function (json) {
+                for (var i = 0; i < json.postedUsages.length; i++) {
+                    var usage = json.postedUsages[i].usage;
+                    var count = json.postedUsages[i].count;
+                    //console.log(usage + "/" + count);
+                }
+            }
+        }
+    );
 }

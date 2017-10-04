@@ -88,7 +88,7 @@ var surveyUsageConfig = {
         },
         title: {
             display: true,
-            text: '利用現況'
+            text: '地価調査：利用現況'
         },
         animation: {
             animateScale: true,
@@ -114,7 +114,7 @@ var surveyUCityPlanConfig = {
         },
         title: {
             display: true,
-            text: '都市計画区域区分'
+            text: '地価調査：都市計画区域区分'
         },
         animation: {
             animateScale: true,
@@ -144,8 +144,13 @@ window.onload = function () {
     //draw doughnut for post current usage.
     var ctx0 = document.getElementById("doughnut-usage-post").getContext("2d");
     window.postedUsageDoughnut = new Chart(ctx0, postUsageConfig);
-    var ctx1 = document.getElementById("doughnut-cityPlan-chart").getContext("2d");
+    var ctx1 = document.getElementById("doughnut-cityPlan-post").getContext("2d");
     window.postedCityPlanDoughnut = new Chart(ctx1, postCityPlanConfig);
+    //
+    var ctx2 = document.getElementById("doughnut-usage-survey").getContext("2d");
+    window.surveyUsageDoughnut = new Chart(ctx2, surveyUsageConfig);
+    var ctx3 = document.getElementById("doughnut-cityPlan-survey").getContext("2d");
+    window.surveyCityPlanDoughnut = new Chart(ctx3, surveyUCityPlanConfig);
 
     $.ajax(
         {
@@ -179,8 +184,37 @@ window.onload = function () {
                     });
                 }
                 window.postedCityPlanDoughnut.update();
-
-
+                if (json.surveyedUsages.length == 0) {
+                    $("div#survey_doughnut").hide();
+                    $("div#survey_station").hide();
+                } else {
+                    for (var i = 0; i < json.surveyedUsages.length; i++) {
+                        var usage = json.surveyedUsages[i].usage;
+                        var count = json.surveyedUsages[i].count;
+                        if (i == MAX_REC_DOUGHNUT) {
+                            break;
+                        }
+                        surveyUsageConfig.data.labels.push(usage);
+                        surveyUsageConfig.data.datasets.forEach(function(dataset) {
+                            dataset.data.push(count);
+                            dataset.backgroundColor.push(doughnutColor[i]);
+                        });
+                    }
+                    window.surveyUsageDoughnut.update();
+                    for (var i = 0; i < json.surveyedCityPlans.length; i++) {
+                        var cityPlan = json.surveyedCityPlans[i].cityPlan;
+                        var count = json.surveyedCityPlans[i].count;
+                        if (i == MAX_REC_DOUGHNUT) {
+                            break;
+                        }
+                        surveyUCityPlanConfig.data.labels.push(cityPlan);
+                        surveyUCityPlanConfig.data.datasets.forEach(function(dataset) {
+                            dataset.data.push(count);
+                            dataset.backgroundColor.push(doughnutColor[i]);
+                        });
+                    }
+                    window.surveyCityPlanDoughnut.update();
+                }
             }
         }
     );

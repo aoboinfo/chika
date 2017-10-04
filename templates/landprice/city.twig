@@ -16,23 +16,19 @@
                 </div>
                 <div class="col s6 m6 l6">
                     <div id="doughnut-chart-wrapper">
-                        <canvas id="doughnut-cityPlan-chart" height="200"></canvas>
+                        <canvas id="doughnut-cityPlan-post" height="200"></canvas>
                     </div>
                 </div>
             </div>
             <div id="survey_doughnut" class="card">
                 <div class="col s6 m6 l6">
                     <div id="doughnut-chart-wrapper">
-                        <canvas id="doughnut-cityPlan-post" height="400"></canvas>
-                        <div class="doughnut-chart-status">4500</div>
+                        <canvas id="doughnut-usage-survey" height="200"></canvas>
                     </div>
                 </div>
                 <div class="col s6 m6 l6">
                     <div id="doughnut-chart-wrapper">
-                        <canvas id="doughnut-chart" height="400"></canvas>
-                        <div class="doughnut-chart-status">4500
-                            <p class="ultra-small center-align">Sold</p>
-                        </div>
+                        <canvas id="doughnut-cityPlan-survey" height="200"></canvas>
                     </div>
                 </div>
             </div>
@@ -174,7 +170,7 @@
     </div>
 {% endblock %}
 {% block rightSection1 %}
-    <div class="card">
+    <div id="survey_station" class="card">
         <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
             <div class="move-up">
                 <h5 class="margin white-text">地価調査ランキング</h5>

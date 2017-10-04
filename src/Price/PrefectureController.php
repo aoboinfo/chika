@@ -194,8 +194,7 @@ class PrefectureController
             $topSurveyPrice[] = $landPrice;
         }
         $surveyPriceOfPrefecture->close();
-
-
+        //
         $this->view->render($response, 'landprice/prefecture.twig',
             [
                 "posted_title"=> $prefecture,
