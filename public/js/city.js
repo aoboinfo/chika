@@ -157,61 +157,68 @@ window.onload = function () {
             url : urlsValues.join("/"),
             type: "GET",
             success: function (json) {
+
                 for (var i = 0; i < json.postedUsages.length; i++) {
                     var usage = json.postedUsages[i].usage;
                     var count = json.postedUsages[i].count;
-                    if (i == MAX_REC_DOUGHNUT) {
-                        break;
+                    if (i <= MAX_REC_DOUGHNUT) {
+                        console.log(usage + "/" + count);
+                        postUsageConfig.data.labels.push(usage);
+                        postUsageConfig.data.datasets.forEach(function(dataset) {
+                            dataset.data.push(count);
+                            dataset.backgroundColor.push(doughnutColor[i]);
+                        });
                     }
-                    console.log(usage + "/" + count);
-                    postUsageConfig.data.labels.push(usage);
-                    postUsageConfig.data.datasets.forEach(function(dataset) {
-                        dataset.data.push(count);
-                        dataset.backgroundColor.push(doughnutColor[i]);
-                    });
+                    urlsValues.splice(3, 1, window.urls.listPostUsage);
+                    $("ul#post_usages").append('<li><a href="' + urlsValues.join("/") + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
                 }
                 window.postedUsageDoughnut.update();
                 for (var i = 0; i < json.postedCityPlans.length; i++) {
                     var cityPlan = json.postedCityPlans[i].cityPlan;
                     var count = json.postedCityPlans[i].count;
-                    if (i == MAX_REC_DOUGHNUT) {
-                        break;
+                    if (i <= MAX_REC_DOUGHNUT) {
+                        postCityPlanConfig.data.labels.push(cityPlan);
+                        postCityPlanConfig.data.datasets.forEach(function(dataset) {
+                            dataset.data.push(count);
+                            dataset.backgroundColor.push(doughnutColor[i]);
+                        });
                     }
-                    postCityPlanConfig.data.labels.push(cityPlan);
-                    postCityPlanConfig.data.datasets.forEach(function(dataset) {
-                        dataset.data.push(count);
-                        dataset.backgroundColor.push(doughnutColor[i]);
-                    });
+                    urlsValues.splice(3, 1, window.urls.listPostCityPlan);
+                    $("ul#post_cityPlans").append('<li><a href="' + urlsValues.join("/") + '/' + cityPlan + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
                 }
                 window.postedCityPlanDoughnut.update();
                 if (json.surveyedUsages.length == 0) {
                     $("div#survey_doughnut").hide();
                     $("div#survey_station").hide();
+                    $("div#surveyBusinessMenu").hide();
                 } else {
                     for (var i = 0; i < json.surveyedUsages.length; i++) {
                         var usage = json.surveyedUsages[i].usage;
                         var count = json.surveyedUsages[i].count;
-                        if (i == MAX_REC_DOUGHNUT) {
-                            break;
+                        if (i <= MAX_REC_DOUGHNUT) {
+                            surveyUsageConfig.data.labels.push(usage);
+                            surveyUsageConfig.data.datasets.forEach(function(dataset) {
+                                dataset.data.push(count);
+                                dataset.backgroundColor.push(doughnutColor[i]);
+                            });
                         }
-                        surveyUsageConfig.data.labels.push(usage);
-                        surveyUsageConfig.data.datasets.forEach(function(dataset) {
-                            dataset.data.push(count);
-                            dataset.backgroundColor.push(doughnutColor[i]);
-                        });
+                        urlsValues.splice(3, 1, window.urls.listSurveyUsage);
+                        $("ul#survey_usages").append('<li><a href="' + urlsValues.join("/") + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
                     }
                     window.surveyUsageDoughnut.update();
                     for (var i = 0; i < json.surveyedCityPlans.length; i++) {
                         var cityPlan = json.surveyedCityPlans[i].cityPlan;
                         var count = json.surveyedCityPlans[i].count;
-                        if (i == MAX_REC_DOUGHNUT) {
-                            break;
+                        if (i <= MAX_REC_DOUGHNUT) {
+                            surveyUCityPlanConfig.data.labels.push(cityPlan);
+                            surveyUCityPlanConfig.data.datasets.forEach(function(dataset) {
+                                dataset.data.push(count);
+                                dataset.backgroundColor.push(doughnutColor[i]);
+                            });
                         }
-                        surveyUCityPlanConfig.data.labels.push(cityPlan);
-                        surveyUCityPlanConfig.data.datasets.forEach(function(dataset) {
-                            dataset.data.push(count);
-                            dataset.backgroundColor.push(doughnutColor[i]);
-                        });
+                        urlsValues.splice(3, 1, window.urls.listSurveyCityPlan);
+                        $("ul#survey_cityPlans").append('<li><a href="' + urlsValues.join("/") + '/' + cityPlan + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
+
                     }
                     window.surveyCityPlanDoughnut.update();
                 }

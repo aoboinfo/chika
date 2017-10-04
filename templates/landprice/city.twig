@@ -5,6 +5,60 @@
     <li><a href="{{ base_url() }}/{{ prefecture }}">{{ prefecture }}</a></li>
     <li><a href="{{ base_url() }}/{{ prefecture }}/{{ city }}">{{ city }}</a></li>
 {% endblock %}
+{% block businessMenu %}
+    <div id="postBusinessMenu">
+        <li class="li-hover">
+            <div class="divider"></div>
+        </li>
+        <li class="no-padding">
+            <ul class="collapsible collapsible-accordion">
+                <li class="bold"><a class="collapsible-header waves-effect waves-cyan">公示：利用現況</a>
+                    <div class="collapsible-body">
+                        <ul id="post_usages"></ul>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li class="li-hover">
+            <div class="divider"></div>
+        </li>
+        <li class="no-padding">
+            <ul class="collapsible collapsible-accordion">
+                <li class="bold"><a class="collapsible-header waves-effect waves-cyan">公示：用途地域</a>
+                    <div class="collapsible-body">
+                        <ul id="post_cityPlans"></ul>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </div>
+    <div id="surveyBusinessMenu">
+        <li class="li-hover">
+            <div class="divider"></div>
+        </li>
+        <li class="no-padding">
+            <ul class="collapsible collapsible-accordion">
+                <li class="bold"><a class="collapsible-header waves-effect waves-cyan">調査：利用現況</a>
+                    <div class="collapsible-body">
+                        <ul id="survey_usages"></ul>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li class="li-hover">
+            <div class="divider"></div>
+        </li>
+        <li class="no-padding">
+            <ul class="collapsible collapsible-accordion">
+                <li class="bold"><a class="collapsible-header waves-effect waves-cyan">調査：用途地域</a>
+                    <div class="collapsible-body">
+                        <ul id="survey_cityPlans"></ul>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </div>
+{% endblock %}
 {% block category %}
     <div class="row">
         <div class="col s12 m12 l12">

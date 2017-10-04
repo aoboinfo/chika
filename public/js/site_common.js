@@ -19,6 +19,16 @@ window.chartColors = {
     peru: 'rgb(205, 133, 63)',
     cyan:  'rgb(0, 255, 255)'
 };
+//
+window.urls = {
+    listPostUsage: 'list/postUsage',
+    listPostCityPlan: 'list/postCityPlan',
+    listSurveyUsage: 'list/surveyUsage/',
+    listSurveyCityPlan: 'list/surveyCityPlan',
+    listAll: 'list/all',
+    listPostStation: 'list/postStation',
+    listSurveyStation: 'list/surveyStation'
+};
 var mapDiv = document.getElementById("map-canvas");
 var map = null;
 //
