@@ -26,8 +26,10 @@ window.urls = {
     listSurveyUsage: 'list/surveyUsage/',
     listSurveyCityPlan: 'list/surveyCityPlan',
     listAll: 'list/all',
-    listPostStation: 'list/postStation',
-    listSurveyStation: 'list/surveyStation'
+    listPostStation: 'list/stationPost',
+    listSurveyStation: 'list/stationSurvey',
+    postDetail: 'detail/post',
+    surveyDetail: 'detail/survey'
 };
 var mapDiv = document.getElementById("map-canvas");
 var map = null;
@@ -177,6 +179,10 @@ function drawAvgPrice(type, targetUrl, chartObj) {
 function addItemMarkersToMap(priceType, value) {
     var price0 = Number(value.price0); //latest price
     var price1 = Number(value.price1); //the price year before latest.
+    var caption = "地価公示";
+    if (priceType == window.urls.surveyDetail) {
+        caption = "地価調査";
+    }
     var icon = null;
     var changeStr = '';
     if (price1 != 0) {
@@ -202,7 +208,8 @@ function addItemMarkersToMap(priceType, value) {
     /* 地図上のmarkerがクリックされると｛｝内の処理を実行。*/
     google.maps.event.addListener(marker, 'click', function() {
         /* InfoWindowOptionsオブジェクトを指定します。*/
-        infoWindow.setContent(priceType + "："+ price0.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' }) + '円/m²' + changeStr + "<br>" + value.address);
+        infoWindow.setContent(caption + "："+ price0.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' }) + '円/m²' + changeStr + "<br>"
+            + '<a href=\"../' + priceType + '/' + value.address + '\">' + value.address + "</a>");
         /* マーカーに情報ウィンドウを表示 */
         infoWindow.open(map,marker);
         //add the detail information under the map.
@@ -244,14 +251,13 @@ function showMap(targetUrl) {
                 });
                 //post
                 json.postedItems.forEach(function (value) {
-                    addItemMarkersToMap("地価公示", value);
+                    addItemMarkersToMap(window.urls.postDetail, value);
                 });
                 //survey
                 json.surveyedItems.forEach(function (value) {
                     //
-                    addItemMarkersToMap("地価調査", value);
+                    addItemMarkersToMap(window.urls.surveyDetail, value);
                 });
-                //map.addFeatures(markers);
             }
         }
     );

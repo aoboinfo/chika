@@ -130,7 +130,7 @@
                                         {% else %}
                                             <td></td>
                                         {% endif %}
-                                        <td>{{ price.address }}</td>
+                                        <td><a style="color:black;" href="{{ base_url() }}/detail/post/{{ price.address }}">{{ price.address }}</a></td>
                                         <td>{{ price.station }}</td>
                                         <td>{{ price.distanceFromStation }}m</td>
                                         <td>{{ price.structure }}</td>
@@ -165,7 +165,7 @@
                                         {% else %}
                                             <td></td>
                                         {% endif %}
-                                        <td>{{ price.address }}</td>
+                                        <td><a style="color:black;" href="{{ base_url() }}/detail/survey/{{ price.address }}">{{ price.address }}</a></td>
                                         <td>{{ price.station }}</td>
                                         <td>{{ price.distanceFromStation }}m</td>
                                         <td>{{ price.structure }}</td>
@@ -206,7 +206,7 @@
                 {% for station  in  postStations %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ station.station }}</td>
+                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -243,7 +243,7 @@
                 {% for station  in  surveyStations %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ station.station }}</td>
+                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}

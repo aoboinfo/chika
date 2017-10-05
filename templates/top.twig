@@ -187,14 +187,14 @@
                         <tbody>
                         {% for postTop in topPostPrices %}
                             <tr>
-                                <td>{{ loop.index }}</td>
+                                <td>{{ loop.index }}</a></td>
                                 <td>{{ postTop.price }}</td>
                                 {% if postTop.changeRate != null %}
                                     <td>{{ postTop.changeRate }}%</td>
                                 {% else %}
                                     <td></td>
                                 {% endif %}
-                                <td>{{ postTop.address }}</td>
+                                <td><a href="{{ base_url() }}/detail/post/{{ postTop.address }}">{{ postTop.address }}</a></td>
                                 <td>{{ postTop.station }}</td>
                                 <td>{{ postTop.distanceFromStation }}</td>
                                 <td>{{ postTop.structure }}</td>
@@ -228,14 +228,14 @@
                         <tbody>
                         {% for surveyTop in topSurveyPrices %}
                             <tr>
-                                <td>{{ loop.index }}</td>
+                                <td>{{ loop.index }}</a></td>
                                 <td>{{ surveyTop.price }}</td>
                                 {% if surveyTop.changeRate != null %}
                                     <td>{{ surveyTop.changeRate }}%</td>
                                 {% else %}
                                     <td></td>
                                 {% endif %}
-                                <td>{{ surveyTop.address }}</td>
+                                <td><a href="{{ base_url() }}/detail/survey/{{ surveyTop.address }}">{{ surveyTop.address }}</a></td>
                                 <td>{{ surveyTop.station }}</td>
                                 <td>{{ surveyTop.distanceFromStation }}</td>
                                 <td>{{ surveyTop.structure }}</td>
@@ -274,7 +274,7 @@
                 {% for station  in  stationTop %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ station.station }}</td>
+                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -309,7 +309,7 @@
                 {% for station  in  stationLow %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ station.station }}</td>
+                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -346,7 +346,7 @@
                 {% for station  in  surveyStationTop %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ station.station }}</td>
+                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -381,7 +381,7 @@
                 {% for station  in  surveyStationLow %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ station.station }}</td>
+                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -406,7 +406,7 @@
                 <div class="card-content purple darken-3">
                     <span class="chart-title white-text">対前年変動率(%)</span>
                     <div class="trending-line-chart-wrapper">
-                        <canvas id="price_change_rate" height="95"></canvas>
+                        <canvas id="price_change_rate" height="80"></canvas>
                     </div>
                 </div>
             </div>
