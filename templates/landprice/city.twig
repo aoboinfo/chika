@@ -206,7 +206,7 @@
                 {% for station  in  postStations %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
+                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/{{ prefecture }}/{{ city }}"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -243,7 +243,7 @@
                 {% for station  in  surveyStations %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
+                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/{{ prefecture }}/{{ city }}"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}

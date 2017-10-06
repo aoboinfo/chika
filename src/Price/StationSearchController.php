@@ -8,10 +8,28 @@
 
 namespace Price;
 
+
 class StationSearchController extends SearchController
 {
-    public function __construct(Twig $view, Router $router, Mysqli $db, Logger $logger) {
-        parent::__construct($view, $router, $db, $logger);
+    public function findPostListForStation($request, $response, $params) {
+        $prefecture = $request->getAttribute('prefecture');
+        $city = $request->getAttribute('city');
+        $station = $request->getAttribute('station');
+        
+        if (is_null($prefecture) && is_null($city)) {
+
+        } else if (is_null($prefecture) && !is_null($city)) {
+
+        } else {
+
+        }
+
+        return $response;
     }
 
+    public function findSurveyListForStation($request, $response, $params) {
+        $prefecture = $request->getAttribute('prefecture');
+        $city = $request->getAttribute('city');
+
+    }
 }

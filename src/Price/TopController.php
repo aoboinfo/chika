@@ -8,40 +8,13 @@
 
 namespace Price;
 
-use Slim\Views\Twig;
-use Slim\Router;
-use Monolog\Logger;
-use Mysqli;
 
-class TopController
+class TopController  extends SearchController
 {
-    private $view;
-    private $router;
-    private $db;
-    private $logger;
-    //
-    public function __construct(Twig $view, Router $router, Mysqli $db, Logger $logger) {
-
-        $this->view = $view;
-        $this->router = $router;
-        $this->db = $db;
-        $this->logger = $logger;
-    }
     public function showTopPage ($request, $response, $params) {
 
         $this->logger->info("LandPrice '/' site home");
         //
-        $areas = ["北海道・東北","関東","信越・北陸","東海","近畿","中国","四国","九州・沖縄"];
-        $prefectures = [
-            ["北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県"],
-            ["東京都","神奈川県","千葉県","埼玉県", "茨城県","栃木県","群馬県","山梨県"],
-            ["新潟県","長野県","富山県","石川県","福井県"],
-            ["愛知県","岐阜県","静岡県","三重県"],
-            ["大阪府","京都府","滋賀県","兵庫県","奈良県","和歌山県"],
-            ["鳥取県","島根県","岡山県","広島県","山口県"],
-            ["徳島県","香川県","愛媛県","高知県"],
-            ["福岡県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"]
-        ];
         //Render index view
         $postStationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from post_price where price1 <> 0 group by near_station order by price0";
         //The top 10 stations
@@ -205,8 +178,8 @@ class TopController
         //render the top page
         return $this->view->render($response, 'top.twig',
             [
-                "areas" => $areas,
-                "leftMenus" => $prefectures,
+                "areas" => $this->getAreas(),
+                "leftMenus" => $this->getPrefectures(),
                 "stationTop" => $stationsDesc,
                 "stationLow" => $stationAsc,
                 "surveyStationTop" => $surveyStationsDesc,

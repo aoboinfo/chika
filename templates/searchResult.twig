@@ -11,7 +11,7 @@
         </li>
         <li class="no-padding">
             <ul class="collapsible collapsible-accordion">
-               <li class="bold"><a class="collapsible-header waves-effect waves-cyan">公示：利用現況</a>
+                <li class="bold"><a class="collapsible-header waves-effect waves-cyan">公示：利用現況</a>
                     <div class="collapsible-body">
                         <ul id="post_usages"></ul>
                     </div>
@@ -323,7 +323,7 @@
                 {% for station  in  stationTop %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/{{ prefecture }}/"><strong>{{ station.station }}</strong></a></td>
+                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -358,7 +358,7 @@
                 {% for station  in  stationLow %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/{{ prefecture }}/"><strong>{{ station.station }}</strong></a></td>
+                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -395,7 +395,7 @@
                 {% for station  in  surveyStationTop %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/{{ prefecture }}/"><strong>{{ station.station }}</strong></a></td>
+                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -430,7 +430,7 @@
                 {% for station  in  surveyStationLow %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/{{ prefecture }}/"><strong>{{ station.station }}</strong></a></td>
+                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}

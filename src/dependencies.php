@@ -47,3 +47,7 @@ $container['Price\PrefectureController'] = function ($c) {
 $container['Service\PostedPriceService'] = function ($c) {
     return new Service\PostedPriceService($c['router'], $c['db'], $c['logger']);
 };
+//
+$container['Price\StationSearchController'] = function ($c) {
+    return new Price\StationSearchController($c['view'], $c['router'], $c['db'], $c['logger']);
+};
