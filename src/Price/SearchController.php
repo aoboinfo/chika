@@ -20,7 +20,20 @@ class SearchController
     protected $db;
     protected $logger;
 
+    const POST_TYPE = 0;
+    const SURVEY_TYPE = 1;
+    const POST_TABLE = "posted_price";
+    const SURVEY_TABLE = "surveyed_price";
+    const POST_VIEW = "post_price";
+    const SURVEY_VIEW = "survey_price";
+
+    //
+    protected $leftOptions = [];
+
+    protected $stationLabel = "全国";
+
     protected $areas = ["北海道・東北","関東","信越・北陸","東海","近畿","中国","四国","九州・沖縄"];
+
 
     protected $prefectures = [
         ["北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県"],
@@ -48,6 +61,40 @@ class SearchController
     {
         return $this->prefectures;
     }
+
+    /**
+     * @return array
+     */
+    public function getLeftOptions()
+    {
+        return $this->leftOptions;
+    }
+
+    /**
+     * @param array $leftOptions
+     */
+    public function setLeftOptions($leftOptions)
+    {
+        $this->leftOptions = $leftOptions;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStationLabel()
+    {
+        return $this->stationLabel;
+    }
+
+    /**
+     * @param string $stationLabel
+     */
+    public function setStationLabel($stationLabel)
+    {
+        $this->stationLabel = $stationLabel;
+    }
+
+
 
     //
     public function __construct(Twig $view, Router $router, Mysqli $db, Logger $logger) {
