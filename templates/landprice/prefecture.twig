@@ -6,9 +6,7 @@
 {% endblock %}
 {% block businessMenu %}
     <div id="postBusinessMenu">
-        <li class="li-hover">
-            <div class="divider"></div>
-        </li>
+        <li class="li-hover"><div class="divider"></div></li>
         <li class="no-padding">
             <ul class="collapsible collapsible-accordion">
                <li class="bold"><a class="collapsible-header waves-effect waves-cyan">公示：利用現況</a>
@@ -73,32 +71,41 @@
         {% endfor %}
     </ul>
 {% endblock %}
-{% block avgPriceYearArea %}
-    <div class="card-content">
-        <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i class="mdi-content-add activator"></i></a>
-    </div>
-    <div class="card-reveal">
-        <span class="card-title grey-text text-darken-4">各年度地価平均一覧表<i class="mdi-navigation-close right"></i></span>
-        <table class="responsive-table">
-            <thead>
-            <tr>
-                <th data-field="year">年度</th>
-                <th data-field="posted_price_m">地価公示(円/m²)</th>
-                <th data-field="survey_price_m">地価調査(円/m²)</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for avgPrice in avgPrices %}
+{% block centralSection %}
+    <div class="card">
+        <div class="card-content green lighten-3">
+            <span class="chart-title black-text">地価推移</span>
+            <div class="trending-line-chart-wrapper">
+                <canvas id="post_price_trending" height="95"></canvas>
+            </div>
+        </div>
+        <div class="card-content">
+            <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i
+                        class="mdi-content-add activator"></i></a>
+        </div>
+        <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">各年度地価平均一覧表<i class="mdi-navigation-close right"></i></span>
+            <table class="responsive-table">
+                <thead>
                 <tr>
-                    <td>{{ avgPrice.year }}</td>
-                    <td>{{ avgPrice.postedPrice }}</td>
-                    {% if avgPrice.surveyPrice !='' %}
-                        <td>{{ avgPrice.surveyPrice }}</td>
-                    {% endif %}
+                    <th data-field="year">年度</th>
+                    <th data-field="posted_price_m">地価公示(円/m²)</th>
+                    <th data-field="survey_price_m">地価調査(円/m²)</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for avgPrice in avgPrices %}
+                    <tr>
+                        <td>{{ avgPrice.year }}</td>
+                        <td>{{ avgPrice.postedPrice }}</td>
+                        {% if avgPrice.surveyPrice !='' %}
+                            <td>{{ avgPrice.surveyPrice }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}
 {% block category %}

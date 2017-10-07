@@ -166,15 +166,7 @@
                                 <li><a href="{{ base_url() }}/">Dashboard</a></li>
                                 {% block content_link %}{% endblock %}
                             </ol>
-                            <div class="card">
-                                <div class="card-content green lighten-3">
-                                    <span class="chart-title black-text">地価推移</span>
-                                    <div class="trending-line-chart-wrapper">
-                                        <canvas id="post_price_trending" height="95"></canvas>
-                                    </div>
-                                </div>
-                                {% block avgPriceYearArea %}{% endblock %}
-                            </div>
+                            {% block centralSection %}{% endblock %}
                             <!-- this block is used for different section -->
                             {% block category %}{% endblock %}
                         </div>
