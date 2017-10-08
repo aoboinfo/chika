@@ -26,6 +26,8 @@ class SearchController
     const SURVEY_TABLE = "surveyed_price";
     const POST_VIEW = "post_price";
     const SURVEY_VIEW = "survey_price";
+    const POST_KANJI = "地価公示";
+    const SURVEY_KANJI = "地価調査";
 
     //
     protected $leftOptions = [];

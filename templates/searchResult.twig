@@ -2,7 +2,48 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content_link %}
-    <li><a href="{{ base_url() }}/{{ prefecture }}">{{ prefecture }}</a></li>
+    <li><a href="{{ base_url() }}/{{ stationLabel }}">{{ stationLabel }}</a></li>
+{% endblock %}
+{% block centralSection %}
+    <div class="card">
+        <div class="card-move-up cyan darken-4 waves-effect waves-block waves-light">
+            <div class="move-up">
+                <h5 class="margin white-text">{{ station }}駅周辺{{ priceType }}</h5>
+            </div>
+            <table class="bordered white-text">
+                <thead>
+                <th data-field="id">順位</th>
+                <th data-field="price">価格(円/m²)</th>
+                <th data-field="rate">前年比(%)</th>
+                <th data-field="place">住所表示</th>
+                <th data-field="station">最寄駅</th>
+                <th data-field="distance">駅から距離(m)</th>
+                <th data-field="structure">建物構造</th>
+                <th data-field="usage">利用現況</th>
+                <th data-field="cityPlan">用途地域</th>
+                </thead>
+                <tbody>
+                {% for listing in listings %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ listing.price }}</td>
+                        {% if listing.changeRate != null %}
+                            <td>{{ listing.changeRate }}%</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        <td><a href="{{ base_url() }}/detail/survey/{{ listing.address }}">{{ listing.address }}</a></td>
+                        <td>{{ listing.station }}</td>
+                        <td>{{ listing.distanceFromStation }}</td>
+                        <td>{{ listing.structure }}</td>
+                        <td>{{ listing.currentUsage }}</td>
+                        <td>{{ listing.cityPlan }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
 {% block businessMenu %}
     <div id="postBusinessMenu">
@@ -71,7 +112,7 @@
                 {% for station  in  stationTop %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
+                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -107,7 +148,7 @@
                 {% for station  in  stationLow %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}"><strong>{{ station.station }}</strong></a></td>
+                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -140,5 +181,4 @@
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ base_url() }}/js/prefecture.js"></script>
 {% endblock %}
