@@ -23,7 +23,7 @@ window.chartColors = {
 window.urls = {
     listPostUsage: 'list/postUsage',
     listPostCityPlan: 'list/postCityPlan',
-    listSurveyUsage: 'list/surveyUsage/',
+    listSurveyUsage: 'list/surveyUsage',
     listSurveyCityPlan: 'list/surveyCityPlan',
     listAll: 'list/all',
     listPostStation: 'list/stationPost',

@@ -11,8 +11,6 @@ namespace Price;
 
 class UsageSearchController extends SearchController
 {
-    public function __construct(Twig $view, Router $router, Mysqli $db, Logger $logger) {
-        parent::__construct($view, $router, $db, $logger);
-    }
+
 
 }

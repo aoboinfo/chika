@@ -1,21 +1,21 @@
 {% extends 'layout.twig' %}
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ pageLabel }}{{ priceType }}{% endblock %}
 
 {% block content_link %}
     {% if linkType == '0' %}
-        <li><a href="{{ base_url() }}/">{{ stationLabel }}</a></li>
+        <li><a href="{{ base_url() }}/">{{ prefectureLabel }}</a></li>
     {% elseif linkType == '1'  %}
-        <li><a href="{{ base_url() }}/{{ stationLabel }}">{{ stationLabel }}</a></li>
+        <li><a href="{{ base_url() }}/{{ prefectureLabel }}">{{ prefectureLabel }}</a></li>
     {% else %}
-        <li><a href="{{ base_url() }}/{{ stationLabel }}">{{ stationLabel }}</a></li>
-        <li><a href="{{ base_url() }}/{{ stationLabel }}/{{ city }}">{{ city }}</a></li>
+        <li><a href="{{ base_url() }}/{{ prefectureLabel }}">{{ prefectureLabel }}</a></li>
+        <li><a href="{{ base_url() }}/{{ prefectureLabel }}/{{ city }}">{{ city }}</a></li>
     {% endif %}
 {% endblock %}
 {% block centralSection %}
     <div>
         <div class="card-move-up cyan darken-4 waves-effect waves-block waves-light">
             <div class="move-up">
-                <h5 class="margin white-text">{{ station }}駅周辺{{ priceType }}</h5>
+                <h5 class="margin white-text">{{ pageLabel }}{{ priceType }}</h5>
             </div>
             <table class="bordered white-text">
                 <thead>
@@ -39,7 +39,11 @@
                         {% else %}
                             <td></td>
                         {% endif %}
-                        <td><a href="{{ base_url() }}/detail/survey/{{ listing.address }}">{{ listing.address }}</a></td>
+                        {% if listing.type == '地価公示' %}
+                            <td><a href="{{ base_url() }}/detail/post/{{ listing.address }}">{{ listing.address }}</a></td>
+                        {% else %}
+                            <td><a href="{{ base_url() }}/detail/survey/{{ listing.address }}">{{ listing.address }}</a></td>
+                        {% endif %}
                         <td>{{ listing.station }}</td>
                         <td>{{ listing.distanceFromStation }}</td>
                         <td>{{ listing.structure }}</td>
@@ -109,7 +113,7 @@
 {% block rightSection0 %}
     <ol class="breadcrumbs">
         <li><a href="#">駅周辺地価ランキング</a></li>
-        <li><a href="#">{% block price_station %}{{ stationLabel }}{% endblock %}</a></li>
+        <li><a href="#">{% block price_station %}{{ prefectureLabel }}{% endblock %}</a></li>
     </ol>
     <div class="card">
         <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
@@ -130,7 +134,11 @@
                 {% for station  in  stationTop %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        {% if priceType == '地価公示' %}
+                            <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        {% else %}
+                            <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        {% endif %}
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -166,7 +174,11 @@
                 {% for station  in  stationLow %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        {% if priceType == '地価公示' %}
+                            <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        {% else %}
+                            <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        {% endif %}
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}

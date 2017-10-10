@@ -113,7 +113,7 @@
                     <table class="bordered white-text">
                         <thead>
                         <th data-field="id">順位</th>
-                        <th data-field="rate">都道府県</th>
+                        <th data-field="rate">市町村</th>
                         <th data-field="price">地価平均(円/㎡)</th>
                         <th data-field="tubo_price">坪単価平均(円/坪)</th>
                         </thead>
@@ -121,7 +121,7 @@
                         {% for postedCity  in  postTopCity %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ postedCity.address }}</td>
+                                <td><a href='{{ base_url() }}/{{ prefecture }}/{{ postedCity.address }}'>{{ postedCity.address }}</a></td>
                                 <td>{{ postedCity.price }}</td>
                                 <td>{{ postedCity.priceOfTubo }}</td>
                             </tr>
@@ -140,7 +140,7 @@
                     <table class="bordered white-text">
                         <thead>
                         <th data-field="id">順位</th>
-                        <th data-field="rate">都道府県</th>
+                        <th data-field="rate">市町村</th>
                         <th data-field="price">地価平均(円/m²)</th>
                         <th data-field="tubo_price">坪単価平均(円/坪)</th>
                         </thead>
@@ -148,7 +148,7 @@
                         {% for postedCity  in  postLowCity %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ postedCity.address }}</td>
+                                <td><a href='{{ base_url() }}/{{ prefecture }}/{{ postedCity.address }}'>{{ postedCity.address }}</a></td>
                                 <td>{{ postedCity.price }}</td>
                                 <td>{{ postedCity.priceOfTubo }}</td>
                             </tr>
@@ -169,7 +169,7 @@
                     <table class="bordered white-text">
                         <thead>
                         <th data-field="id">順位</th>
-                        <th data-field="rate">都道府県</th>
+                        <th data-field="rate">市町村</th>
                         <th data-field="price">地価平均(円/m²)</th>
                         <th data-field="tubo_price">坪単価平均(円/坪)</th>
                         </thead>
@@ -177,7 +177,7 @@
                         {% for city  in  surveyTopCity %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ city.address }}</td>
+                                <td><a href='{{ base_url() }}/{{ prefecture }}/{{ postedCity.address }}'>{{ city.address }}</a></td>
                                 <td>{{ city.price }}</td>
                                 <td>{{ city.priceOfTubo }}</td>
                             </tr>
@@ -196,7 +196,7 @@
                     <table class="bordered white-text">
                         <thead>
                         <th data-field="id">順位</th>
-                        <th data-field="rate">都道府県</th>
+                        <th data-field="rate">市町村</th>
                         <th data-field="price">地価平均(円/m²)</th>
                         <th data-field="tubo_price">坪単価平均(円/坪)</th>
                         </thead>
@@ -204,7 +204,7 @@
                         {% for city  in  surveyLowCity %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ city.address }}</td>
+                                <td><a href='{{ base_url() }}/{{ prefecture }}/{{ postedCity.address }}'>{{ city.address }}</a></td>
                                 <td>{{ city.price }}</td>
                                 <td>{{ city.priceOfTubo }}</td>
                             </tr>

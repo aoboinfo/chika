@@ -11,6 +11,7 @@ namespace Price;
 
 class StationSearchController extends SearchController
 {
+    const STATION_POSTFIX = "駅";
     private function stationResult($request, $response, $params, $priceType) {
 
         $prefecture = $request->getAttribute('prefecture');
@@ -23,36 +24,16 @@ class StationSearchController extends SearchController
             $target = SearchController::SURVEY_VIEW;
             $priceName = SearchController::SURVEY_KANJI;
         }
-        $stationsDesc = array();
-        $stationAsc = array();
+
         $usages = array();
         $cityPlans = array();
 
         //
         if (is_null($prefecture) && is_null($city)) {
-            $stationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from " . $target ." where price1 <> 0 group by near_station order by price0";
-            //The top 10 stations
-            $stationTop10 = $this->db->query($stationQuery . " desc limit 10");
-            while ($row = mysqli_fetch_assoc($stationTop10)) {
-                $landPrice = new LandPrice();
-                $landPrice->setStation($row["near_station"]);
-                $landPrice->setPrice($row["price_jp"]);
-                $landPrice->setPriceOfTubo($row["price_tubo"]);
-                $landPrice->setChangeRate($row["rate"]);
-                $stationsDesc[] = $landPrice;
-            }
-            $stationTop10->close();
+
+            $stationsDesc = $this->getTopStationListForTarget($target, $prefecture, $city);
             //
-            $stationLow10 = $this->db->query($stationQuery .  " limit 10");
-            while ($row = mysqli_fetch_assoc($stationLow10)) {
-                $landPrice = new LandPrice();
-                $landPrice->setStation($row["near_station"]);
-                $landPrice->setPrice($row["price_jp"]);
-                $landPrice->setPriceOfTubo($row["price_tubo"]);
-                $landPrice->setChangeRate($row["rate"]);
-                $stationAsc[] = $landPrice;
-            }
-            $stationLow10->close();
+            $stationAsc = $this->getLowStationListForTarget($target, $prefecture);
             //the listings for the station
             $queryOfStation = $this->db->query("select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, distance_station, current_use, build_structure, city_plan from " . $target . " where near_station = '" . $station . "' order by price0 desc");
             $resultOfStation = array();
@@ -67,6 +48,7 @@ class StationSearchController extends SearchController
                 $landPrice->setCurrentUsage($row["current_use"]);
                 $landPrice->setStructure($row["build_structure"]);
                 $landPrice->setCityPlan($row["city_plan"]);
+                $landPrice->setType($priceName);
                 $resultOfStation[] = $landPrice;
             }
             $queryOfStation->close();
@@ -80,8 +62,8 @@ class StationSearchController extends SearchController
                     "listings" => $resultOfStation,
                     "optionMenus" => [$usages,$cityPlans],
                     "options" => $this->getLeftOptions(), //the menu list below place to be selected
-                    "stationLabel" => $this->getStationLabel(),
-                    "station" => $station,
+                    "prefectureLabel" => $this->getStationLabel(),
+                    "pageLabel" => $station . StationSearchController::STATION_POSTFIX,
                     "priceType" => $priceName,
                     "linkType" => "0"
                 ]
@@ -91,31 +73,9 @@ class StationSearchController extends SearchController
             //
             $this->setStationLabel($prefecture);
             //
-            $postStationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from " . $target . " where price1 <> 0 and address like '" . $prefecture . "%' group by near_station order by price0";
-            $stationTop10 = $this->db->query($postStationQuery . " desc limit 10");
+            $stationsDesc = $this->getTopStationListForTarget($target, $prefecture, $city);
             //
-            while ($row = mysqli_fetch_assoc($stationTop10)) {
-                $landPrice = new LandPrice();
-                $landPrice->setStation($row["near_station"]);
-                $landPrice->setPrice($row["price_jp"]);
-                $landPrice->setPriceOfTubo($row["price_tubo"]);
-                $landPrice->setChangeRate($row["rate"]);
-                $stationsDesc[] = $landPrice;
-            }
-            $stationTop10->close();
-            //
-            $stationLow10 = $this->db->query($postStationQuery .  " limit 10");
-            $stationAsc = array();
-            //
-            while ($row = mysqli_fetch_assoc($stationLow10)) {
-                $landPrice = new LandPrice();
-                $landPrice->setStation($row["near_station"]);
-                $landPrice->setPrice($row["price_jp"]);
-                $landPrice->setPriceOfTubo($row["price_tubo"]);
-                $landPrice->setChangeRate($row["rate"]);
-                $stationAsc[] = $landPrice;
-            }
-            $stationLow10->close();
+            $stationAsc = $this->getLowStationListForTarget($target, $prefecture);
             //
             $queryOfStation = $this->db->query("select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, distance_station, current_use, build_structure, city_plan from " . $target . " where near_station = '" . $station . "' and address like '" . $prefecture . "%' order by price0 desc");
             $resultOfStation = array();
@@ -130,6 +90,7 @@ class StationSearchController extends SearchController
                 $landPrice->setCurrentUsage($row["current_use"]);
                 $landPrice->setStructure($row["build_structure"]);
                 $landPrice->setCityPlan($row["city_plan"]);
+                $landPrice->setType($priceName);
                 $resultOfStation[] = $landPrice;
             }
             $queryOfStation->close();
@@ -143,28 +104,15 @@ class StationSearchController extends SearchController
                     "listings" => $resultOfStation,
                     "optionMenus" => [$usages,$cityPlans],
                     "options" => $this->getLeftOptions(), //the menu list below is place to be selected
-                    "stationLabel" => $this->getStationLabel(),
-                    "station" => $station,
+                    "prefectureLabel" => $this->getStationLabel(),
+                    "pageLabel" => $station . StationSearchController::STATION_POSTFIX,
                     "priceType" => $priceName,
                     "linkType" => "1"
                 ]
             );
 
         } else {
-            $stationsQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from " . $target . " where price1 <> 0 and city = '" . $city . "' and address like '" . $prefecture . "%' group by near_station order by price0";
-            $allStations = $this->db->query($stationsQuery . " desc");
-            $this->setStationLabel($prefecture);
-
-            while ($row = mysqli_fetch_assoc($allStations)) {
-                $landPrice = new LandPrice();
-                $landPrice->setStation($row["near_station"]);
-                $landPrice->setPrice($row["price_jp"]);
-                $landPrice->setPriceOfTubo($row["price_tubo"]);
-                $landPrice->setChangeRate($row["rate"]);
-                $stationsDesc[] = $landPrice;
-            }
-            $allStations->close();
-
+            $stationsDesc = $this->getTopStationListForTarget($target, $prefecture, $city);
             //
             $listOfStation = $this->db->query("select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, distance_station, current_use, build_structure, city_plan from " . $target . " where near_station = '" . $station . "' and city = '" . $city . "' and address like '" . $prefecture . "%' order by price0 desc");
 
@@ -180,6 +128,7 @@ class StationSearchController extends SearchController
                 $landPrice->setCurrentUsage($row["current_use"]);
                 $landPrice->setStructure($row["build_structure"]);
                 $landPrice->setCityPlan($row["city_plan"]);
+                $landPrice->setType($priceName);
                 $resultOfStation[] = $landPrice;
             }
             $listOfStation->close();
@@ -192,8 +141,8 @@ class StationSearchController extends SearchController
                     "listings" => $resultOfStation,
                     "optionMenus" => [$usages,$cityPlans],
                     "options" => $this->getLeftOptions(), //the menu list below is place to be selected
-                    "stationLabel" => $this->getStationLabel(),
-                    "station" => $station,
+                    "prefectureLabel" => $this->getStationLabel(),
+                    "pageLabel" => $station . StationSearchController::STATION_POSTFIX,
                     "priceType" => $priceName,
                     "city" => $city,
                     "linkType" => "2"

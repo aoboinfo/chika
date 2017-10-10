@@ -117,4 +117,84 @@ class SearchController
         $cities->close();
         return $result;
     }
+    //
+    public function getTopStationListForTarget($target, $prefecture, $city) {
+        $stationsDesc = array();
+        if (is_null($city) && is_null($prefecture)) {
+            $stationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from " . $target ." where price1 <> 0 group by near_station order by price0";
+            //The top 10 stations
+            $stationTop10 = $this->db->query($stationQuery . " desc limit 10");
+            while ($row = mysqli_fetch_assoc($stationTop10)) {
+                $landPrice = new LandPrice();
+                $landPrice->setStation($row["near_station"]);
+                $landPrice->setPrice($row["price_jp"]);
+                $landPrice->setPriceOfTubo($row["price_tubo"]);
+                $landPrice->setChangeRate($row["rate"]);
+                $stationsDesc[] = $landPrice;
+            }
+            $stationTop10->close();
+        } else if (!is_null($prefecture) && is_null($city)) {
+            $stationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from " . $target . " where price1 <> 0 and address like '" . $prefecture . "%' group by near_station order by price0";
+            $stationTop10 = $this->db->query($stationQuery . " desc limit 10");
+            //
+            while ($row = mysqli_fetch_assoc($stationTop10)) {
+                $landPrice = new LandPrice();
+                $landPrice->setStation($row["near_station"]);
+                $landPrice->setPrice($row["price_jp"]);
+                $landPrice->setPriceOfTubo($row["price_tubo"]);
+                $landPrice->setChangeRate($row["rate"]);
+                $stationsDesc[] = $landPrice;
+            }
+            $stationTop10->close();
+        } else {
+            $stationsQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from " . $target . " where price1 <> 0 and city = '" . $city . "' and address like '" . $prefecture . "%' group by near_station order by price0";
+            $allStations = $this->db->query($stationsQuery . " desc");
+            $this->setStationLabel($prefecture);
+
+            while ($row = mysqli_fetch_assoc($allStations)) {
+                $landPrice = new LandPrice();
+                $landPrice->setStation($row["near_station"]);
+                $landPrice->setPrice($row["price_jp"]);
+                $landPrice->setPriceOfTubo($row["price_tubo"]);
+                $landPrice->setChangeRate($row["rate"]);
+                $stationsDesc[] = $landPrice;
+            }
+            $allStations->close();
+        }
+        //
+        return $stationsDesc;
+    }
+    //
+    public function getLowStationListForTarget($target, $prefecture) {
+        $stationAsc = array();
+        if (is_null($prefecture)) {
+            $stationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from " . $target ." where price1 <> 0 group by near_station order by price0";
+            //The top 10 stations
+            $stationTop10 = $this->db->query($stationQuery . " limit 10");
+            while ($row = mysqli_fetch_assoc($stationTop10)) {
+                $landPrice = new LandPrice();
+                $landPrice->setStation($row["near_station"]);
+                $landPrice->setPrice($row["price_jp"]);
+                $landPrice->setPriceOfTubo($row["price_tubo"]);
+                $landPrice->setChangeRate($row["rate"]);
+                $stationAsc[] = $landPrice;
+            }
+            $stationTop10->close();
+        } else {
+            $stationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from " . $target . " where price1 <> 0 and address like '" . $prefecture . "%' group by near_station order by price0";
+            $stationTop10 = $this->db->query($stationQuery . " limit 10");
+            //
+            while ($row = mysqli_fetch_assoc($stationTop10)) {
+                $landPrice = new LandPrice();
+                $landPrice->setStation($row["near_station"]);
+                $landPrice->setPrice($row["price_jp"]);
+                $landPrice->setPriceOfTubo($row["price_tubo"]);
+                $landPrice->setChangeRate($row["rate"]);
+                $stationAsc[] = $landPrice;
+            }
+            $stationTop10->close();
+        }
+        //
+        return $stationAsc;
+    }
 }
