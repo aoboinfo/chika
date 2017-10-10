@@ -27,14 +27,14 @@ window.onload = function () {
                     var count = json.postedUsages[i].count;
                     //var linkURL = '<li><a href="usages/' + prefectureName.substring(0, 3) + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>";
                     //console.log(linkURL);
-                    $("ul#post_usages").append('<li><a href="' + window.urls.listPostUsage + '/' + prefectureName.substring(0, 3) + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
+                    $("ul#post_usages").append('<li><a href="' + window.urls.listPostUsage + '/' + usage  + '/' + prefectureName.substring(0, 3) + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
                 }
                 for (var i = 0; i < json.postedCityPlans.length; i++) {
                     var cityPlan = json.postedCityPlans[i].cityPlan;
                     var count = json.postedCityPlans[i].count;
                     //var linkURL = '<li><a href="usages/' + prefectureName.substring(0, 3) + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>";
                     //console.log(linkURL);
-                    $("ul#post_cityPlans").append('<li><a href="' + window.urls.listPostCityPlan + '/' + prefectureName.substring(0, 3) + '/' + cityPlan + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
+                    $("ul#post_cityPlans").append('<li><a href="' + window.urls.listPostCityPlan + '/' + cityPlan + '/' + prefectureName.substring(0, 3) + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
                 }
                 //survey
                 for (var i = 0; i < json.surveyedUsages.length; i++) {
@@ -42,14 +42,14 @@ window.onload = function () {
                     var count = json.surveyedUsages[i].count;
                     //var linkURL = '<li><a href="usages/' + prefectureName.substring(0, 3) + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>";
                     //console.log(linkURL);
-                    $("ul#survey_usages").append('<li><a href="' + window.urls.listSurveyUsage + '/' + prefectureName.substring(0, 3) + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
+                    $("ul#survey_usages").append('<li><a href="' + window.urls.listSurveyUsage + '/' + usage + '/' + prefectureName.substring(0, 3) + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
                 }
                 for (var i = 0; i < json.surveyedCityPlans.length; i++) {
                     var cityPlan = json.surveyedCityPlans[i].cityPlan;
                     var count = json.surveyedCityPlans[i].count;
                     //var linkURL = '<li><a href="usages/' + prefectureName.substring(0, 3) + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>";
                     //console.log(linkURL);
-                    $("ul#survey_cityPlans").append('<li><a href="' + window.urls.listSurveyCityPlan + '/' + prefectureName.substring(0, 3) + '/' + cityPlan + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
+                    $("ul#survey_cityPlans").append('<li><a href="' + window.urls.listSurveyCityPlan + '/' + cityPlan + '/' + prefectureName.substring(0, 3) + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
                 }
 
             }
