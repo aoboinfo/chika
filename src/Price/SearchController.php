@@ -32,7 +32,7 @@ class SearchController
     //
     protected $leftOptions = [];
 
-    protected $stationLabel = "全国";
+    protected $stationLabel;
 
     protected $areas = ["北海道・東北","関東","信越・北陸","東海","近畿","中国","四国","九州・沖縄"];
 
@@ -105,6 +105,16 @@ class SearchController
         $this->router = $router;
         $this->db = $db;
         $this->logger = $logger;
+        $this->stationLabel = "全国";
     }
 
+    public function getCityList($target, $prefecture) {
+        $cities = $this->db->query("select distinct city from " . $target . " where address like '" . $prefecture . "%' order by city");
+        $result = array();
+        while ($row = mysqli_fetch_assoc($cities)) {
+            $result[] = $row["city"];
+        }
+        $cities->close();
+        return $result;
+    }
 }

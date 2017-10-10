@@ -2,10 +2,17 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content_link %}
-    <li><a href="{{ base_url() }}/{{ stationLabel }}">{{ stationLabel }}</a></li>
+    {% if linkType == '0' %}
+        <li><a href="{{ base_url() }}/">{{ stationLabel }}</a></li>
+    {% elseif linkType == '1'  %}
+        <li><a href="{{ base_url() }}/{{ stationLabel }}">{{ stationLabel }}</a></li>
+    {% else %}
+        <li><a href="{{ base_url() }}/{{ stationLabel }}">{{ stationLabel }}</a></li>
+        <li><a href="{{ base_url() }}/{{ stationLabel }}/{{ city }}">{{ city }}</a></li>
+    {% endif %}
 {% endblock %}
 {% block centralSection %}
-    <div class="card">
+    <div>
         <div class="card-move-up cyan darken-4 waves-effect waves-block waves-light">
             <div class="move-up">
                 <h5 class="margin white-text">{{ station }}駅周辺{{ priceType }}</h5>
@@ -43,6 +50,17 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="card">
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- LandPriceTop -->
+        <ins class="adsbygoogle aoboAds"
+             style="display:inline-block"
+             data-ad-client="ca-pub-2770900584946061"
+             data-ad-slot="5901050259"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </div>
 {% endblock %}
 {% block businessMenu %}
@@ -96,7 +114,7 @@
     <div class="card">
         <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
             <div class="move-up">
-                <h5 class="margin white-text">地価公示・高価格ランキング</h5>
+                <h5 class="margin white-text">{{ priceType }}・高価格ランキング</h5>
             </div>
             <table class="bordered white-text">
                 <thead>
@@ -132,7 +150,7 @@
     <div class="card">
         <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
             <div class="move-up">
-                <h5 class="margin white-text">地価公示・低価格ランキング</h5>
+                <h5 class="margin white-text">{{ priceType }}・低価格ランキング</h5>
             </div>
             <table class="bordered white-text">
                 <thead>
@@ -165,19 +183,6 @@
         </div>
     </div>
  {% endif %}
-{% endblock %}
-{% block googleAds %}
-    <div class="card">
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <!-- LandPriceTop -->
-        <ins class="adsbygoogle aoboAds"
-             style="display:inline-block"
-             data-ad-client="ca-pub-2770900584946061"
-             data-ad-slot="5901050259"></ins>
-        <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-    </div>
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
