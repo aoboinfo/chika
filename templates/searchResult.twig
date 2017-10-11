@@ -40,9 +40,9 @@
                             <td></td>
                         {% endif %}
                         {% if listing.type == '地価公示' %}
-                            <td><a href="{{ base_url() }}/detail/post/{{ listing.address }}">{{ listing.address }}</a></td>
+                            <td><a href="{{ base_url() }}/item/detail/{{ listing.address }}?type=0">{{ listing.address }}</a></td>
                         {% else %}
-                            <td><a href="{{ base_url() }}/detail/survey/{{ listing.address }}">{{ listing.address }}</a></td>
+                            <td><a href="{{ base_url() }}/item/detail/{{ listing.address }}?type=1">{{ listing.address }}</a></td>
                         {% endif %}
                         <td>{{ listing.station }}</td>
                         <td>{{ listing.distanceFromStation }}</td>
@@ -79,7 +79,35 @@
                         <div class="collapsible-body">
                             <ul>
                                 {% for menu in optionMenus[key] %}
-                                    <li><a href="{{ base_url() }}/list/postUsage/{{ area }}/{{ menu }}">{{ menu }}</a></li>
+                                    {% if linkType == "1" %}
+                                        {% if key == 0 %}
+                                            {% if priceType == "地価公示" %}
+                                               <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/?type=0&offset=0option=usage&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                             {% else %}
+                                                 <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/?type=1&offset=0option=usage&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                             {% endif %}
+                                        {% else  %}
+                                            {% if priceType ==  "地価公示" %}
+                                                <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/?type=0&offset=0option=cityPlan&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                            {% else %}
+                                                <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/?type=1&offset=0option=cityPlan&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% else %}
+                                        {% if key == 0 %}
+                                            {% if priceType ==  "地価公示" %}
+                                                <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/{{ city }}?type=0&offset=0option=usage&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                            {% else %}
+                                                <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/{{ city }}?type=1&offset=0option=usage&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                            {% endif %}
+                                        {% else  %}
+                                            {% if priceType ==  "地価公示" %}
+                                                <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/{{ city }}?type=0&offset=0option=cityPlan&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                            {% else %}
+                                                <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/{{ city }}?type=1&offset=0option=cityPlan&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
                                 {% endfor %}
                             </ul>
                         </div>
@@ -116,7 +144,11 @@
         <li><a href="#">{% block price_station %}{{ prefectureLabel }}{% endblock %}</a></li>
     </ol>
     <div class="card">
-        <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
+        {% if priceType == '地価公示' %}
+            <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
+        {% else %}
+             <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
+        {% endif %}
             <div class="move-up">
                 <h5 class="margin white-text">{{ priceType }}・高価格ランキング</h5>
             </div>
@@ -156,7 +188,11 @@
     </div>
  {% if stationLow != null %}
     <div class="card">
-        <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
+        {% if priceType == '地価公示' %}
+            <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
+        {% else %}
+            <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
+         {% endif %}
             <div class="move-up">
                 <h5 class="margin white-text">{{ priceType }}・低価格ランキング</h5>
             </div>

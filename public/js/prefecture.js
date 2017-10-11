@@ -16,10 +16,10 @@ window.onload = function () {
     changeRateDataSets[1].borderColor = 'rgb(25, 118, 210)';
     drawPriceChangeRate('changeRate/' + prefectureName.substring(0, 3) + '/', document.getElementById("price_change_rate"));
     //Set current usage and city plan menu.
-    //console.log('listingCityPlan/' + prefectureName.substring(0, 3) + '/');
+    //console.log('listingCityPlanAndUsage/' + prefectureName.substring(0, 3) + '/');
     $.ajax(
         {
-            url : 'listingCityPlan/' + prefectureName.substring(0, 3) + '/',
+            url : window.urls.listingOptions + '/' + prefectureName.substring(0, 3) + '/',
             type: "GET",
             success: function (json) {
                 for (var i = 0; i < json.postedUsages.length; i++) {
@@ -27,14 +27,14 @@ window.onload = function () {
                     var count = json.postedUsages[i].count;
                     //var linkURL = '<li><a href="usages/' + prefectureName.substring(0, 3) + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>";
                     //console.log(linkURL);
-                    $("ul#post_usages").append('<li><a href="' + window.urls.listPostUsage + '/' + usage  + '/' + prefectureName.substring(0, 3) + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
+                    $("ul#post_usages").append('<li><a href="' + window.urls.findOptionList + '/' + prefectureName.substring(0, 3) + '/?type=0&offset=0&option=usage&value=' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
                 }
                 for (var i = 0; i < json.postedCityPlans.length; i++) {
                     var cityPlan = json.postedCityPlans[i].cityPlan;
                     var count = json.postedCityPlans[i].count;
                     //var linkURL = '<li><a href="usages/' + prefectureName.substring(0, 3) + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>";
                     //console.log(linkURL);
-                    $("ul#post_cityPlans").append('<li><a href="' + window.urls.listPostCityPlan + '/' + cityPlan + '/' + prefectureName.substring(0, 3) + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
+                    $("ul#post_cityPlans").append('<li><a href="' + window.urls.findOptionList + '/' + prefectureName.substring(0, 3) + '/?type=0&offset=0&option=cityPlan&value=' + cityPlan + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
                 }
                 //survey
                 for (var i = 0; i < json.surveyedUsages.length; i++) {
@@ -42,14 +42,14 @@ window.onload = function () {
                     var count = json.surveyedUsages[i].count;
                     //var linkURL = '<li><a href="usages/' + prefectureName.substring(0, 3) + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>";
                     //console.log(linkURL);
-                    $("ul#survey_usages").append('<li><a href="' + window.urls.listSurveyUsage + '/' + usage + '/' + prefectureName.substring(0, 3) + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
+                    $("ul#survey_usages").append('<li><a href="' + window.urls.findOptionList + '/' + prefectureName.substring(0, 3) + '/?type=1&offset=0&option=usage&value=' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
                 }
                 for (var i = 0; i < json.surveyedCityPlans.length; i++) {
                     var cityPlan = json.surveyedCityPlans[i].cityPlan;
                     var count = json.surveyedCityPlans[i].count;
                     //var linkURL = '<li><a href="usages/' + prefectureName.substring(0, 3) + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>";
                     //console.log(linkURL);
-                    $("ul#survey_cityPlans").append('<li><a href="' + window.urls.listSurveyCityPlan + '/' + cityPlan + '/' + prefectureName.substring(0, 3) + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
+                    $("ul#survey_cityPlans").append('<li><a href="' + window.urls.findOptionList + '/' + prefectureName.substring(0, 3) + '/?type=1&offset=0&option=cityPlan&value=' + cityPlan + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
                 }
 
             }

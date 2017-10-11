@@ -112,6 +112,7 @@ class StationSearchController extends SearchController
             );
 
         } else {
+            $this->setStationLabel($prefecture);
             $stationsDesc = $this->getTopStationListForTarget($target, $prefecture, $city);
             //
             $listOfStation = $this->db->query("select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, distance_station, current_use, build_structure, city_plan from " . $target . " where near_station = '" . $station . "' and city = '" . $city . "' and address like '" . $prefecture . "%' order by price0 desc");

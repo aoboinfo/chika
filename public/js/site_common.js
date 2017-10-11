@@ -21,15 +21,15 @@ window.chartColors = {
 };
 //
 window.urls = {
-    listPostUsage: 'list/postUsage',
+    findOptionList: 'list/options', //find listing based on option
     listPostCityPlan: 'list/postCityPlan',
     listSurveyUsage: 'list/surveyUsage',
     listSurveyCityPlan: 'list/surveyCityPlan',
     listAll: 'list/all',
-    listPostStation: 'list/stationPost',
-    listSurveyStation: 'list/stationSurvey',
-    postDetail: 'detail/post',
-    surveyDetail: 'detail/survey'
+    listPostStation: 'list/stationPost', //ok, at present
+    listSurveyStation: 'list/stationSurvey', //ok, at present
+    detail: '/item/detail',
+    listingOptions: 'listingCityPlanAndUsage' //show options
 };
 var mapDiv = document.getElementById("map-canvas");
 var map = null;
@@ -180,7 +180,7 @@ function addItemMarkersToMap(priceType, value) {
     var price0 = Number(value.price0); //latest price
     var price1 = Number(value.price1); //the price year before latest.
     var caption = "地価公示";
-    if (priceType == window.urls.surveyDetail) {
+    if (priceType == "1") {
         caption = "地価調査";
     }
     var icon = null;
@@ -209,7 +209,7 @@ function addItemMarkersToMap(priceType, value) {
     google.maps.event.addListener(marker, 'click', function() {
         /* InfoWindowOptionsオブジェクトを指定します。*/
         infoWindow.setContent(caption + "："+ price0.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' }) + '円/m²' + changeStr + "<br>"
-            + '<a href=\"../' + priceType + '/' + value.address + '\">' + value.address + "</a>");
+            + '<a href=\"../' + window.urls.detail + '/' + value.address + '?type=' + priceType + '\">' + value.address + "</a>");
         /* マーカーに情報ウィンドウを表示 */
         infoWindow.open(map,marker);
         //add the detail information under the map.
@@ -227,14 +227,25 @@ function showMap(targetUrl) {
                 var i = 0;
                 var lats = 0.0;
                 var lngs = 0.0;
-                json.postedItems.forEach(function (value) {
-                    var lat = value.lat;
-                    var lng = value.lng;
-                    //
-                    lats = lats + parseFloat(lat);
-                    lngs = lngs + parseFloat(lng);
-                    i++;
-                });
+                if (json.postedItems.length > 0) {
+                    json.postedItems.forEach(function (value) {
+                        var lat = value.lat;
+                        var lng = value.lng;
+                        //
+                        lats = lats + parseFloat(lat);
+                        lngs = lngs + parseFloat(lng);
+                        i++;
+                    });
+                } else {
+                    json.surveyedItems.forEach(function (value) {
+                        var lat = value.lat;
+                        var lng = value.lng;
+                        //
+                        lats = lats + parseFloat(lat);
+                        lngs = lngs + parseFloat(lng);
+                        i++;
+                    });
+                }
                 console.log("i:" + i);
                 console.log("latlng:" + lats + "/" + lngs);
                 map = new google.maps.Map( mapDiv, {
@@ -251,12 +262,12 @@ function showMap(targetUrl) {
                 });
                 //post
                 json.postedItems.forEach(function (value) {
-                    addItemMarkersToMap(window.urls.postDetail, value);
+                    addItemMarkersToMap('0', value);
                 });
                 //survey
                 json.surveyedItems.forEach(function (value) {
                     //
-                    addItemMarkersToMap(window.urls.surveyDetail, value);
+                    addItemMarkersToMap("1", value);
                 });
             }
         }

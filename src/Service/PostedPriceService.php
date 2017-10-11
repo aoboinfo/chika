@@ -81,12 +81,21 @@ class PostedPriceService
         //survey prices
         $surveyHistory = $this->db->query($surveyPriceQuery);
         $surveyPrices = array();
-        while ($row = mysqli_fetch_assoc($surveyHistory)) {
-            $surveyPrices[] = $row["avg_price"];
+        //
+        if ($this->getRecCount() > 0) {
+            while ($row = mysqli_fetch_assoc($surveyHistory)) {
+                $surveyPrices[] = $row["avg_price"];
+            }
+            for ($i = count($surveyPrices); $i < $this->getRecCount(); $i++) {
+                $surveyPrices[] = "0";
+            }
+        } else {
+            while ($row = mysqli_fetch_assoc($surveyHistory)) {
+                $labels[] = $row["year"];
+                $surveyPrices[] = $row["avg_price"];
+            }
         }
-        for ($i = count($surveyPrices); $i < $this->getRecCount(); $i++) {
-            $surveyPrices[] = "0";
-        }
+
         //
         $result = ["labels"=>$labels, "postPrices"=>$postPrices, "surveyPrices"=>$surveyPrices];
         //

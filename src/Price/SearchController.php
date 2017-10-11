@@ -8,10 +8,10 @@
 
 namespace Price;
 
-use Slim\Views\Twig;
-use Slim\Router;
-use Monolog\Logger;
-use Mysqli;
+use Slim\Views\Twig as Twig;
+use Slim\Router as Router;
+use Monolog\Logger as Logger;
+use Mysqli as Mysqli;
 
 class SearchController
 {
@@ -28,6 +28,8 @@ class SearchController
     const SURVEY_VIEW = "survey_price";
     const POST_KANJI = "地価公示";
     const SURVEY_KANJI = "地価調査";
+    //
+    const BASIC_QUERY_STR = "select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from ";
 
     //
     protected $leftOptions = [];
@@ -95,8 +97,6 @@ class SearchController
     {
         $this->stationLabel = $stationLabel;
     }
-
-
 
     //
     public function __construct(Twig $view, Router $router, Mysqli $db, Logger $logger) {
@@ -196,5 +196,50 @@ class SearchController
         }
         //
         return $stationAsc;
+    }
+    //
+    public function getPostUsages($prefecture, $city) {
+        return optionsList(SearchController::POST_TABLE, $prefecture, $city, "0");
+    }
+    public function getPostCityPlans($prefecture, $city) {
+        return optionsList(SearchController::POST_TABLE, $prefecture, $city, "1");
+    }
+    public function getSurveyUsages($prefecture, $city) {
+        return optionsList(SearchController::SURVEY_TABLE, $prefecture, $city, "0");
+    }
+    public function getSurveyCityPlans($prefecture, $city) {
+        return optionsList(SearchController::SURVEY_TABLE, $prefecture, $city, "1");
+    }
+    //
+    public function optionsList($target, $prefecture, $city, $type) {
+        $result = array();
+        if ($type == "0") {
+            if (is_null($city)) {
+                $queryString = "select current_use, count(*) as u_count from " . $target . " where address like '" . $prefecture . "%' group by current_use order by u_count desc";
+            } else {
+                $queryString = "select current_use, count(*) as u_count from " . $target . " where address like '" . $prefecture . "%' and city = '" . $city . "' group by current_use order by u_count desc";
+            }
+            $usagesQuery = $this->db->query($queryString);
+            while($row = mysqli_fetch_assoc($usagesQuery)) {
+                $usage = ["name" => $row["current_use"], "count" => $row["u_count"]];
+                //
+                $result[] = $usage;
+            }
+            $usagesQuery->close();
+        } else {
+            if (is_null($city)) {
+                $queryString = "select city_plan, count(*) as u_count from " . $target . " where address like '" . $prefecture . "%' group by city_plan order by u_count desc";
+            } else {
+                $queryString = "select city_plan, count(*) as u_count from " . $target . " where address like '" . $prefecture . "%' and city = '" . $city . "' group by city_plan order by u_count desc";
+            }
+            $cityPlanQuery = $this->db->query($queryString);
+            while($row = mysqli_fetch_assoc($cityPlanQuery)) {
+                $cityPlan = ["name" => $row["city_plan"], "count" => $row["u_count"]];
+                //
+                $result[] = $cityPlan;
+            }
+            $cityPlanQuery->close();
+        }
+        return $result;
     }
 }

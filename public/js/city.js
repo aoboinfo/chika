@@ -134,13 +134,14 @@ window.onload = function () {
     landPriceDataSets[0].borderColor = 'rgb(255, 99, 132)';
     landPriceDataSets[1].backgroundColor = 'rgb(25, 118, 210)';
     landPriceDataSets[1].borderColor = 'rgb(25, 118, 210)';
+    console.log("URL:", targetURL);
     drawAvgPrice('bar', targetURL, document.getElementById("post_price_trending"));
     //
     urlsValues.splice(3, 1, "mapItems"); //exchange the key in router
     showMap(urlsValues.join("/"));
     //Draw Doughnut on the city town page
     //
-    urlsValues.splice(3, 1, "listingCityPlan"); //exchange with mapItems
+    urlsValues.splice(3, 1, window.urls.listingOptions); //exchange with mapItems
     //draw doughnut for post current usage.
     var ctx0 = document.getElementById("doughnut-usage-post").getContext("2d");
     window.postedUsageDoughnut = new Chart(ctx0, postUsageConfig);
@@ -157,36 +158,40 @@ window.onload = function () {
             url : urlsValues.join("/"),
             type: "GET",
             success: function (json) {
-
-                for (var i = 0; i < json.postedUsages.length; i++) {
-                    var usage = json.postedUsages[i].usage;
-                    var count = json.postedUsages[i].count;
-                    if (i <= MAX_REC_DOUGHNUT) {
-                        console.log(usage + "/" + count);
-                        postUsageConfig.data.labels.push(usage);
-                        postUsageConfig.data.datasets.forEach(function(dataset) {
-                            dataset.data.push(count);
-                            dataset.backgroundColor.push(doughnutColor[i]);
-                        });
+                urlsValues.splice(3, 1, window.urls.findOptionList);
+                if (json.postedUsages.length == 0) {
+                    $("div#post_doughnut").hide();
+                    $("div#post_station").hide();
+                    $("div#postBusinessMenu").hide();
+                } else {
+                    for (var i = 0; i < json.postedUsages.length; i++) {
+                        var usage = json.postedUsages[i].usage;
+                        var count = json.postedUsages[i].count;
+                        if (i <= MAX_REC_DOUGHNUT) {
+                            console.log(usage + "/" + count);
+                            postUsageConfig.data.labels.push(usage);
+                            postUsageConfig.data.datasets.forEach(function (dataset) {
+                                dataset.data.push(count);
+                                dataset.backgroundColor.push(doughnutColor[i]);
+                            });
+                        }
+                        $("ul#post_usages").append('<li><a href="' + urlsValues.join("/") + '?type=0&offset=0&option=usage&value=' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
                     }
-                    urlsValues.splice(3, 1, window.urls.listPostUsage);
-                    $("ul#post_usages").append('<li><a href="' + urlsValues.join("/") + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
-                }
-                window.postedUsageDoughnut.update();
-                for (var i = 0; i < json.postedCityPlans.length; i++) {
-                    var cityPlan = json.postedCityPlans[i].cityPlan;
-                    var count = json.postedCityPlans[i].count;
-                    if (i <= MAX_REC_DOUGHNUT) {
-                        postCityPlanConfig.data.labels.push(cityPlan);
-                        postCityPlanConfig.data.datasets.forEach(function(dataset) {
-                            dataset.data.push(count);
-                            dataset.backgroundColor.push(doughnutColor[i]);
-                        });
+                    window.postedUsageDoughnut.update();
+                    for (var i = 0; i < json.postedCityPlans.length; i++) {
+                        var cityPlan = json.postedCityPlans[i].cityPlan;
+                        var count = json.postedCityPlans[i].count;
+                        if (i <= MAX_REC_DOUGHNUT) {
+                            postCityPlanConfig.data.labels.push(cityPlan);
+                            postCityPlanConfig.data.datasets.forEach(function (dataset) {
+                                dataset.data.push(count);
+                                dataset.backgroundColor.push(doughnutColor[i]);
+                            });
+                        }
+                        $("ul#post_cityPlans").append('<li><a href="' + urlsValues.join("/") + '?type=0&offset=0&option=cityPlan&value=' + cityPlan + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
                     }
-                    urlsValues.splice(3, 1, window.urls.listPostCityPlan);
-                    $("ul#post_cityPlans").append('<li><a href="' + urlsValues.join("/") + '/' + cityPlan + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
+                    window.postedCityPlanDoughnut.update();
                 }
-                window.postedCityPlanDoughnut.update();
                 if (json.surveyedUsages.length == 0) {
                     $("div#survey_doughnut").hide();
                     $("div#survey_station").hide();
@@ -202,8 +207,7 @@ window.onload = function () {
                                 dataset.backgroundColor.push(doughnutColor[i]);
                             });
                         }
-                        urlsValues.splice(3, 1, window.urls.listSurveyUsage);
-                        $("ul#survey_usages").append('<li><a href="' + urlsValues.join("/") + '/' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
+                        $("ul#survey_usages").append('<li><a href="' + urlsValues.join("/") + '?type=1&offset=0&option=usage&value=' + usage + '">' + usage + "<span class=\"new badge\">" + count + "</span></a></li>");
                     }
                     window.surveyUsageDoughnut.update();
                     for (var i = 0; i < json.surveyedCityPlans.length; i++) {
@@ -216,8 +220,7 @@ window.onload = function () {
                                 dataset.backgroundColor.push(doughnutColor[i]);
                             });
                         }
-                        urlsValues.splice(3, 1, window.urls.listSurveyCityPlan);
-                        $("ul#survey_cityPlans").append('<li><a href="' + urlsValues.join("/") + '/' + cityPlan + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
+                        $("ul#survey_cityPlans").append('<li><a href="' + urlsValues.join("/") + '?type=1&offset=0&option=cityPlan&value=' + cityPlan + '">' + cityPlan + "<span class=\"new badge\">" + count + "</span></a></li>");
 
                     }
                     window.surveyCityPlanDoughnut.update();

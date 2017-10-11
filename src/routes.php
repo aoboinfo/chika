@@ -6,8 +6,12 @@ $app->get('/{prefecture}', 'Price\PrefectureController:showPricesFor')->setName(
 $app->get('/{prefecture}/{city}', 'Price\PrefectureController:showPricesForCity')->setName('city-price'); //setName: url name for later reference.
 $app->get('/list/stationPost/{station}/[{prefecture}/[{city}]]', 'Price\StationSearchController:findPostListForStation')->setName('post-station');
 $app->get('/list/stationSurvey/{station}/[{prefecture}/[{city}]]', 'Price\StationSearchController:findSurveyListForStation')->setName('survey-station');
-//Usages
-$app->get('/list/postUsage/[{prefecture}/[{city}]]', 'Price\StationSearchController:findSurveyListForStation')->setName('survey-station');
+$app->get('/list/options/{prefecture}/[{city}]', 'Price\OptionsSearchController:findOptions')->setName('find-options');
+$app->get('/item/detail/{address}', function ($request, $response, $args) {
+    $address = $request->getAttribute('address');
+    $response->getBody()->write("Hello, " . $address);
+    return $response;
+});
 
 //get price history at country, prefecture, id level
 /*$app->get('/avgs/[{city}/[{id}]]', function ($request, $response, $args) {
@@ -21,4 +25,5 @@ $app->get('/list/postUsage/[{prefecture}/[{city}]]', 'Price\StationSearchControl
 $app->get('/avgs/[{prefecture}/[{city}]]', 'Service\PostedPriceService:historyPriceOf');
 $app->get('/changeRate/[{prefecture}/[{city}]]', 'Service\PostedPriceService:changeRate');
 $app->get('/mapItems/[{prefecture}/[{city}]]', 'Service\PostedPriceService:itemsOnMap');
-$app->get('/listingCityPlan/{prefecture}/[{city}]', 'Service\PostedPriceService:itemsForCityPlanAndUsage');
+$app->get('/listingCityPlanAndUsage/{prefecture}/[{city}]', 'Service\PostedPriceService:itemsForCityPlanAndUsage');
+//They must be initialized in dependencies.
