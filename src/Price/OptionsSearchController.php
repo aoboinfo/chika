@@ -11,7 +11,7 @@ namespace Price;
 
 class OptionsSearchController extends SearchController
 {
-    const LIMIT_REC = 20;
+    const LIMIT_REC = 18;
 
     private $priceName;
     private $target;
@@ -112,7 +112,8 @@ class OptionsSearchController extends SearchController
                 "pageLabel" => $pageLabel,
                 "priceType" => $this->getPriceName(),
                 "city" => $city,
-                "linkType" => $linkType
+                "linkType" => $linkType,
+                "offset" => $offset
             ]
         );
 

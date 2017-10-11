@@ -53,7 +53,11 @@
 {% block leftDropMenu %}
     <ul class="collapsible collapsible-accordion">
         {% for key, area in areas %}
-            <li class="bold"><a id="linkArea" class="collapsible-header waves-effect waves-cyan">{{ area }}</a>
+            {% if key == 0 %}
+               <li class="bold"><a id="linkArea" class="collapsible-header waves-effect waves-cyan">{{ area }}：地価公示</a>
+            {% else %}
+                <li class="bold"><a id="linkArea" class="collapsible-header waves-effect waves-cyan">{{ area }}：地価調査</a>
+            {% endif %}
                 <div class="collapsible-body">
                     <ul>
                         {% for city in leftMenus[key] %}

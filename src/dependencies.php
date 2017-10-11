@@ -41,7 +41,7 @@ $container['Price\TopController'] = function ($c) {
     return new \Price\TopController($c['view'], $c['router'], $c['db'], $c['logger']);
 };
 $container['Price\PrefectureController'] = function ($c) {
-    return new Price\PrefectureController($c['view'], $c['router'], $c['db']);
+    return new Price\PrefectureController($c['view'], $c['router'], $c['db'], $c['logger']);
 };
 //Service for output json data of Draw on page.
 $container['Service\PostedPriceService'] = function ($c) {

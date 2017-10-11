@@ -15,28 +15,12 @@ use Mysqli;
 use Price\LandPrice;
 
 
-class PrefectureController
+class PrefectureController extends SearchController
 {
-    private $view;
-    private $router;
-    private $db;
-    //
-    public function __construct(Twig $view, Router $router, Mysqli $db) {
-
-        $this->view = $view;
-        $this->router = $router;
-        $this->db = $db;
-    }
     //
     public function showPricesFor ($request, $response, $params) {
         //menu
         $prefecture = $params['prefecture'];
-        $cities = $this->db->query("select distinct city from posted_price where address like '" . $prefecture . "%' order by city");
-        $result = array();
-        while ($row = mysqli_fetch_assoc($cities)) {
-            $result[] = $row["city"];
-        }
-        $cities->close();
         //The posted 10 stations
         $postStationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from post_price where price1 <> 0 and address like '" . $prefecture . "%' group by near_station order by price0";
         $stationTop10 = $this->db->query($postStationQuery . " desc limit 10");
@@ -113,7 +97,7 @@ class PrefectureController
         }
         $survey_avg->close();
         /*Ranking area*/
-        $postedQuery10 = "select city, round(avg(price0)) as pre_price, round(avg(price0) * 3.305785) as tubo_price  from post_price where address like '" . $prefecture ."%' group by city order by pre_price";
+        $postedQuery10 = "select city, round(avg(price0)) as pre_price, round(avg(price0) * 3.305785) as tubo_price from post_price where address like '" . $prefecture ."%' group by city order by pre_price";
         //top 10 city
         $top10CityQry = $this->db->query($postedQuery10 . " desc limit 10");
         $postedTop10City = array();
@@ -139,7 +123,7 @@ class PrefectureController
         //
         $surveyQuery10 = "select city, round(avg(price0)) as pre_price, round(avg(price0) * 3.305785) as tubo_price  from survey_price where address like '" . $prefecture ."%' group by city order by pre_price";
         //top 10 city
-        $surveyTop10CityQry = $this->db->query($postedQuery10 . " desc limit 10");
+        $surveyTop10CityQry = $this->db->query($surveyQuery10 . " desc limit 10");
         $surveyedTop10City = array();
         while ($row = mysqli_fetch_assoc($surveyTop10CityQry)) {
             $landPrice = new LandPrice();
@@ -150,7 +134,7 @@ class PrefectureController
         }
         $surveyTop10CityQry->close();
         //low 10 prefecture
-        $surveyedLow10CityQry = $this->db->query($postedQuery10 . " limit 10");
+        $surveyedLow10CityQry = $this->db->query($surveyQuery10 . " limit 10");
         $surveyedLow10City = array();
         while ($row = mysqli_fetch_assoc($surveyedLow10CityQry)) {
             $landPrice = new LandPrice();
@@ -194,13 +178,14 @@ class PrefectureController
             $topSurveyPrice[] = $landPrice;
         }
         $surveyPriceOfPrefecture->close();
+
         //
         $this->view->render($response, 'landprice/prefecture.twig',
             [
                 "posted_title"=> $prefecture,
-                "areas" => [$prefecture],
+                "areas" => [$prefecture, $prefecture], //this is trick for create correct url. post and survey
                 "prefecture" => $prefecture,
-                "leftMenus" => [$result],
+                "leftMenus" => [$this->getCityList(SearchController::POST_TABLE, $prefecture), $this->getCityList(SearchController::SURVEY_TABLE, $prefecture)],
                 "title"=> $prefecture . "地価",
                 "stationTop" => $stationsDesc,
                 "stationLow" => $stationAsc,
