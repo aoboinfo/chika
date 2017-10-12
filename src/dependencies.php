@@ -54,4 +54,7 @@ $container['Price\StationSearchController'] = function ($c) {
 $container['Price\OptionsSearchController'] = function ($c) {
     return new Price\OptionsSearchController($c['view'], $c['router'], $c['db'], $c['logger']);
 };
+$container['Price\AddressSearchController'] = function ($c) {
+    return new Price\AddressSearchController($c['view'], $c['router'], $c['db'], $c['logger']);
+};
 //NOTICE: Please check the Name and Class instance, they must be paired.

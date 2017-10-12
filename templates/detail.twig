@@ -1,0 +1,251 @@
+{% extends 'layout.twig' %}
+{% block title %}{{ pageLabel }}{{ priceType }}{% endblock %}
+
+{% block content_link %}
+      <li><a href="{{ base_url() }}/{{ prefectureLabel }}">{{ prefectureLabel }}</a></li>
+{% endblock %}
+{% block centralSection %}
+    <div>
+        <div class="card-move-up cyan darken-4 waves-effect waves-block waves-light">
+            <div class="move-up">
+                <h5 class="margin white-text">{{ pageLabel }}{{ priceType }}</h5>
+            </div>
+            <table id="searchResult" class="bordered white-text">
+                <thead>
+                <th data-field="id">順位</th>
+                <th data-field="price">価格(円/m²)</th>
+                <th data-field="rate">前年比(%)</th>
+                <th data-field="place">住所表示</th>
+                <th data-field="station">最寄駅</th>
+                <th data-field="distance">駅から距離(m)</th>
+                <th data-field="structure">建物構造</th>
+                <th data-field="usage">利用現況</th>
+                <th data-field="cityPlan">用途地域</th>
+                </thead>
+                <tbody>
+                {% for listing in listings %}
+                    <tr>
+                        <td>{{ loop.index + offset }}</td>
+                        <td>{{ listing.price }}</td>
+                        {% if listing.changeRate != null %}
+                            <td>{{ listing.changeRate }}%</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        {% if listing.type == '地価公示' %}
+                            <td><a href="{{ base_url() }}/item/detail/{{ listing.address }}?type=0">{{ listing.address }}</a></td>
+                        {% else %}
+                            <td><a href="{{ base_url() }}/item/detail/{{ listing.address }}?type=1">{{ listing.address }}</a></td>
+                        {% endif %}
+                        <td>{{ listing.station }}</td>
+                        <td>{{ listing.distanceFromStation }}</td>
+                        <td>{{ listing.structure }}</td>
+                        <td>{{ listing.currentUsage }}</td>
+                        <td>{{ listing.cityPlan }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% if listings|length == 10 %}
+        {% if offset == 0 %}
+            <p><a id="btn_next" href="#" class="btn waves-effect waves-light indigo">次へ</a></p>
+        {% else %}
+            <p><a id="btn_next" href="#" class="btn waves-effect waves-light indigo">次へ</a><a id="btn_prev" href="#" class="btn waves-effect waves-light indigo">前へ</a></p>
+        {% endif %}
+    {% else %}
+        {% if offset != 0 %}
+            <p><a id="btn_prev" href="#" class="btn waves-effect waves-light indigo">前へ</a></p>
+        {% endif %}
+    {% endif %}
+    </div>
+
+    <div class="divider" style="clear:right"></div>
+    <div class="row">
+        <div class="col s12 m3 l3">
+            <h3>広告募集中</h3>
+        </div>
+        <div class="col s12 m9 l9">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- LandPriceTop -->
+            <ins class="adsbygoogle aoboAds"
+                 style="display:inline-block"
+                 data-ad-client="ca-pub-2770900584946061"
+                 data-ad-slot="5901050259"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+{% endblock %}
+{% block businessMenu %}
+    <div id="postBusinessMenu">
+        {% for key, option in options %}
+            <li class="li-hover">
+                <div class="divider"></div>
+            </li>
+            <li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li class="bold"><a class="collapsible-header waves-effect waves-cyan">{{ option }}</a>
+                        <div class="collapsible-body">
+                            <!-- linkType: prefecture, prefecture/city. key:0:利用現況 1:用途地域 -->
+                            <ul>
+                                {% for menu in optionMenus[key] %}
+                                    {% if linkType == "1" %}
+                                        {% if key == 0 %}
+                                            {% if priceType == "地価公示" %}
+                                               <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/?type=0&offset=0&option=usage&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                             {% else %}
+                                                 <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/?type=1&offset=0&option=usage&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                             {% endif %}
+                                        {% else  %}
+                                            {% if priceType ==  "地価公示" %}
+                                                <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/?type=0&offset=0&option=cityPlan&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                            {% else %}
+                                                <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/?type=1&offset=0&option=cityPlan&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% else %}
+                                        {% if key == 0 %}
+                                            {% if priceType ==  "地価公示" %}
+                                                <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/{{ city }}?type=0&offset=0&option=usage&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                            {% else %}
+                                                <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/{{ city }}?type=1&offset=0&option=usage&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                            {% endif %}
+                                        {% else  %}
+                                            {% if priceType ==  "地価公示" %}
+                                                <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/{{ city }}?type=0&offset=0&option=cityPlan&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                            {% else %}
+                                                <li><a href="{{ base_url() }}/list/options/{{ prefectureLabel }}/{{ city }}?type=1&offset=0&option=cityPlan&value={{ menu.name }}">{{ menu.name }}<span class="new badge">{{ menu.count }}</span></a></li>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        {% endfor %}
+{% endblock %}
+{% block leftDropMenu %}
+    <ul class="collapsible collapsible-accordion">
+        {% for key, area in areas %}
+            <li class="bold"><a id="linkArea" class="collapsible-header waves-effect waves-cyan">{{ area }}</a>
+                <div class="collapsible-body">
+                    <ul>
+                        {% if areas|length == 1 %}
+                            {% for city in leftMenus[key] %}
+                                <li><a href="{{ base_url() }}/{{ area }}/{{ city }}">{{ city }}</a></li>
+                            {% endfor %}
+                        {% else %}
+                            {% for pref in leftMenus[key] %}
+                                <li><a href="{{ base_url() }}/{{ pref }}">{{ pref }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+
+                    </ul>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+{% block rightSection0 %}
+    <ol class="breadcrumbs">
+        <li><a href="#">駅周辺地価ランキング</a></li>
+        <li><a href="#">{% block price_station %}{{ prefectureLabel }}{% endblock %}</a></li>
+    </ol>
+    <div class="card">
+        {% if priceType == '地価公示' %}
+            <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
+        {% else %}
+             <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
+        {% endif %}
+            <div class="move-up">
+                <h5 class="margin white-text">{{ priceType }}・高価格ランキング</h5>
+            </div>
+            <table class="bordered white-text">
+                <thead>
+                <tr>
+                    <th data-field="id">順位</th>
+                    <th data-field="name">駅名</th>
+                    <th data-field="price">地価平均(円/m²)</th>
+                    <th data-field="tubo_price">坪単価平均(円/坪)</th>
+                    <th data-field="rate">前年比</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for station  in  stationTop %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        {% if priceType == '地価公示' %}
+                            <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        {% else %}
+                            <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        {% endif %}
+                        <td>{{ station.price }}</td>
+                        <td>{{ station.priceOfTubo }}</td>
+                        {% if station.changeRate > 0 %}
+                            <td>+{{ station.changeRate }}%</td>
+                        {% elseif station.changeRate == 0 %}
+                            <td>{{ station.changeRate }}%</td>
+                        {% else %}
+                            <td>-{{ station.changeRate }}%</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+ {% if stationLow != null %}
+    <div class="card">
+        {% if priceType == '地価公示' %}
+            <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
+        {% else %}
+            <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
+         {% endif %}
+            <div class="move-up">
+                <h5 class="margin white-text">{{ priceType }}・低価格ランキング</h5>
+            </div>
+            <table class="bordered white-text">
+                <thead>
+                <tr>
+                    <th data-field="id">順位</th>
+                    <th data-field="name">駅名</th>
+                    <th data-field="price">地価平均(円/m²)</th>
+                    <th data-field="tubo_price">坪単価平均(円/坪)</th>
+                    <th data-field="rate">前年比</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for station  in  stationLow %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        {% if priceType == '地価公示' %}
+                            <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        {% else %}
+                            <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        {% endif %}
+                        <td>{{ station.price }}</td>
+                        <td>{{ station.priceOfTubo }}</td>
+                        {% if station.changeRate > 0 %}
+                            <td>+{{ station.changeRate }}%</td>
+                        {% elseif station.changeRate == 0 %}
+                            <td>{{ station.changeRate }}%</td>
+                        {% else %}
+                            <td>-{{ station.changeRate }}%</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+ {% endif %}
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    {# javascript for this page #}
+    <script type="text/javascript" src="{{ base_url() }}/js/search.js"></script>
+{% endblock %}

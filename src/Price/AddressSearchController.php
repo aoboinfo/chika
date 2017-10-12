@@ -8,16 +8,21 @@
 
 namespace Price;
 
-
-use Psr\Http\Message\ServerRequestInterface;
-
 class AddressSearchController extends SearchController
 {
     public function detailForAddress($request, $response, $params) {
         $address = $request->getAttribute('address');
         $allGetVars = $request->getQueryParams();
         $priceType = $allGetVars['type'];
-        $commQuery = "SELECT lat,
+        //for getting menus
+        $halfSpaceAddress = mb_convert_kana($address, 's');
+        $items = preg_split('/ /', $halfSpaceAddress);
+        $prefecture = $items[0];
+
+        $citiesTarget = SearchController::POST_TABLE;
+        $stationTarget = SearchController::POST_VIEW;
+        $commQuery = "SELECT id,
+                      lat,
                       lng,
                       acreage,
                       current_use,
@@ -47,43 +52,75 @@ class AddressSearchController extends SearchController
                       floor_area_ratio FROM ";
         $detailQuery = "";
         if ($priceType == 0) {
-            $detailQuery = $detailQuery . $commQuery . SearchController::POST_TABLE . " WHERE address = '" . $address . "'";
+            $detailQuery = $detailQuery . $commQuery . $citiesTarget . " WHERE address = '" . $address . "'";
+            $usages = $this->optionsList($citiesTarget, $prefecture, NULL, "0");
+            $cityPlans = $this->optionsList($citiesTarget, $prefecture, NULL, "1");
+            $this->setLeftOptions(["公示：利用現況","公示：用途地域"]);
         } else {
-            $detailQuery = $detailQuery . $commQuery . SearchController::SURVEY_TABLE . " WHERE address = '" . $address . "'";
+            $citiesTarget = SearchController::SURVEY_TABLE;
+            $stationTarget = SearchController::SURVEY_VIEW;
+            $detailQuery = $detailQuery . $commQuery . $citiesTarget . " WHERE address = '" . $address . "'";
+            $usages = $this->optionsList($citiesTarget, $prefecture, NUll, "0"); //$city = NULL
+            $cityPlans = $this->optionsList($citiesTarget, $prefecture, NUll, "1");
+            $this->setLeftOptions(["調査：利用現況","調査：用途地域"]);
         }
         $itemDetail = $this->db->query($detailQuery);
         //
         $detail = new LandPrice();
+
         while ($row = mysqli_fetch_assoc($itemDetail)) {
+            $detail->setId($row["id"]);
             $detail->setLat($row["lat"]);
             $detail->setLng($row["lng"]);
-            $detail->acreage = $row["acreage"];
-            $detail->usage = $row["current_use"];
-            $detail->desc = $row["use_desc"];
-            $detail->structure = $row["build_structure"];
-            $detail->water = $row["water"];
-            $detail->gas = $row["gas"];
-            $detail-> = $row["sewage"];
-            $detail->lat = $row["config"];
-            $detail->lat = $row["front_ratio"];
-            $detail->lat = $row["depth_ratio"];
-            $detail->lat = $row["num_of_floors"];
-            $detail->lat = $row["num_of_basefloors"];
-            $detail->lat = $row["front_roads"];
-            $detail->lat = $row["road_direction"];
-            $detail->lat = $row["road_width"];
-            $detail->lat = $row["road_front_status"];
-            $detail->lat = $row["road_pavement"];
-            $detail->lat = $row["side_road"];
-            $detail->lat = $row["side_road_direction"];
-            $detail->lat = $row["about_transport_area"];
-            $detail->lat = $row["about_near"];
-            $detail->lat = $row["near_station"];
-            $detail->lat = $row["distance_station"];
-            $detail->lat = $row["city_plan"];
-            $detail->lat = $row["build_coverage"];
-            $detail->lat = $row["floor_area_ratio"];
+            $detail->setAcreage($row["acreage"]);
+            $detail->setCurrentUsage($row["current_use"]);
+            $detail->setUseDesc($row["use_desc"]);
+            $detail->setStructure($row["build_structure"]);
+            $detail->setWater($row["water"]);
+            $detail->setGas($row["gas"]);
+            $detail->setSewage(["sewage"]);
+            $detail->setConfig($row["config"]);
+            $detail->setFrontRatio($row["front_ratio"]);
+            $detail->setDepthRatio($row["depth_ratio"]);
+            $detail->setNumOfFloors($row["num_of_floors"]);
+            $detail->setNumOfBasefloors($row["num_of_basefloors"]);
+            $detail->setFrontRoads($row["front_roads"]);
+            $detail->setRoadDirection($row["road_direction"]);
+            $detail->setRoadWidth($row["road_width"]);
+            $detail->setRoadRrontStatus($row["road_front_status"]);
+            $detail->setRoadPavement($row["road_pavement"]);
+            $detail->setSideRoad($row["side_road"]);
+            $detail->setSideRroadDirection($row["side_road_direction"]);
+            $detail->setAboutTransportArea($row["about_transport_area"]);
+            $detail->setAboutNear($row["about_near"]);
+            $detail->setStation($row["near_station"]);
+            $detail->setDistanceFromStation($row["distance_station"]);
+            $detail->setCityPlan($row["city_plan"]);
+            $detail->setBuildCoverage($row["build_coverage"]);
+            $detail->setFloorAreaRatio($row["floor_area_ratio"]);
         }
         $itemDetail->close();
+
+        if ($priceType == 0) {
+
+        } else {
+
+        }
+
+        return $this->view->render($response, 'detail.twig',
+            [
+                "areas" => [$prefecture, $prefecture],
+                "leftMenus" => [$this->getCityList(SearchController::POST_TABLE, $prefecture), $this->getCityList(SearchController::SURVEY_TABLE, $prefecture)],
+                "stationTop" => $this->getTopStationListForTarget($stationTarget, $prefecture, NULL),
+                "stationLow" => $this->getLowStationListForTarget($stationTarget, $priceType),
+                //"listings" => $resultOfOption,
+                //"optionMenus" => [$usages,$cityPlans],
+                "options" => $this->getLeftOptions(), //the menu list below is place to be selected
+                "prefectureLabel" => $prefecture,
+                "pageLabel" => $address,
+                "priceType" => $priceType
+            ]
+        );
+
     }
 }

@@ -7,18 +7,11 @@ $app->get('/{prefecture}/{city}', 'Price\PrefectureController:showPricesForCity'
 $app->get('/list/stationPost/{station}/[{prefecture}/[{city}]]', 'Price\StationSearchController:findPostListForStation')->setName('post-station');
 $app->get('/list/stationSurvey/{station}/[{prefecture}/[{city}]]', 'Price\StationSearchController:findSurveyListForStation')->setName('survey-station');
 $app->get('/list/options/{prefecture}/[{city}]', 'Price\OptionsSearchController:findOptions')->setName('find-options');
-$app->get('/item/detail/{address}', function ($request, $response, $args) {
+$app->get('/item/detail/{address}','Price\AddressSearchController:detailForAddress')->setName('item-detail');
+
+/*$app->get('/item/detail/{address}', function ($request, $response, $args) {
     $address = $request->getAttribute('address');
     $response->getBody()->write("Hello, " . $address);
-    return $response;
-});
-
-//get price history at country, prefecture, id level
-/*$app->get('/avgs/[{city}/[{id}]]', function ($request, $response, $args) {
-    $prefecture = $request->getAttribute('city');
-    $itemID = $request->getAttribute('id');
-    $response->getBody()->write("Hello, $prefecture" . " " . $itemID);
-
     return $response;
 });*/
 //
