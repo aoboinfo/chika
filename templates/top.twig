@@ -33,8 +33,7 @@
             </div>
         </div>
         <div class="card-content">
-            <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i
-                        class="mdi-content-add activator"></i></a>
+            <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i class="mdi-content-add activator"></i></a>
         </div>
         <div class="card-reveal">
             <span class="card-title grey-text text-darken-4">各年度地価平均一覧表<i class="mdi-navigation-close right"></i></span>
@@ -283,7 +282,7 @@
                 {% for station  in  stationTop %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/">{{ station.station }}</a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -318,7 +317,7 @@
                 {% for station  in  stationLow %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/">{{ station.station }}</a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -355,7 +354,7 @@
                 {% for station  in  surveyStationTop %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/">{{ station.station }}</a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}
@@ -390,7 +389,7 @@
                 {% for station  in  surveyStationLow %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/">{{ station.station }}</a></td>
                         <td>{{ station.price }}</td>
                         <td>{{ station.priceOfTubo }}</td>
                         {% if station.changeRate > 0 %}

@@ -18,7 +18,6 @@ class PostedPriceService
     private $router;
     private $db;
     private $logger;
-
     private $recCount;
 
     /**
@@ -264,5 +263,12 @@ class PostedPriceService
         return $res;
 
     }
+    public function detailForAddress($request, $response, $params)
+    {
+        $address = $request->getAttribute('address');
+        $allGetVars = $request->getQueryParams();
+        $priceType = $allGetVars['type'];
+    }
+
 
 }

@@ -139,6 +139,9 @@
                 </li>
                 {% block businessMenu %} {% endblock %}
                 <!-- LandPriceDetail ADS -->
+                <div class="card-panel">
+                    <h4>広告募集中</h4>
+                </div>
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                 <ins class="adsbygoogle"
                      style="display:block"
@@ -185,157 +188,45 @@
                     {% block mapArea %} {% endblock %}
                 </div>
                 <!--chart dashboard end-->
-                <!-- //////////////////////////////////////////////////////////////////////////// -->
-                <!--card stats start-->
-                <div id="card-stats">
-                </div>
-                <!-- Floating Action Button -->
-                <div class="fixed-action-btn" style="bottom: 50px; right: 19px;">
-                    <a class="btn-floating btn-large">
-                        <i class="mdi-action-stars"></i>
-                    </a>
-                    <ul>
-                        <li><a href="css-helpers.html" class="btn-floating red"><i class="large mdi-communication-live-help"></i></a></li>
-                        <li><a href="app-widget.html" class="btn-floating yellow darken-1"><i class="large mdi-device-now-widgets"></i></a></li>
-                        <li><a href="app-calendar.html" class="btn-floating green"><i class="large mdi-editor-insert-invitation"></i></a></li>
-                        <li><a href="app-email.html" class="btn-floating blue"><i class="large mdi-communication-email"></i></a></li>
-                    </ul>
-                </div>
-                <!-- Floating Action Button -->
             </div>
             <!--end container-->
         </section>
         <!-- END CONTENT -->
         <!-- //////////////////////////////////////////////////////////////////////////// -->
         <!-- START RIGHT SIDEBAR NAV-->
+        {% set areaNames = ['1低専：第一種低層住居専用地域','2低専：第二種低層住居専用地域','1中専：第一種中高層住居専用地域','2中専：第二種中高層住居専用地域','1住居：第一種住居地域','2住居：第二種住居地域','準住居：準住居地域','近商：近隣商業地域','商業：商業地域','準工：準工業地域','工業：工業地域','工専：工業専用地域','防火：防火地域','準防：準防火地域','調区：市街化調整区域','都計外：都市計画区域外','地森計：地域森林計画対象区域','準都計：準都市計画区域','都市：市街化区域及び市街化調整区域以外の都市計画区域','国立公(普)：国立公園（普通）地域','国定公(普)：国定公園（普通）区域','国立公(2特)：国立公園第二種特別地域','国立公(3特)：国立公園第三種特別地域','国定公(2特)：国定公園第二種特別区域','国定公(3特)：国定公園第三種特別区域'] %}
         <aside id="right-sidebar-nav">
             <ul id="chat-out" class="side-nav rightside-navigation">
                 <li class="li-hover">
                     <a href="#" data-activates="chat-out" class="chat-close-collapse right"><i class="mdi-navigation-close"></i></a>
-                    <div id="right-search" class="row">
-                        <form class="col s12">
-                            <div class="input-field">
-                                <i class="mdi-action-search prefix"></i>
-                                <input id="icon_prefix" type="text" class="validate">
-                                <label for="icon_prefix">Search</label>
-                            </div>
-                        </form>
-                    </div>
                 </li>
                 <li class="li-hover">
                     <ul class="chat-collapsible" data-collapsible="expandable">
                         <li>
-                            <div class="collapsible-header teal white-text active"><i class="mdi-social-whatshot"></i>Recent Activity</div>
+                            <div class="collapsible-header teal white-text active">土地価格</div>
                             <div class="collapsible-body recent-activity">
                                 <div class="recent-activity-list chat-out-list row">
-                                    <div class="col s3 recent-activity-list-icon"><i class="mdi-action-add-shopping-cart"></i>
-                                    </div>
-                                    <div class="col s9 recent-activity-list-text">
-                                        <a href="#">just now</a>
-                                        <p>Jim Doe Purchased new equipments for zonal office.</p>
+                                    <div class="col s11 recent-activity-list-text">
+                                        <a href="#">地価公示</a>
+                                        <p>公示地価とは、国土交通省が全国に定めた地点（標準地といいます）を対象に、毎年1月1日時点の価格を公示するものです。<br>土地の取引価格は公示地価に拘束されませんが、1つの重要な指標として存在します。</p>
                                     </div>
                                 </div>
                                 <div class="recent-activity-list chat-out-list row">
-                                    <div class="col s3 recent-activity-list-icon"><i class="mdi-device-airplanemode-on"></i>
-                                    </div>
-                                    <div class="col s9 recent-activity-list-text">
-                                        <a href="#">Yesterday</a>
-                                        <p>Your Next flight for USA will be on 15th August 2015.</p>
-                                    </div>
-                                </div>
-                                <div class="recent-activity-list chat-out-list row">
-                                    <div class="col s3 recent-activity-list-icon"><i class="mdi-action-settings-voice"></i>
-                                    </div>
-                                    <div class="col s9 recent-activity-list-text">
-                                        <a href="#">5 Days Ago</a>
-                                        <p>Natalya Parker Send you a voice mail for next conference.</p>
-                                    </div>
-                                </div>
-                                <div class="recent-activity-list chat-out-list row">
-                                    <div class="col s3 recent-activity-list-icon"><i class="mdi-action-store"></i>
-                                    </div>
-                                    <div class="col s9 recent-activity-list-text">
-                                        <a href="#">Last Week</a>
-                                        <p>Jessy Jay open a new store at S.G Road.</p>
-                                    </div>
-                                </div>
-                                <div class="recent-activity-list chat-out-list row">
-                                    <div class="col s3 recent-activity-list-icon"><i class="mdi-action-settings-voice"></i>
-                                    </div>
-                                    <div class="col s9 recent-activity-list-text">
-                                        <a href="#">5 Days Ago</a>
-                                        <p>Natalya Parker Send you a voice mail for next conference.</p>
+                                    <div class="col s11 recent-activity-list-text">
+                                        <a href="#">地価調査</a>
+                                        <p>「基準地価」等とも呼ばれ、公示地価と評価、公表の内容、手順等の類似性が高い。「都道府県地価調査は、地価公示とあわせて一般の土地取引の指標ともなっている」とされている（国交省）。</p>
                                     </div>
                                 </div>
                             </div>
                         </li>
                         <li>
-                            <div class="collapsible-header light-blue white-text active"><i class="mdi-editor-attach-money"></i>Sales Repoart</div>
+                            <div class="collapsible-header light-blue white-text active">用途地域</div>
                             <div class="collapsible-body sales-repoart">
-                                <div class="sales-repoart-list  chat-out-list row">
-                                    <div class="col s8">Target Salse</div>
-                                    <div class="col s4"><span id="sales-line-1"></span>
+                                {% for areaName in areaNames %}
+                                    <div class="sales-repoart-list  chat-out-list row">
+                                        <div class="col s12">{{ areaName }}</div>
                                     </div>
-                                </div>
-                                <div class="sales-repoart-list chat-out-list row">
-                                    <div class="col s8">Payment Due</div>
-                                    <div class="col s4"><span id="sales-bar-1"></span>
-                                    </div>
-                                </div>
-                                <div class="sales-repoart-list chat-out-list row">
-                                    <div class="col s8">Total Delivery</div>
-                                    <div class="col s4"><span id="sales-line-2"></span>
-                                    </div>
-                                </div>
-                                <div class="sales-repoart-list chat-out-list row">
-                                    <div class="col s8">Total Progress</div>
-                                    <div class="col s4"><span id="sales-bar-2"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="collapsible-header red white-text"><i class="mdi-action-stars"></i>Favorite Associates</div>
-                            <div class="collapsible-body favorite-associates">
-                                <div class="favorite-associate-list chat-out-list row">
-                                    <div class="col s4"><img src="{{ base_url() }}/img/avatar.jpg" alt="" class="circle responsive-img online-user valign profile-image"></div>
-                                    <div class="col s8">
-                                        <p>Eileen Sideways</p>
-                                        <p class="place">Los Angeles, CA</p>
-                                    </div>
-                                </div>
-                                <div class="favorite-associate-list chat-out-list row">
-                                    <div class="col s4"><img src="{{ base_url() }}/img/avatar.jpg" alt="" class="circle responsive-img online-user valign profile-image">
-                                    </div>
-                                    <div class="col s8">
-                                        <p>Zaham Sindil</p>
-                                        <p class="place">San Francisco, CA</p>
-                                    </div>
-                                </div>
-                                <div class="favorite-associate-list chat-out-list row">
-                                    <div class="col s4"><img src="{{ base_url() }}/img/avatar.jpg" alt="" class="circle responsive-img offline-user valign profile-image">
-                                    </div>
-                                    <div class="col s8">
-                                        <p>Renov Leongal</p>
-                                        <p class="place">Cebu City, Philippines</p>
-                                    </div>
-                                </div>
-                                <div class="favorite-associate-list chat-out-list row">
-                                    <div class="col s4"><img src="{{ base_url() }}/img/avatar.jpg" alt="" class="circle responsive-img online-user valign profile-image">
-                                    </div>
-                                    <div class="col s8">
-                                        <p>Weno Carasbong</p>
-                                        <p>Tokyo, Japan</p>
-                                    </div>
-                                </div>
-                                <div class="favorite-associate-list chat-out-list row">
-                                    <div class="col s4"><img src="{{ base_url() }}/img/avatar.jpg" alt="" class="circle responsive-img offline-user valign profile-image">
-                                    </div>
-                                    <div class="col s8">
-                                        <p>Nusja Nawancali</p>
-                                        <p class="place">Bangkok, Thailand</p>
-                                    </div>
-                                </div>
+                                {% endfor %}
                             </div>
                         </li>
                     </ul>

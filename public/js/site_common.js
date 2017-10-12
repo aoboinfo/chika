@@ -20,11 +20,8 @@ window.chartColors = {
     cyan:  'rgb(0, 255, 255)'
 };
 //
-window.urls = {
+window.urls = {//the latest version
     findOptionList: 'list/options', //find listing based on option
-    listPostCityPlan: 'list/postCityPlan',
-    listSurveyUsage: 'list/surveyUsage',
-    listSurveyCityPlan: 'list/surveyCityPlan',
     listAll: 'list/all',
     listPostStation: 'list/stationPost', //ok, at present
     listSurveyStation: 'list/stationSurvey', //ok, at present

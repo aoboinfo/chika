@@ -122,12 +122,12 @@
                         <th data-field="tubo_price">坪単価平均(円/坪)</th>
                         </thead>
                         <tbody>
-                        {% for postedCity  in  postTopCity %}
+                        {% for city in postTopCity %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td><a href='{{ base_url() }}/{{ prefecture }}/{{ postedCity.address }}'>{{ postedCity.address }}</a></td>
-                                <td>{{ postedCity.price }}</td>
-                                <td>{{ postedCity.priceOfTubo }}</td>
+                                <td><a href='{{ base_url() }}/{{ prefecture }}/{{ city.address }}'>{{ city.address }}</a></td>
+                                <td>{{ city.price }}</td>
+                                <td>{{ city.priceOfTubo }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -149,12 +149,12 @@
                         <th data-field="tubo_price">坪単価平均(円/坪)</th>
                         </thead>
                         <tbody>
-                        {% for postedCity  in  postLowCity %}
+                        {% for city in  postLowCity %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td><a href='{{ base_url() }}/{{ prefecture }}/{{ postedCity.address }}'>{{ postedCity.address }}</a></td>
-                                <td>{{ postedCity.price }}</td>
-                                <td>{{ postedCity.priceOfTubo }}</td>
+                                <td><a href='{{ base_url() }}/{{ prefecture }}/{{ city.address }}'>{{ city.address }}</a></td>
+                                <td>{{ city.price }}</td>
+                                <td>{{ city.priceOfTubo }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -181,7 +181,7 @@
                         {% for city  in  surveyTopCity %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td><a href='{{ base_url() }}/{{ prefecture }}/{{ postedCity.address }}'>{{ city.address }}</a></td>
+                                <td><a href='{{ base_url() }}/{{ prefecture }}/{{ city.address }}'>{{ city.address }}</a></td>
                                 <td>{{ city.price }}</td>
                                 <td>{{ city.priceOfTubo }}</td>
                             </tr>
@@ -208,7 +208,7 @@
                         {% for city  in  surveyLowCity %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td><a href='{{ base_url() }}/{{ prefecture }}/{{ postedCity.address }}'>{{ city.address }}</a></td>
+                                <td><a href='{{ base_url() }}/{{ prefecture }}/{{ city.address }}'>{{ city.address }}</a></td>
                                 <td>{{ city.price }}</td>
                                 <td>{{ city.priceOfTubo }}</td>
                             </tr>

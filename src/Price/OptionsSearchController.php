@@ -11,7 +11,7 @@ namespace Price;
 
 class OptionsSearchController extends SearchController
 {
-    const LIMIT_REC = 18;
+    const LIMIT_REC = 10;
 
     private $priceName;
     private $target;
@@ -82,11 +82,11 @@ class OptionsSearchController extends SearchController
         $queryOfStation->close();
         //
         $pageLabel = $prefecture . "/" . $value . "/";
-        $linkType = 1;
+        $linkType = 1; //only prefecture.
         $stationsLowRanking = $this->getLowStationListForTarget($this->getTarget(), $prefecture);
         if (!is_null($city)) {
             $pageLabel = $prefecture . $city . "/" . $value . "/";
-            $linkType = 2;
+            $linkType = 2; //only prefecture, city
             $stationsLowRanking = null;
         }
         if ($priceType == 0) {

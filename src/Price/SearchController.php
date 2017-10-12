@@ -198,19 +198,6 @@ class SearchController
         return $stationAsc;
     }
     //
-    public function getPostUsages($prefecture, $city) {
-        return optionsList(SearchController::POST_TABLE, $prefecture, $city, "0");
-    }
-    public function getPostCityPlans($prefecture, $city) {
-        return optionsList(SearchController::POST_TABLE, $prefecture, $city, "1");
-    }
-    public function getSurveyUsages($prefecture, $city) {
-        return optionsList(SearchController::SURVEY_TABLE, $prefecture, $city, "0");
-    }
-    public function getSurveyCityPlans($prefecture, $city) {
-        return optionsList(SearchController::SURVEY_TABLE, $prefecture, $city, "1");
-    }
-    //
     public function optionsList($target, $prefecture, $city, $type) {
         $result = array();
         if ($type == "0") {
