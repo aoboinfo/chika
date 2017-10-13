@@ -182,8 +182,9 @@ function addItemMarkersToMap(priceType, value) {
     }
     var icon = null;
     var changeStr = '';
+    var changeRate = ''; //must be '', if you want get NULL in php request
     if (price1 != 0) {
-        var changeRate = Math.round(100 * (price0 - price1)/price1);
+        changeRate = Math.round(100 * (price0 - price1)/price1);
         if (changeRate > 0) {
             changeStr = "&nbsp;&nbsp;+" + changeRate + "%";
             icon = '../../img/up.png';
@@ -205,8 +206,9 @@ function addItemMarkersToMap(priceType, value) {
     /* 地図上のmarkerがクリックされると｛｝内の処理を実行。*/
     google.maps.event.addListener(marker, 'click', function() {
         /* InfoWindowOptionsオブジェクトを指定します。*/
-        infoWindow.setContent(caption + "："+ price0.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' }) + '円/m²' + changeStr + "<br>"
-            + '<a href=\"../' + window.urls.detail + '/' + value.address + '?type=' + priceType + '\">' + value.address + "</a>");
+        var localPrice = price0.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' });
+        infoWindow.setContent(caption + "："+ localPrice + '円/m²' + changeStr + "<br>"
+            + '<a href=\"../' + window.urls.detail + '/' + value.address + '?type=' + priceType + '&price=' + localPrice + '&rate=' + changeRate + '\">' + value.address + "</a>");
         /* マーカーに情報ウィンドウを表示 */
         infoWindow.open(map,marker);
         //add the detail information under the map.

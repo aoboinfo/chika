@@ -40,7 +40,7 @@ class LandPrice
     protected $frontRoads;
     protected $roadDirection;
     protected $roadWidth;
-    protected $roadRrontStatus;
+    protected $roadFrontStatus;
     protected $roadPavement;
     protected $sideRoad;
     protected $sideRroadDirection;
@@ -153,6 +153,9 @@ class LandPrice
      */
     public function getUseDesc()
     {
+        if (trim($this->useDesc) == "") {
+            return "-";
+        }
         return $this->useDesc;
     }
 
@@ -217,6 +220,9 @@ class LandPrice
      */
     public function getConfig()
     {
+        if(trim($this->config) == "") {
+            return "-";
+        }
         return $this->config;
     }
 
@@ -313,6 +319,9 @@ class LandPrice
      */
     public function getRoadDirection()
     {
+        if (trim($this->roadDirection) == "") {
+            return "-";
+        }
         return $this->roadDirection;
     }
 
@@ -329,6 +338,9 @@ class LandPrice
      */
     public function getRoadWidth()
     {
+        if (trim($this->roadWidth) == "") {
+            return "-";
+        }
         return $this->roadWidth;
     }
 
@@ -343,17 +355,20 @@ class LandPrice
     /**
      * @return mixed
      */
-    public function getRoadRrontStatus()
+    public function getRoadFrontStatus()
     {
-        return $this->roadRrontStatus;
+        if (trim($this->roadFrontStatus) == "") {
+            return "-";
+        }
+        return $this->roadFrontStatus;
     }
 
     /**
-     * @param mixed $roadRrontStatus
+     * @param mixed $roadFrontStatus
      */
-    public function setRoadRrontStatus($roadRrontStatus)
+    public function setRoadFrontStatus($roadFrontStatus)
     {
-        $this->roadRrontStatus = $roadRrontStatus;
+        $this->roadFrontStatus = $roadFrontStatus;
     }
 
     /**
@@ -361,6 +376,9 @@ class LandPrice
      */
     public function getRoadPavement()
     {
+        if (trim($this->roadPavement) == "") {
+            return "-";
+        }
         return $this->roadPavement;
     }
 
@@ -377,6 +395,9 @@ class LandPrice
      */
     public function getSideRoad()
     {
+        if (trim($this->sideRoad) == "") {
+            return "-";
+        }
         return $this->sideRoad;
     }
 
@@ -393,6 +414,9 @@ class LandPrice
      */
     public function getSideRroadDirection()
     {
+        if (trim($this->sideRroadDirection) == "") {
+            return "-";
+        }
         return $this->sideRroadDirection;
     }
 
@@ -409,6 +433,9 @@ class LandPrice
      */
     public function getAboutTransportArea()
     {
+        if (trim($this->aboutTransportArea) == "") {
+            return "-";
+        }
         return $this->aboutTransportArea;
     }
 

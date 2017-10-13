@@ -10,13 +10,12 @@
         <div class="card-move-up cyan darken-4 waves-effect waves-block waves-light">
             <div class="move-up">
                 <h5 class="margin white-text">{{ pageLabel }}</h5>
-                <p style="color:white;" class="caption">周辺の土地の利用の現況{{ listing.aboutNear }}</p>
+                <p style="color:white;" class="caption">{{ listing.aboutNear }}</p>
             </div>
             <div class="row">
                 <div class="col s12 m6 l6">
                 <table id="searchResult" class="bordered white-text">
                 <tbody>
-                    <tr><th>標準地番号</th><td>{{ listing.systemNo }}</td></tr>
                     <tr><th>地価区分</th><td>
                     {% if listing.type == 0 %}
                         地価公示
@@ -24,15 +23,16 @@
                         地価調査
                     {% endif %}
                     </td></tr>
+                    <tr><th>標準地番号</th><td>{{ listing.systemNo }}</td></tr>
                     <tr><th>価格(円/m²)</th><td>{{ listing.price }}</td></tr>
                     <tr><th>地積(m²)	</th><td>{{ listing.acreage }}</td></tr>
                     <tr><th>最新年対前年変動率(%)</th><td>{{ listing.changeRate }}</td></tr>
-                    <tr><th>最寄駅と駅からの距離</th><td>{{ listing.station }}　{{ listing.distanceFromStation }}</td></tr>
+                    <tr><th>最寄駅と駅からの距離</th><td>{{ listing.station }}　{{ listing.distanceFromStation }}m</td></tr>
                     <tr><th>建物構造</th><td>{{ listing.currentUsage }}</td></tr>
                     <tr><th>利用現況</th><td>{{ listing.currentUsage }}</td></tr>
                     <tr><th>給排水状況</th><td>{{ listing.waterLabel }}　{{ listing.gasLabel }}　{{ listing.sewageLabel }}</td></tr>
                     <tr><th>形状</th><td>{{ listing.config }}</td></tr>
-                    <tr><th>間口、奥行比率(%)</th><td>{{ listing.frontRatio }　{{ listing.depthRatio }}</td></tr>
+                    <tr><th>間口、奥行比率(%)</th><td>{{ listing.frontRatio }}　{{ listing.depthRatio }}</td></tr>
                     <tr><th>地上、地下階層</th><td>{{ listing.numOfFloors }}、{{ listing.numOfBasefloors }}</td></tr>
                 </tbody>
                 </table>
@@ -40,18 +40,18 @@
                 <div class="col s12 m6 l6">
                 <table id="searchResult" class="bordered white-text">
                 <tbody>
-                    <tr><th>前面道路</th><td>{{ listing.acreage }}</td></tr>
-                    <tr><th>前面道路の方位</th><td>{{ listing.acreage }}</td></tr>
-                    <tr><th>前面道路の幅員(m)</th><td>{{ listing.acreage }}</td></tr>
-                    <tr><th>前面道路の駅前状況</th><td>{{ listing.acreage }}</td></tr>
-                    <tr><th>前面道路の舗装状況</th><td>{{ listing.acreage }}</td></tr>
-                    <tr><th>側道区分</th><td>{{ listing.acreage }}</td></tr>
-                    <tr><th>側道方位</th><td>{{ listing.acreage }}</td></tr>
-                    <tr><th>交通施設との近接状況</th><td>{{ listing.acreage }}</td></tr>
-                    <tr><th>建ぺい率(%)</th><td>{{ listing.acreage }}</td></tr>
-                    <tr><th>容積率(%)</th><td>{{ listing.acreage }}</td></tr>
-                    <tr><th>都市計画区域区分)</th><td>{{ listing.acreage }}</td></tr>
-                    <tr><th>備考</th><td>{{ listing.acreage }}</td></tr>
+                    <tr><th>前面道路</th><td>{{ listing.frontRoads }}</td></tr>
+                    <tr><th>前面道路の方位</th><td>{{ listing.roadDirection }}</td></tr>
+                    <tr><th>前面道路の幅員(m)</th><td>{{ listing.roadWidth }}</td></tr>
+                    <tr><th>前面道路の駅前状況</th><td>{{ listing.roadFrontStatus }}</td></tr>
+                    <tr><th>前面道路の舗装状況</th><td>{{ listing.roadPavement }}</td></tr>
+                    <tr><th>側道区分</th><td>{{ listing.sideRoad }}</td></tr>
+                    <tr><th>側道方位</th><td>{{ listing.sideRroadDirection }}</td></tr>
+                    <tr><th>交通施設との近接状況</th><td>{{ listing.aboutTransportArea }}</td></tr>
+                    <tr><th>建ぺい率(%)</th><td>{{ listing.buildCoverage }}</td></tr>
+                    <tr><th>容積率(%)</th><td>{{ listing.floorAreaRatio }}</td></tr>
+                    <tr><th>都市計画区域区分)</th><td>{{ listing.cityPlan }}</td></tr>
+                    <tr><th>備考</th><td>{{ listing.useDesc }}</td></tr>
                 </tbody>
                 </table>
                 </div>
@@ -68,24 +68,6 @@
             <p><a id="btn_prev" href="#" class="btn waves-effect waves-light indigo">前へ</a></p>
         {% endif %}
     {% endif %}
-    </div>
-
-    <div class="divider" style="clear:right"></div>
-    <div class="row">
-        <div class="col s12 m3 l3">
-            <h3>広告募集中</h3>
-        </div>
-        <div class="col s12 m9 l9">
-            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- LandPriceTop -->
-            <ins class="adsbygoogle aoboAds"
-                 style="display:inline-block"
-                 data-ad-client="ca-pub-2770900584946061"
-                 data-ad-slot="5901050259"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
     </div>
 {% endblock %}
 {% block leftDropMenu %}
@@ -109,46 +91,36 @@
 {% endblock %}
 {% block rightSection0 %}
     <ol class="breadcrumbs">
-        <li><a href="#">駅周辺地価ランキング</a></li>
-        <li><a href="{{ base_url() }}/{{ prefectureLabel }}">{% block price_station %}{{ prefectureLabel }}{% endblock %}</a></li>
+        <li><a href="#">周辺地価ランキング</a></li>
     </ol>
     <div class="card">
-        {% if priceType == '地価公示' %}
+        {% if listing.type == 0 %}
             <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
         {% else %}
              <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
         {% endif %}
-            <div class="move-up">
-                <h5 class="margin white-text">{{ priceType }}・高価格ランキング</h5>
-            </div>
             <table class="bordered white-text">
                 <thead>
                 <tr>
-                    <th data-field="id">順位</th>
-                    <th data-field="name">駅名</th>
-                    <th data-field="price">地価平均(円/m²)</th>
-                    <th data-field="tubo_price">坪単価平均(円/坪)</th>
+                    <th data-field="name">価格(円/m²)</th>
                     <th data-field="rate">前年比</th>
+                    <th data-field="price">住所表示</th>
+                    <th data-field="tubo_price">最寄駅</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for station  in  stationTop %}
+                {% for item  in  aroundUp %}
                     <tr>
-                        <td>{{ loop.index }}</td>
-                        {% if priceType == '地価公示' %}
-                            <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        <td>{{ item.price }}</td>
+                        {% if item.changeRate > 0 %}
+                            <td>+{{ item.changeRate }}%</td>
+                        {% elseif item.changeRate == 0 %}
+                            <td>{{ item.changeRate }}%</td>
                         {% else %}
-                            <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                            <td>-{{ item.changeRate }}%</td>
                         {% endif %}
-                        <td>{{ station.price }}</td>
-                        <td>{{ station.priceOfTubo }}</td>
-                        {% if station.changeRate > 0 %}
-                            <td>+{{ station.changeRate }}%</td>
-                        {% elseif station.changeRate == 0 %}
-                            <td>{{ station.changeRate }}%</td>
-                        {% else %}
-                            <td>-{{ station.changeRate }}%</td>
-                        {% endif %}
+                        <td>{{ item.address }}</td>
+                        <td>{{ item.station }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -200,6 +172,19 @@
         </div>
     </div>
  {% endif %}
+{% endblock %}
+{% block googleAds %}
+    <div class="card">
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- LandPriceTop -->
+        <ins class="adsbygoogle aoboAds"
+             style="display:inline-block"
+             data-ad-client="ca-pub-2770900584946061"
+             data-ad-slot="5901050259"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
