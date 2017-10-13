@@ -40,9 +40,9 @@
                             <td></td>
                         {% endif %}
                         {% if listing.type == '地価公示' %}
-                            <td><a href="{{ base_url() }}/item/detail/{{ listing.address }}?type=0">{{ listing.address }}</a></td>
+                            <td><a href="{{ base_url() }}/item/detail/{{ listing.address }}?type=0&price={{ listing.price }}&rate={{ listing.changeRate }}">{{ listing.address }}</a></td>
                         {% else %}
-                            <td><a href="{{ base_url() }}/item/detail/{{ listing.address }}?type=1">{{ listing.address }}</a></td>
+                            <td><a href="{{ base_url() }}/item/detail/{{ listing.address }}?type=1&price={{ listing.price }}&rate={{ listing.changeRate }}">{{ listing.address }}</a></td>
                         {% endif %}
                         <td>{{ listing.station }}</td>
                         <td>{{ listing.distanceFromStation }}</td>
@@ -160,7 +160,7 @@
 {% block rightSection0 %}
     <ol class="breadcrumbs">
         <li><a href="#">駅周辺地価ランキング</a></li>
-        <li><a href="#">{% block price_station %}{{ prefectureLabel }}{% endblock %}</a></li>
+        <li><a href="{{ base_url() }}/{{ prefectureLabel }}">{% block price_station %}{{ prefectureLabel }}{% endblock %}</a></li>
     </ol>
     <div class="card">
         {% if priceType == '地価公示' %}

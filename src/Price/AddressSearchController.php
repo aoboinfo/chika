@@ -8,14 +8,20 @@
 
 namespace Price;
 
+use phpDocumentor\Reflection\Types\Null_;
+
 class AddressSearchController extends SearchController
 {
     public function detailForAddress($request, $response, $params) {
         $address = $request->getAttribute('address');
         $allGetVars = $request->getQueryParams();
         $priceType = $allGetVars['type'];
+        $rate = $allGetVars['rate'];
+        if ($rate == NULL) {
+            $rate = "";
+        }
         //for getting menus
-        $halfSpaceAddress = mb_convert_kana($address, 's');
+        $halfSpaceAddress = mb_convert_kana($address, 's'); //change to half space at first, if has.
         $items = preg_split('/ /', $halfSpaceAddress);
         $prefecture = $items[0];
 
@@ -24,6 +30,8 @@ class AddressSearchController extends SearchController
         $commQuery = "SELECT id,
                       lat,
                       lng,
+                      seqNo,
+                      city,
                       acreage,
                       current_use,
                       use_desc,
@@ -53,25 +61,24 @@ class AddressSearchController extends SearchController
         $detailQuery = "";
         if ($priceType == 0) {
             $detailQuery = $detailQuery . $commQuery . $citiesTarget . " WHERE address = '" . $address . "'";
-            $usages = $this->optionsList($citiesTarget, $prefecture, NULL, "0");
-            $cityPlans = $this->optionsList($citiesTarget, $prefecture, NULL, "1");
-            $this->setLeftOptions(["公示：利用現況","公示：用途地域"]);
         } else {
             $citiesTarget = SearchController::SURVEY_TABLE;
             $stationTarget = SearchController::SURVEY_VIEW;
             $detailQuery = $detailQuery . $commQuery . $citiesTarget . " WHERE address = '" . $address . "'";
-            $usages = $this->optionsList($citiesTarget, $prefecture, NUll, "0"); //$city = NULL
-            $cityPlans = $this->optionsList($citiesTarget, $prefecture, NUll, "1");
-            $this->setLeftOptions(["調査：利用現況","調査：用途地域"]);
         }
         $itemDetail = $this->db->query($detailQuery);
         //
         $detail = new LandPrice();
+        $detail->setType($priceType);
+        $detail->setPrice($allGetVars['price']);
+        $detail->setChangeRate($rate);
 
         while ($row = mysqli_fetch_assoc($itemDetail)) {
             $detail->setId($row["id"]);
             $detail->setLat($row["lat"]);
             $detail->setLng($row["lng"]);
+            $detail->setSeqNo($row["seqNo"]);
+            $detail->setCity($row["city"]);
             $detail->setAcreage($row["acreage"]);
             $detail->setCurrentUsage($row["current_use"]);
             $detail->setUseDesc($row["use_desc"]);
@@ -101,24 +108,16 @@ class AddressSearchController extends SearchController
         }
         $itemDetail->close();
 
-        if ($priceType == 0) {
-
-        } else {
-
-        }
-
         return $this->view->render($response, 'detail.twig',
             [
                 "areas" => [$prefecture, $prefecture],
                 "leftMenus" => [$this->getCityList(SearchController::POST_TABLE, $prefecture), $this->getCityList(SearchController::SURVEY_TABLE, $prefecture)],
                 "stationTop" => $this->getTopStationListForTarget($stationTarget, $prefecture, NULL),
                 "stationLow" => $this->getLowStationListForTarget($stationTarget, $priceType),
-                //"listings" => $resultOfOption,
-                //"optionMenus" => [$usages,$cityPlans],
+                "listing" => $detail,
                 "options" => $this->getLeftOptions(), //the menu list below is place to be selected
                 "prefectureLabel" => $prefecture,
-                "pageLabel" => $address,
-                "priceType" => $priceType
+                "pageLabel" => $address
             ]
         );
 

@@ -48,6 +48,89 @@ class LandPrice
     protected $aboutNear;
     protected $buildCoverage;
     protected $floorAreaRatio;
+    //
+    protected $city;
+    protected $seqNo;
+    //only getter
+    protected $systemNo;
+    protected $waterLabel;
+    protected $gasLabel;
+    protected $sewageLabel;
+
+    /**
+     * @return mixed
+     */
+    public function getWaterLabel()
+    {
+        if ($this->getWater() == '1') {
+            return "水道";
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGasLabel()
+    {
+        if ($this->getGas() == '1') {
+            return "ガス";
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSewageLabel()
+    {
+        if ($this->getSewage() == '1') {
+            return "下水";
+        } else {
+            return "";
+        }
+    }
+    /**
+     * @return mixed
+     */
+    public function getSystemNo()
+    {
+        return $this->getCity() . (int)$this->getSeqNo();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param mixed $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSeqNo()
+    {
+        return $this->seqNo;
+    }
+
+    /**
+     * @param mixed $seqNo
+     */
+    public function setSeqNo($seqNo)
+    {
+        $this->seqNo = $seqNo;
+    }
 
     /**
      * @return mixed

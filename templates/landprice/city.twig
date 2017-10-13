@@ -160,7 +160,7 @@
                                                 <td></td>
                                             {% endif %}
                                             <td><a style="color:black;"
-                                                   href="{{ base_url() }}/item/detail/{{ price.address }}?type=0">{{ price.address }}</a>
+                                                   href="{{ base_url() }}/item/detail/{{ price.address }}?type=0&price={{ price.price }}&rate={{ price.changeRate }}">{{ price.address }}</a>
                                             </td>
                                             <td>{{ price.station }}</td>
                                             <td>{{ price.distanceFromStation }}m</td>
@@ -199,7 +199,7 @@
                                                 <td></td>
                                             {% endif %}
                                             <td><a style="color:black;"
-                                                   href="{{ base_url() }}/item/detail/{{ price.address }}?type=1">{{ price.address }}</a>
+                                                   href="{{ base_url() }}/item/detail/{{ price.address }}?type=1&price={{ price.price }}&rate={{ price.changeRate }}">{{ price.address }}</a>
                                             </td>
                                             <td>{{ price.station }}</td>
                                             <td>{{ price.distanceFromStation }}m</td>
@@ -221,7 +221,7 @@
 {% block rightSection0 %}
     <ol class="breadcrumbs">
         <li><a href="#">駅周辺地価</a></li>
-        <li><a href="#">{% block price_station %}{{ city }}{% endblock %}</a></li>
+        <li><a href="{{ base_url() }}/{{ prefecture }}/{{ city }}">{% block price_station %}{{ city }}{% endblock %}</a></li>
     </ol>
     <div  id="post_station" class="card">
         <div class="card-move-up green darken-1 waves-effect waves-block waves-light">

@@ -248,7 +248,7 @@
                                 {% else %}
                                     <td></td>
                                 {% endif %}
-                                <td><a href="{{ base_url() }}/item/detail/{{ postTop.address }}?type=0">{{ postTop.address }}</a></td>
+                                <td><a href="{{ base_url() }}/item/detail/{{ postTop.address }}?type=0&price={{ postTop.price }}&rate={{ postTop.changeRate }}">{{ postTop.address }}</a></td>
                                 <td>{{ postTop.station }}</td>
                                 <td>{{ postTop.distanceFromStation }}</td>
                                 <td>{{ postTop.structure }}</td>
@@ -289,7 +289,7 @@
                                 {% else %}
                                     <td></td>
                                 {% endif %}
-                                <td><a href="{{ base_url() }}/item/detail/{{ surveyTop.address }}?type=1">{{ surveyTop.address }}</a></td>
+                                <td><a href="{{ base_url() }}/item/detail/{{ surveyTop.address }}?type=1&price={{ surveyTop.price }}&rate={{ surveyTop.changeRate }}">{{ surveyTop.address }}</a></td>
                                 <td>{{ surveyTop.station }}</td>
                                 <td>{{ surveyTop.distanceFromStation }}</td>
                                 <td>{{ surveyTop.structure }}</td>
@@ -307,7 +307,7 @@
 {% block rightSection0 %}
     <ol class="breadcrumbs">
         <li><a href="#">駅周辺地価ランキング</a></li>
-        <li><a href="#">{% block price_station %}{{ prefecture }}{% endblock %}</a></li>
+        <li><a href="{{ base_url() }}/{{ prefecture }}">{% block price_station %}{{ prefecture }}{% endblock %}</a></li>
     </ol>
     <div class="card">
         <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
