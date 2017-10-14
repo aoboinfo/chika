@@ -14,7 +14,7 @@
             </div>
             <div class="row">
                 <div class="col s12 m6 l6">
-                <table id="searchResult" class="bordered white-text">
+                <table class="bordered white-text">
                 <tbody>
                     <tr><th>地価区分</th><td>
                     {% if listing.type == 0 %}
@@ -32,17 +32,15 @@
                     <tr><th>利用現況</th><td>{{ listing.currentUsage }}</td></tr>
                     <tr><th>給排水状況</th><td>{{ listing.waterLabel }}　{{ listing.gasLabel }}　{{ listing.sewageLabel }}</td></tr>
                     <tr><th>形状</th><td>{{ listing.config }}</td></tr>
-                    <tr><th>間口、奥行比率(%)</th><td>{{ listing.frontRatio }}　{{ listing.depthRatio }}</td></tr>
-                    <tr><th>地上、地下階層</th><td>{{ listing.numOfFloors }}、{{ listing.numOfBasefloors }}</td></tr>
+                    <tr><th>間口、奥行比率(%)</th><td>{{ listing.frontRatio }}、{{ listing.depthRatio }}</td></tr>
                 </tbody>
                 </table>
                 </div>
                 <div class="col s12 m6 l6">
                 <table id="searchResult" class="bordered white-text">
                 <tbody>
-                    <tr><th>前面道路</th><td>{{ listing.frontRoads }}</td></tr>
-                    <tr><th>前面道路の方位</th><td>{{ listing.roadDirection }}</td></tr>
-                    <tr><th>前面道路の幅員(m)</th><td>{{ listing.roadWidth }}</td></tr>
+                    <tr><th>地上、地下階層</th><td>{{ listing.numOfFloors }}、{{ listing.numOfBasefloors }}</td></tr>
+                    <tr><th>前面道路、方位、幅員(m)</th><td>{{ listing.frontRoads }}、{{ listing.roadDirection }}、{{ listing.roadWidth }}</td></tr>
                     <tr><th>前面道路の駅前状況</th><td>{{ listing.roadFrontStatus }}</td></tr>
                     <tr><th>前面道路の舗装状況</th><td>{{ listing.roadPavement }}</td></tr>
                     <tr><th>側道区分</th><td>{{ listing.sideRoad }}</td></tr>
@@ -91,14 +89,18 @@
 {% endblock %}
 {% block rightSection0 %}
     <ol class="breadcrumbs">
-        <li><a href="#">周辺地価ランキング</a></li>
+        <li><a href="#">周辺地価</a></li>
     </ol>
+   {% if aroundUp|length != 0 %}
     <div class="card">
         {% if listing.type == 0 %}
             <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
         {% else %}
-             <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
+            <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
         {% endif %}
+            <div class="move-up">
+                <h5 class="margin white-text">地価高いリスト</h5>
+            </div>
             <table class="bordered white-text">
                 <thead>
                 <tr>
@@ -119,7 +121,11 @@
                         {% else %}
                             <td>-{{ item.changeRate }}%</td>
                         {% endif %}
-                        <td>{{ item.address }}</td>
+                        {% if listing.type == 0 %}
+                            <td><a href="{{ base_url() }}/item/detail/{{ item.address }}?type=0&price={{ item.price }}&rate={{ item.changeRate }}">{{ item.address }}</a></td>
+                        {% else %}
+                            <td><a href="{{ base_url() }}/item/detail/{{ item.address }}?type=1&price={{ item.price }}&rate={{ item.changeRate }}">{{ item.address }}</a></td>
+                        {% endif %}
                         <td>{{ item.station }}</td>
                     </tr>
                 {% endfor %}
@@ -127,44 +133,43 @@
             </table>
         </div>
     </div>
- {% if stationLow != null %}
+ {% endif %}
+ {% if aroundDown|length != 0 %}
     <div class="card">
-        {% if priceType == '地価公示' %}
+        {% if listing.type == 0 %}
             <div class="card-move-up green darken-1 waves-effect waves-block waves-light">
         {% else %}
             <div class="card-move-up orange darken-4 waves-effect waves-block waves-light">
-         {% endif %}
+        {% endif %}
             <div class="move-up">
-                <h5 class="margin white-text">{{ priceType }}・低価格ランキング</h5>
+                <h5 class="margin white-text">地価低いリスト</h5>
             </div>
             <table class="bordered white-text">
                 <thead>
                 <tr>
-                    <th data-field="id">順位</th>
-                    <th data-field="name">駅名</th>
-                    <th data-field="price">地価平均(円/m²)</th>
-                    <th data-field="tubo_price">坪単価平均(円/坪)</th>
+                    <th data-field="name">価格(円/m²)</th>
                     <th data-field="rate">前年比</th>
+                    <th data-field="price">住所表示</th>
+                    <th data-field="tubo_price">最寄駅</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for station  in  stationLow %}
+                {% for item  in  aroundDown %}
                     <tr>
-                        <td>{{ loop.index }}</td>
-                        {% if priceType == '地価公示' %}
-                            <td><a href="{{ base_url() }}/list/stationPost/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                        <td>{{ item.price }}</td>
+                        {% if item.changeRate > 0 %}
+                            <td>+{{ item.changeRate }}%</td>
+                        {% elseif item.changeRate == 0 %}
+                            <td>{{ item.changeRate }}%</td>
                         {% else %}
-                            <td><a href="{{ base_url() }}/list/stationSurvey/{{ station.station }}/"><strong>{{ station.station }}</strong></a></td>
+                            <td>-{{ item.changeRate }}%</td>
                         {% endif %}
-                        <td>{{ station.price }}</td>
-                        <td>{{ station.priceOfTubo }}</td>
-                        {% if station.changeRate > 0 %}
-                            <td>+{{ station.changeRate }}%</td>
-                        {% elseif station.changeRate == 0 %}
-                            <td>{{ station.changeRate }}%</td>
+                        {% if listing.type == 0 %}
+                            <td><a href="{{ base_url() }}/item/detail/{{ item.address }}?type=0&price={{ item.price }}&rate={{ item.changeRate }}">{{ item.address }}</a></td>
                         {% else %}
-                            <td>-{{ station.changeRate }}%</td>
+                            <td><a href="{{ base_url() }}/item/detail/{{ item.address }}?type=1&price={{ item.price }}&rate={{ item.changeRate }}">{{ item.address }}</a></td>
                         {% endif %}
+                        <td>{{ item.station }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -172,6 +177,10 @@
         </div>
     </div>
  {% endif %}
+<input type="hidden" id="year" value='{{ historyYear }}'/>
+<input type="hidden" id="price" value='{{ historyPrice }}'/>
+<input type="hidden" id="map_lat" value='{{ listing.lat }}'/>
+<input type="hidden" id="map_lng" value='{{ listing.lng }}'/>
 {% endblock %}
 {% block googleAds %}
     <div class="card">

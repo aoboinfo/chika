@@ -58,15 +58,18 @@ class AddressSearchController extends SearchController
                       build_coverage,
                       floor_area_ratio FROM ";
         $detailQuery = "";
+        $historyQuery = "select year, price from ";
         $arountCommonQuery = "select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station from ";
         $aroundQuery = "";
         if ($priceType == 0) {
             $detailQuery = $detailQuery . $commQuery . SearchController::POST_TABLE . " WHERE address = '" . $address . "'";
             $aroundQuery = $arountCommonQuery . SearchController::POST_VIEW . " WHERE city = '";
+            $historyQuery = $historyQuery . "posted_his ";
 
         } else {
             $detailQuery = $detailQuery . $commQuery . SearchController::SURVEY_TABLE . " WHERE address = '" . $address . "'";
             $aroundQuery = $arountCommonQuery . SearchController::SURVEY_VIEW . " WHERE city = '";
+            $historyQuery = $historyQuery . "survey_price ";
         }
         $itemDetail = $this->db->query($detailQuery);
         //
@@ -117,7 +120,7 @@ class AddressSearchController extends SearchController
         $itemsAroundUp = $this->db->query($upDataQuery);
         while ($row = mysqli_fetch_assoc($itemsAroundUp)) {
             $landPrice = new LandPrice();
-            $landPrice->setPrice($row["price0"]);
+            $landPrice->setPrice("¥" . number_format($row["price0"]));
             $landPrice->setChangeRate($row["rate"]);
             $landPrice->setAddress($row["address"]);
             $landPrice->setStation($row["near_station"]);
@@ -130,7 +133,7 @@ class AddressSearchController extends SearchController
         $itemsAroundDown = $this->db->query($aroundQuery . $detail->getCity() . "' and id <> '" . $detail->getId() . "' and price0 < " . $priceInt . " order by price0 limit 10");
         while ($row = mysqli_fetch_assoc($itemsAroundDown)) {
             $landPrice = new LandPrice();
-            $landPrice->setPrice($row["price0"]);
+            $landPrice->setPrice("¥" . number_format($row["price0"]));
             $landPrice->setChangeRate($row["rate"]);
             $landPrice->setAddress($row["address"]);
             $landPrice->setStation($row["near_station"]);
@@ -138,6 +141,14 @@ class AddressSearchController extends SearchController
             $aroundRecordsDown[] = $landPrice;
         }
         $itemsAroundDown->close();
+        //history data
+        $historyQuery = $this->db->query($historyQuery . "WHERE id = '" . $detail->getId() . "'");
+        $historyYear = array();
+        $historyPrice = array();
+        while ($row = mysqli_fetch_assoc($historyQuery)) {
+            $historyYear[] = $row["year"];
+            $historyPrice[] = $row["price"];
+        }
 
         return $this->view->render($response, 'detail.twig',
             [
@@ -148,7 +159,9 @@ class AddressSearchController extends SearchController
                 "prefectureLabel" => $prefecture,
                 "pageLabel" => $address,
                 "aroundUp" => $aroundRecordsUp,
-                "aroundDown" => $aroundRecordsDown
+                "aroundDown" => $aroundRecordsDown,
+                "historyYear" => json_encode($historyYear),
+                "historyPrice" => json_encode($historyPrice)
             ]
         );
 
