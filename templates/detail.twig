@@ -55,17 +55,20 @@
                 </div>
             </div>
         </div>
-    {% if listings|length == 10 %}
-        {% if offset == 0 %}
-            <p><a id="btn_next" href="#" class="btn waves-effect waves-light indigo">次へ</a></p>
-        {% else %}
-            <p><a id="btn_next" href="#" class="btn waves-effect waves-light indigo">次へ</a><a id="btn_prev" href="#" class="btn waves-effect waves-light indigo">前へ</a></p>
-        {% endif %}
-    {% else %}
-        {% if offset != 0 %}
-            <p><a id="btn_prev" href="#" class="btn waves-effect waves-light indigo">前へ</a></p>
-        {% endif %}
-    {% endif %}
+        <!-- price history trend--->
+        <div class="card">
+         <div class="card-content green lighten-3">
+            <span class="chart-title black-text">地価推移</span>
+            <div class="trending-line-chart-wrapper">
+                <canvas id="price_history" height="50"></canvas>
+            </div>
+         </div>
+        </div>
+            <div class="card-image waves-effect waves-block waves-light">
+                <!-- must define the size for a map in this theme -->
+                <div id="detail_map" style="float:left;width:50%; height:300px;"></div>
+                <div id="detail_pano" style="float:left;width:50%; height:300px;"></div>
+            </div>
     </div>
 {% endblock %}
 {% block leftDropMenu %}
@@ -177,26 +180,14 @@
         </div>
     </div>
  {% endif %}
-<input type="hidden" id="year" value='{{ historyYear }}'/>
-<input type="hidden" id="price" value='{{ historyPrice }}'/>
-<input type="hidden" id="map_lat" value='{{ listing.lat }}'/>
-<input type="hidden" id="map_lng" value='{{ listing.lng }}'/>
-{% endblock %}
-{% block googleAds %}
-    <div class="card">
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <!-- LandPriceTop -->
-        <ins class="adsbygoogle aoboAds"
-             style="display:inline-block"
-             data-ad-client="ca-pub-2770900584946061"
-             data-ad-slot="5901050259"></ins>
-        <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-    </div>
+ <input type="hidden" id="year" value='{{ historyYear }}'/>
+ <input type="hidden" id="price" value='{{ historyPrice }}'/>
+ <input type="hidden" id="map_lat" value='{{ listing.lat }}'/>
+ <input type="hidden" id="map_lng" value='{{ listing.lng }}'/>
+ <input type="hidden" id="price_type" value='{{ listing.type }}'/>
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
     {# javascript for this page #}
-    <script type="text/javascript" src="{{ base_url() }}/js/search.js"></script>
+    <script type="text/javascript" src="{{ base_url() }}/js/detail.js"></script>
 {% endblock %}

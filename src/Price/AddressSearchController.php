@@ -63,13 +63,13 @@ class AddressSearchController extends SearchController
         $aroundQuery = "";
         if ($priceType == 0) {
             $detailQuery = $detailQuery . $commQuery . SearchController::POST_TABLE . " WHERE address = '" . $address . "'";
-            $aroundQuery = $arountCommonQuery . SearchController::POST_VIEW . " WHERE city = '";
+            $aroundQuery = $arountCommonQuery . SearchController::POST_VIEW . " WHERE address LIKE '" . $prefecture  . "%' AND city = '";
             $historyQuery = $historyQuery . "posted_his ";
 
         } else {
             $detailQuery = $detailQuery . $commQuery . SearchController::SURVEY_TABLE . " WHERE address = '" . $address . "'";
-            $aroundQuery = $arountCommonQuery . SearchController::SURVEY_VIEW . " WHERE city = '";
-            $historyQuery = $historyQuery . "survey_price ";
+            $aroundQuery = $arountCommonQuery . SearchController::SURVEY_VIEW . " WHERE address LIKE '" . $prefecture . "%' AND city = '";
+            $historyQuery = $historyQuery . "survey_his ";
         }
         $itemDetail = $this->db->query($detailQuery);
         //
