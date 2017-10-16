@@ -56,6 +56,57 @@ class LandPrice
     protected $waterLabel;
     protected $gasLabel;
     protected $sewageLabel;
+    protected $structureLabel;
+
+    private function startsWith($haystack, $needle)
+    {
+        return $needle === "" || strpos($haystack, $needle) === 0;
+    }
+
+/**
+     * @return mixed
+     */
+    public function getStructureLabel()
+    {
+        $ret = "";
+        $leftStr = "";
+        if ($this->startsWith($this->structure, "SRC")) {
+            $ret = $ret . "鉄骨・鉄筋コンクリート造";
+            $leftStr = substr($this->structure,3);
+        } else if ($this->startsWith($this->structure, "RC")) {
+            $ret = $ret . "鉄筋コンクリート造";
+            $leftStr = substr($this->structure,2);
+        } else if ($this->startsWith($this->structure, "S")) {
+            $ret = $ret . "鉄骨造";
+            $leftStr = substr($this->structure,1);
+        } else if ($this->startsWith($this->structure, "LS")) {
+            $ret = $ret . "軽量鉄骨造";
+            $leftStr = substr($this->structure,2);
+        } else if ($this->startsWith($this->structure, "B")) {
+            $ret = $ret . "ブロック造";
+            $leftStr = substr($this->structure,1);
+        } else if ($this->startsWith($this->structure, "W")) {
+            $ret = $ret . "木造";
+            $leftStr = substr($this->structure,1);
+        }
+        //
+        if ($leftStr && strlen($leftStr) > 0) {
+            $leftStr = strtoupper($leftStr);
+            $pos1 = stripos($leftStr, "F");
+            if ($pos1 === false) {
+                return $ret . $leftStr."階";
+            }
+            $pieces = explode("F", $leftStr);
+            $parts = count($pieces);
+            if ($parts > 1) {
+                $BfloorStr = substr($pieces[1], 0, -1);
+                $ret = $ret . $pieces[0] . "階地下" . $BfloorStr . "階";
+            } else {
+                $ret = $ret . $pieces[0] . "階";
+            }
+        }
+        return $ret;
+    }
 
     /**
      * @return mixed

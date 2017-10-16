@@ -4,6 +4,7 @@
 /**
  * Draw price change rate.
  */
+window.priceType = 2;
 window.chartColors = {
     red: 'rgb(255, 99, 132)',
     orange: 'rgb(255, 159, 64)',
@@ -278,4 +279,29 @@ $(document).ready(function () {
             $("a#targetArea").text($(this).text());
         }
     );
+    $("span#post").click( function () {
+            window.priceType = 0;
+            $("span.language-select").text("地価公示");
+        }
+    );
+    $("span#survey").click( function () {
+            window.priceType = 1;
+            $("span.language-select").text("地価調査");
+        }
+    );
+    $("span#post_survey").click( function () {
+            window.priceType = 2;
+            $("span.language-select").text("公示・調査");
+        }
+    );
+    $("input[name='Search']").keydown(function (e){
+        if(e.keyCode == 13){
+            var inputTxt = $("input[name='Search']").val();
+            $("div#modalSearch").css({"display":"block", "margin":"auto", "bottom":"0%", "z-index":"20", "height":"70%"});
+            $("span#madal_caption").text("検索中・・・");
+        }
+    });
+    $("a#modalClose").click(function () {
+        $("div#modalSearch").css({"display":"none","bottom":"-100%"});
+    });
 });
