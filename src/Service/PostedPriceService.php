@@ -15,10 +15,16 @@ use Price\LandPrice;
 
 class PostedPriceService
 {
+    //
+    const RET_MSG = "msg";
+    const RET_NG = "NG";
+    const RET_OK = "OK";
+    //
     private $router;
     private $db;
     private $logger;
     private $recCount;
+    //
 
     /**
      * @return mixed
@@ -265,10 +271,69 @@ class PostedPriceService
     }
     public function detailForAddress($request, $response, $params)
     {
-        $address = $request->getAttribute('address');
-        $allGetVars = $request->getQueryParams();
-        $priceType = $allGetVars['type'];
+        $data = $request->getParsedBody();
+        //$this->logger->info($data["type"]);
+        //$this->logger->info($data["address"]);
+        $priceType = $data["type"];
+        $address = $data["address"];
+        $queryComm = "select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from ";
+
+        if ($priceType == 0) { //post
+            $resultQuery = $this->db->query($queryComm . " post_price where address like '%" . $address . "%' order by price0 desc limit 100");
+            if ($resultQuery->num_rows == 0 || $resultQuery->num_rows > 100) {
+                return $this->overSizeMessage($resultQuery->num_rows, $response);
+            } else {
+                return $this->searchResult($resultQuery, $response);
+            }
+        } else if ($priceType == 1) {//survey
+            $resultQuery = $this->db->query($queryComm . " survey_price where address like '%" . $address . "%' order by price0 desc limit 100");
+            if ($resultQuery->num_rows == 0 || $resultQuery->num_rows > 100) {
+                return $this->overSizeMessage($resultQuery->num_rows, $response);
+            } else {
+                return $this->searchResult($resultQuery, $response);
+            }
+        } else {//both
+            $resultQuery0 = $this->db->query($queryComm . " post_price where address like '%" . $address . "%' order by price0 desc limit 50");
+            $resultQuery1 = $this->db->query($queryComm . " survey_price where address like '%" . $address . "%' order by price0 desc limit 50");
+            $totalRecordCount = $resultQuery0->num_rows + $resultQuery1->num_rows;
+            if ($totalRecordCount == 0 || $totalRecordCount > 100) {
+                return $this->overSizeMessage($totalRecordCount, $response);
+            } else {
+
+            }
+
+        }
     }
-
-
+    //
+    private function overSizeMessage($recordSize, $res) {
+        if ($recordSize == 0) {
+            $newResponse = $res->withJson([PostedPriceService::RET_MSG=>PostedPriceService::RET_NG, "msg_idx"=>"0"])
+                ->withHeader('Content-type', 'application/json;charset=utf-8');
+            return $newResponse;
+        } else {
+            $newResponse = $res->withJson([PostedPriceService::RET_MSG=>PostedPriceService::RET_NG, "msg_idx"=>"1"])
+                ->withHeader('Content-type', 'application/json;charset=utf-8');
+            return $newResponse;
+        }
+    }
+    private function searchResult($queryObj, $res) {
+        $result = array();
+        while($row = mysqli_fetch_assoc($queryObj)) {
+            $landPrice = new LandPrice();
+            $landPrice->setId($row["id"]);
+            $landPrice->setPrice("¥" . number_format($row["price0"]));
+            $landPrice->setChangeRate($row["rate"]);
+            $landPrice->setAddress($row["address"]);
+            $landPrice->setStation($row["near_station"]);
+            $landPrice->setDistanceFromStation($row["distance_station"]);
+            $landPrice->setCurrentUsage($row["current_use"]);
+            $landPrice->setStructure($row["build_structure"]);
+            $landPrice->setCityPlan($row["city_plan"]);
+            $result[] = $landPrice;
+        }
+        $queryObj->close();
+        $newResponse = $res->withJson([PostedPriceService::RET_MSG=>PostedPriceService::RET_OK, "result"=>$result])
+            ->withHeader('Content-type', 'application/json;charset=utf-8');
+        return $newResponse;
+    }
 }

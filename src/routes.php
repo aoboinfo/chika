@@ -19,4 +19,5 @@ $app->get('/avgs/[{prefecture}/[{city}]]', 'Service\PostedPriceService:historyPr
 $app->get('/changeRate/[{prefecture}/[{city}]]', 'Service\PostedPriceService:changeRate');
 $app->get('/mapItems/[{prefecture}/[{city}]]', 'Service\PostedPriceService:itemsOnMap');
 $app->get('/listingCityPlanAndUsage/{prefecture}/[{city}]', 'Service\PostedPriceService:itemsForCityPlanAndUsage');
+$app->post('/search/address/', 'Service\PostedPriceService:detailForAddress')->setName('search-input');
 //They must be initialized in dependencies.

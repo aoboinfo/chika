@@ -5,6 +5,11 @@
  * Draw price change rate.
  */
 window.priceType = 2;
+window.error_msg = [
+    "該当データがありませんでした！入力情報を見直してから、もう一度検索してください！",
+    "検索結果が１００件を超えましたため、表示できません。入力情報を絞って、もう一度試してください！",
+    "該当物件は{}件が見つかりました！"
+];
 window.chartColors = {
     red: 'rgb(255, 99, 132)',
     orange: 'rgb(255, 159, 64)',
@@ -297,8 +302,26 @@ $(document).ready(function () {
     $("input[name='Search']").keydown(function (e){
         if(e.keyCode == 13){
             var inputTxt = $("input[name='Search']").val();
+            if (inputTxt.length == 0) {
+                return;
+            }
             $("div#modalSearch").css({"display":"block", "margin":"auto", "bottom":"0%", "z-index":"20", "height":"70%"});
             $("span#madal_caption").text("検索中・・・");
+            alert("input:" + window.priceType + '/' + inputTxt);
+            var urlsItems = decodeURIComponent(window.location.href).split("/");
+            $.ajax(
+                {
+                    url:urlsItems[0] + '//' + urlsItems[2] + '/search/address/',
+                    type: 'post',
+                    data: {
+                        "type": window.priceType,
+                        "address":inputTxt
+                    },
+                    sucess: function (result) {
+                        //populate the result table
+                    }
+                }
+            );
         }
     });
     $("a#modalClose").click(function () {
