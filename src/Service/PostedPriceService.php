@@ -272,8 +272,8 @@ class PostedPriceService
     public function detailForAddress($request, $response, $params)
     {
         $data = $request->getParsedBody();
-        //$this->logger->info($data["type"]);
-        //$this->logger->info($data["address"]);
+        $this->logger->info($data["type"]);
+        $this->logger->info($data["address"]);
         $priceType = $data["type"];
         $address = $data["address"];
         $queryComm = "select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from ";
@@ -293,10 +293,10 @@ class PostedPriceService
                 return $this->searchResult($resultQuery, $response);
             }
         } else {//both
-            $resultQuery0 = $this->db->query($queryComm . " post_price where address like '%" . $address . "%' order by price0 desc limit 51");
-            $resultQuery1 = $this->db->query($queryComm . " survey_price where address like '%" . $address . "%' order by price0 desc limit 51");
+            $resultQuery0 = $this->db->query($queryComm . " post_price where address like '%" . $address . "%' order by price0 desc limit 101");
+            $resultQuery1 = $this->db->query($queryComm . " survey_price where address like '%" . $address . "%' order by price0 desc limit 101");
             $totalRecordCount = $resultQuery0->num_rows + $resultQuery1->num_rows;
-            if ($totalRecordCount == 0 || $totalRecordCount > 100) {
+            if ($totalRecordCount == 0 || $totalRecordCount > 200) {
                 return $this->overSizeMessage($totalRecordCount, $response);
             } else {
                 $result = array();
@@ -339,8 +339,12 @@ class PostedPriceService
             $newResponse = $res->withJson([PostedPriceService::RET_MSG=>PostedPriceService::RET_NG, "msg_idx"=>"0"])
                 ->withHeader('Content-type', 'application/json;charset=utf-8');
             return $newResponse;
-        } else {
+        } else if ($recordSize > 100 && $recordSize < 200) {
             $newResponse = $res->withJson([PostedPriceService::RET_MSG=>PostedPriceService::RET_NG, "msg_idx"=>"1"])
+                ->withHeader('Content-type', 'application/json;charset=utf-8');
+            return $newResponse;
+        } else {
+            $newResponse = $res->withJson([PostedPriceService::RET_MSG => PostedPriceService::RET_NG, "msg_idx" => "3"])
                 ->withHeader('Content-type', 'application/json;charset=utf-8');
             return $newResponse;
         }

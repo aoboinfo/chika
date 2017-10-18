@@ -8,7 +8,8 @@ window.priceType = 2;
 window.msg = [
     "該当データがありませんでした！入力情報を見直してから、もう一度検索してください！",
     "検索結果が１００件を超えましたため、表示できません。入力情報を絞って、もう一度試してください！",
-    "該当物件は{}件が見つかりました！"
+    "該当物件は{}件が見つかりました！",
+    "検索結果が２００件を超えましたため、表示できません。入力情報を絞って、もう一度試してください！",
 ];
 window.NG = "NG";
 window.OK = "OK";
@@ -308,9 +309,9 @@ $(document).ready(function () {
             if (inputTxt.length == 0) {
                 return;
             }
-            $("div#modalSearch").css({"display":"block", "margin":"auto", "bottom":"0%", "z-index":"20", "height":"70%"});
+            $("div#modalSearch").css({"display":"block", "margin":"auto", "bottom":"5%", "z-index":"20", "height":"70%"});
             $("span#madal_caption").text("検索中・・・");
-            alert("input:" + window.priceType + '/' + inputTxt);
+            //alert("input:" + window.priceType + '/' + inputTxt);
             var urlsItems = decodeURIComponent(window.location.href).split("/");
             $.ajax(
                 {
@@ -328,13 +329,40 @@ $(document).ready(function () {
                         } else {
                             var records = jsonObj.result;
                             $("span#madal_caption").text(window.msg[2].replace("{}", records.length));
+                            var child = $("#modal_content > tbody:last-child");
+                            child.empty();
                             records.forEach(function (value) {
-                                var lat = value.lat;
-                                var lng = value.lng;
-                                //
-                                var address = value.address;
-                                console.log(address);
-                            });
+                                var changed = value.rate;
+                                if (changed == null) {
+                                    changed = "";
+                                }
+                                var priceType = "0";
+                                var recordId = value.id;
+                                if (recordId.search("L02") == 0) {
+                                    priceType = "1";
+                                }
+                                if (changed < 0) {
+                                    child.append("<tr class='deep-orange-text'><td>" + value.price +
+                                        "</td><td>" + changed +
+                                        "</td><td>" + '<a style=\"color:black;\" href=\"' + urlsItems[0] + '//' + urlsItems[2] + window.urls.detail + '/' + value.address + '?type=' + priceType + '&price=' + value.price + '&rate=' + changed + '\">' + value.address + "</a>" +
+                                        "</td><td>" + value.station +
+                                        "</td><td>" + value.distance +
+                                        "</td><td>" + value.structure +
+                                        "</td><td>" + value.usage +
+                                        "</td><td>" + value.cityPlan +
+                                        "</td></tr>");
+                                } else {
+                                    child.append("<tr><td>" + value.price +
+                                        "</td><td>" + changed +
+                                        "</td><td>" + '<a style=\"color:black;\" href=\"' + urlsItems[0] + '//' + urlsItems[2] + window.urls.detail + '/' + value.address + '?type=' + priceType + '&price=' + value.price + '&rate=' + changed + '\">' + value.address + "</a>" +
+                                        "</td><td>" + value.station +
+                                        "</td><td>" + value.distance +
+                                        "</td><td>" + value.structure +
+                                        "</td><td>" + value.usage +
+                                        "</td><td>" + value.cityPlan +
+                                        "</td></tr>");
+                                }
+                             });
                         }
                     }
                 }
