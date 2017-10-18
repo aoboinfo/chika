@@ -2,7 +2,6 @@
 // DIC configuration
 
 $container = $app->getContainer();
-
 // View
 $container['view'] = function ($c) {
     $view = new \Slim\Views\Twig($c['settings']['view']['template_path'], $c['settings']['view']['twig']);
@@ -36,12 +35,18 @@ $container['db'] = function ($c) {
     }
     return $mysqli;
 };
+
+$container['session'] = function ($c) {
+
+    return new \SlimSession\Helper;
+};
+
 // controllers for business in this site
 $container['Price\TopController'] = function ($c) {
-    return new \Price\TopController($c['view'], $c['router'], $c['db'], $c['logger']);
+    return new \Price\TopController($c['view'], $c['router'], $c['db'], $c['logger'], $c['session']);
 };
 $container['Price\PrefectureController'] = function ($c) {
-    return new Price\PrefectureController($c['view'], $c['router'], $c['db'], $c['logger']);
+    return new Price\PrefectureController($c['view'], $c['router'], $c['db'], $c['logger'], $c['session']);
 };
 //Service for output json data of Draw on page.
 $container['Service\PostedPriceService'] = function ($c) {
@@ -49,12 +54,12 @@ $container['Service\PostedPriceService'] = function ($c) {
 };
 //
 $container['Price\StationSearchController'] = function ($c) {
-    return new Price\StationSearchController($c['view'], $c['router'], $c['db'], $c['logger']);
+    return new Price\StationSearchController($c['view'], $c['router'], $c['db'], $c['logger'], $c['session']);
 };
 $container['Price\OptionsSearchController'] = function ($c) {
-    return new Price\OptionsSearchController($c['view'], $c['router'], $c['db'], $c['logger']);
+    return new Price\OptionsSearchController($c['view'], $c['router'], $c['db'], $c['logger'], $c['session']);
 };
 $container['Price\AddressSearchController'] = function ($c) {
-    return new Price\AddressSearchController($c['view'], $c['router'], $c['db'], $c['logger']);
+    return new Price\AddressSearchController($c['view'], $c['router'], $c['db'], $c['logger'], $c['session']);
 };
 //NOTICE: Please check the Name and Class instance, they must be paired.

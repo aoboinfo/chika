@@ -2,7 +2,16 @@
 // Application middleware
 
 // e.g: $app->add(new \Slim\Csrf\Guard);
+
+
 $container = $app->getContainer();
+
+$app->add(new \Slim\Middleware\Session([
+    'name' => 'land_price_session',
+    'autorefresh' => true,
+    'lifetime' => '1 hour'
+]));
+
 /*
  * Slim treats a URL pattern with a trailing slash as different to one without.
  * That is, /user and /user/ are different and so can have different callbacks attached.

@@ -12,6 +12,7 @@ use Slim\Views\Twig as Twig;
 use Slim\Router as Router;
 use Monolog\Logger as Logger;
 use Mysqli as Mysqli;
+use SlimSession\Helper as SessionHelper;
 
 class SearchController
 {
@@ -19,6 +20,7 @@ class SearchController
     protected $router;
     protected $db;
     protected $logger;
+    protected $session;
 
     const POST_TYPE = 0;
     const SURVEY_TYPE = 1;
@@ -28,6 +30,8 @@ class SearchController
     const SURVEY_VIEW = "survey_price";
     const POST_KANJI = "地価公示";
     const SURVEY_KANJI = "地価調査";
+    //
+    const ALL_COUNTRY = "ALL_COUNTRY";
     //
     const BASIC_QUERY_STR = "select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from ";
 
@@ -99,13 +103,14 @@ class SearchController
     }
 
     //
-    public function __construct(Twig $view, Router $router, Mysqli $db, Logger $logger) {
+    public function __construct(Twig $view, Router $router, Mysqli $db, Logger $logger, SessionHelper $session) {
 
         $this->view = $view;
         $this->router = $router;
         $this->db = $db;
         $this->logger = $logger;
         $this->stationLabel = "全国";
+        $this->session = $session;
     }
 
     public function getCityList($target, $prefecture) {
