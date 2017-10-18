@@ -36,7 +36,9 @@ window.urls = {//the latest version
     listPostStation: 'list/stationPost', //ok, at present
     listSurveyStation: 'list/stationSurvey', //ok, at present
     detail: '/item/detail',
-    listingOptions: 'listingCityPlanAndUsage' //show options
+    listingOptions: 'listingCityPlanAndUsage', //show options
+    searchAddress: '/search/address/',
+    notice: '/notice/message/'
 };
 var mapDiv = document.getElementById("map-canvas");
 var map = null;
@@ -282,6 +284,19 @@ function showMap(targetUrl) {
         }
     );
 }
+//Show notice message
+window.onload = function () {
+    var urlsItems = decodeURIComponent(window.location.href).split("/");
+    $.ajax(
+        {
+            url:urlsItems[0] + '//' + urlsItems[2] + window.urls.notice,
+            type:'GET',
+            success: function (jsonObj) {
+
+            }
+        }
+    );
+}
 
 $(document).ready(function () {
     $("a#linkArea").click( function () {
@@ -315,7 +330,7 @@ $(document).ready(function () {
             var urlsItems = decodeURIComponent(window.location.href).split("/");
             $.ajax(
                 {
-                    url:urlsItems[0] + '//' + urlsItems[2] + '/search/address/',
+                    url:urlsItems[0] + '//' + urlsItems[2] + window.urls.searchAddress,
                     type: 'post',
                     data: {
                         "type": window.priceType,

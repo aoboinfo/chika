@@ -333,7 +333,20 @@ class PostedPriceService
 
         }
     }
-    //
+    //Send notice message to user.
+    public function showNotice($request, $response, $params) {
+        $noticeQuery = $this->db->query("SELECT notice, created from notice order by created desc");
+        $result = array();
+        while ($row = mysqli_fetch_assoc($noticeQuery)) {
+            $record = ["notice"=>$row["notice"], "created"=> $row["created"]];
+            $result[] = $record;
+        }
+        $noticeQuery->close();
+        $newResponse = $response->withJson(["result"=>$result])
+            ->withHeader('Content-type', 'application/json;charset=utf-8');
+        return $newResponse;
+    }
+    //private functions
     private function overSizeMessage($recordSize, $res) {
         if ($recordSize == 0) {
             $newResponse = $res->withJson([PostedPriceService::RET_MSG=>PostedPriceService::RET_NG, "msg_idx"=>"0"])

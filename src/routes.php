@@ -18,6 +18,11 @@ $app->get('/item/detail/{address}','Price\AddressSearchController:detailForAddre
 $app->get('/avgs/[{prefecture}/[{city}]]', 'Service\PostedPriceService:historyPriceOf');
 $app->get('/changeRate/[{prefecture}/[{city}]]', 'Service\PostedPriceService:changeRate');
 $app->get('/mapItems/[{prefecture}/[{city}]]', 'Service\PostedPriceService:itemsOnMap');
+//
 $app->get('/listingCityPlanAndUsage/{prefecture}/[{city}]', 'Service\PostedPriceService:itemsForCityPlanAndUsage');
+
+$app->get('/notice/message/', 'Service\PostedPriceService:showNotice')->setName('show-notice');
+//
 $app->post('/search/address/', 'Service\PostedPriceService:detailForAddress')->setName('search-input');
+
 //They must be initialized in dependencies.
