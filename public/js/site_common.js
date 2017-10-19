@@ -13,6 +13,7 @@ window.msg = [
 ];
 window.NG = "NG";
 window.OK = "OK";
+window.NOTICE_COUNT_KEY = "new_notice_of_price";
 //
 window.chartColors = {
     red: 'rgb(255, 99, 132)',
@@ -284,20 +285,45 @@ function showMap(targetUrl) {
         }
     );
 }
+
 //Show notice message
-window.onload = function () {
+
+function showNotice() {
     var urlsItems = decodeURIComponent(window.location.href).split("/");
     $.ajax(
         {
-            url:urlsItems[0] + '//' + urlsItems[2] + window.urls.notice,
-            type:'GET',
+            url: urlsItems[0] + '//' + urlsItems[2] + window.urls.notice,
+            type: 'GET',
             success: function (jsonObj) {
 
+                if (jsonObj.result.length > 0) {
+                    //alert(jsonObj.result.length);
+                    var noticeCount = $.cookie(window.NOTICE_COUNT_KEY);
+                    var noticeDisplayedCount = 0;
+                    if (noticeCount == null) {
+                        noticeDisplayedCount = jsonObj.result.length;
+                    } else {
+                        noticeDisplayedCount = jsonObj.result.length - parseInt(noticeCount);
+                    }
+                    if (noticeDisplayedCount == 0) {//no red flag
+                        $("small#notice_count").hide();
+                        $("span#notice_count").removeClass("new badge");
+                        $("span#notice_count").text(jsonObj.result.length);
+                    } else {//show red flag
+                        $.cookie(window.NOTICE_COUNT_KEY, jsonObj.result.length, {expires: 365 * 2});
+                        $("span#notice_count").show();
+                        $("span#notice_count").text(jsonObj.result.length);
+                        $("span#notice_count").addClass("new badge");
+                    }
+                    jsonObj.result.forEach(function (value) {
+                        alert(value.notice);
+                        $("div#notice_content").append("<li><a href='#'>" + value.notice + "</a></li>")
+                    });
+                }
             }
         }
     );
 }
-
 $(document).ready(function () {
     $("a#linkArea").click( function () {
             $("a#targetArea").text($(this).text());

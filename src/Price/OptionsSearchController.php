@@ -82,8 +82,11 @@ class OptionsSearchController extends SearchController
         $queryOfStation->close();
         //
         $pageLabel = $prefecture . "/" . $value . "/";
+
         $linkType = 1; //only prefecture.
+
         $stationsLowRanking = $this->getLowStationListForTarget($this->getTarget(), $prefecture);
+
         if (!is_null($city)) {
             $pageLabel = $prefecture . $city . "/" . $value . "/";
             $linkType = 2; //only prefecture, city

@@ -22,35 +22,14 @@ class PrefectureController extends SearchController
         //menu
         $prefecture = $params['prefecture'];
         //The posted 10 stations
-        $stationsDesc = $this->session->get($prefecture . "stationTop" ,NULL);
-        if ($stationsDesc == NULL) {
-            $stationsDesc = $this->getTopStationListForTarget(SearchController::POST_VIEW, $prefecture);
-            $this->session->set($prefecture . "stationTop" ,$stationsDesc);
-        }
+        $stationsDesc = $this->getTopStationListForTarget(SearchController::POST_VIEW, $prefecture, NULL);
+        $stationAsc = $this->getLowStationListForTarget(SearchController::POST_VIEW, $prefecture, NULL);
         //
-        $stationAsc = $this->session->get($prefecture . "stationLow" ,NULL);
-        if ($stationAsc == NULL) {
-            $stationAsc = $this->getLowStationListForTarget(SearchController::POST_VIEW, $prefecture);
-            $this->session->set($prefecture . "stationLow" ,$stationAsc);
-        }
-
-        //The survey 10 stations
-        $surveyStationsDesc = $this->session->get($prefecture . "surveyStationTop" ,NULL);
-
-        if ($surveyStationsDesc == NULL) {
-            $surveyStationsDesc = $this->getTopStationListForTarget(SearchController::SURVEY_VIEW, $prefecture);
-            $this->session->set($prefecture . "surveyStationTop" ,$surveyStationsDesc);
-        }
-
-        $surveyStationsAsc = $this->session->get($prefecture . "surveyStationLow", NULL);
-
-        if ($surveyStationsAsc == NULL) {
-            $surveyStationsAsc = $this->getTopStationListForTarget(SearchController::SURVEY_VIEW, $prefecture);
-            $this->session->set($prefecture . "surveyStationLow" , $surveyStationsAsc);
-        }
+        $surveyStationsDesc = $this->getTopStationListForTarget(SearchController::SURVEY_VIEW, $prefecture, NULL);
+        $surveyStationsAsc = $this->getTopStationListForTarget(SearchController::SURVEY_VIEW, $prefecture, NULL);
 
         //posted average price/year
-        $averagePrices = $this->session->get( $prefecture . "avgPrices", NULL);
+        $averagePrices = $this->session->get($prefecture . "avgPrices", NULL);
         if ($averagePrices == NULL) {
             $posted_avg = $this->db->query("select year, FORMAT(ROUND(AVG(price)),0) as avg_price from posted_his where price <> 0 and prefecture = '" . mb_substr($prefecture, 0, 3) . "' group by year order by year");
             //

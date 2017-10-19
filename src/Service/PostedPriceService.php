@@ -335,10 +335,11 @@ class PostedPriceService
     }
     //Send notice message to user.
     public function showNotice($request, $response, $params) {
-        $noticeQuery = $this->db->query("SELECT notice, created from notice order by created desc");
+        $noticeQuery = $this->db->query("select notice, DATE_FORMAT(created, '%Y年%m月%d日') as day from notice order by created desc");
         $result = array();
         while ($row = mysqli_fetch_assoc($noticeQuery)) {
-            $record = ["notice"=>$row["notice"], "created"=> $row["created"]];
+            $record = ["notice"=>$row["notice"],
+                "created"=> $row["day"]];
             $result[] = $record;
         }
         $noticeQuery->close();

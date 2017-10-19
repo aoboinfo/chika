@@ -13,4 +13,6 @@ window.onload = function () {
     changeRateDataSets[1].backgroundColor = 'rgb(25, 118, 210)';
     changeRateDataSets[1].borderColor = 'rgb(25, 118, 210)';
     drawPriceChangeRate('changeRate/', document.getElementById("price_change_rate"));
+    //
+    showNotice();
 }

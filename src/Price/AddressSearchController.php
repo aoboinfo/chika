@@ -113,7 +113,7 @@ class AddressSearchController extends SearchController
         }
         $itemDetail->close();
         //
-        $priceInt = str_replace("¥", "", str_replace(",", "", $detail->getPrice()));
+        $priceInt = str_replace(",", "", mb_substr($detail->getPrice(), 1));
         $aroundRecordsUp = array();
         $upDataQuery = $aroundQuery . $detail->getCity() . "' and id <> '" . $detail->getId() . "' and price0 > " . $priceInt . " order by price0 limit 10";
         $this->logger->addInfo($upDataQuery);

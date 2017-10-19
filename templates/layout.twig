@@ -42,7 +42,6 @@
     <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
     <link href="{{ base_url() }}/css/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="{{ base_url() }}/css/jquery-jvectormap.css" type="text/css" rel="stylesheet" media="screen,projection">
-    <link href="{{ base_url() }}/css/chartist.min.css" type="text/css" rel="stylesheet" media="screen,projection">
     <style>
         .aoboAds {width:320px; height:100px;}
         @media(min-width:500px) {.aoboAds {width:468px;height:60px;}}
@@ -74,8 +73,8 @@
                 <ul class="right hide-on-med-and-down">
                     <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light translation-button" data-activates="translation-dropdown"><span class="language-select">公示・調査</span></a></li>
                     <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light toggle-fullscreen"><i class="material-icons">settings_overscan</i></a></li>
-                    <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light notification-button" data-activates="notifications-dropdown"><i class="mdi-social-notifications"><small class="notification-badge">5</small></i></a></li>
-                    <li><a href="javascript:void(0);" data-activates="chat-out" class="waves-effect waves-block waves-light chat-collapse"><i class="mdi-communication-chat"></i></a></li>
+                    <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light notification-button" data-activates="notifications-dropdown"><i class="mdi-social-notifications"><small id="notice_count" class="notification-badge"><span></span></small></i></a></li>
+                    <li><a href="javascript:void(0);" data-activates="chat-out" class="waves-effect waves-block waves-light chat-collapse"><i class="material-icons">info</i></a></li>
                 </ul>
                 <!-- translation-button -->
                 <ul id="translation-dropdown" class="dropdown-content">
@@ -94,18 +93,9 @@
                 </ul>
                 <!-- notifications-dropdown -->
                 <ul id="notifications-dropdown" class="dropdown-content">
-                    <li>
-                        <h5>通知<span id="notice_count" class="new badge">5</span></h5>
-                    </li>
                     <li class="divider"></li>
-                    <li>
-                        <a href="#!"><i class="mdi-action-add-shopping-cart"></i> A new order has been placed!</a>
-                        <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">2 hours ago</time>
-                    </li>
-                    <li>
-                        <a href="#!"><i class="mdi-action-stars"></i> Completed the task</a>
-                        <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">3 days ago</time>
-                    </li>
+                    <div id="notice_content" class="col s12 m4 l4">
+                    </div>
                 </ul>
             </div>
         </nav>
@@ -121,7 +111,7 @@
         <!-- START LEFT SIDEBAR NAV-->
         <aside id="left-sidebar-nav">
             <ul id="slide-out" class="side-nav fixed leftside-navigation">
-                <li class="bold active"><a href="/" class="waves-effect waves-cyan"><i class="mdi-action-dashboard"></i> Dashboard</a></li>
+                <li class="bold active"><a href="/" class="waves-effect waves-cyan"><i class="material-icons">widgets</i>ダッシュボード</a></li>
                 <li class="li-hover"><div class="divider"></div></li>
                 <li class="no-padding">
                     {% block leftDropMenu %} {% endblock %}
@@ -155,7 +145,7 @@
                     <div class="row">
                         <div class="col s12 m8 l8">
                             <ol class="breadcrumbs">
-                                <li><a href="{{ base_url() }}/">Dashboard</a></li>
+                                <li><a href="{{ base_url() }}/">ダッシュボード</a></li>
                                 {% block content_link %}{% endblock %}
                             </ol>
                             {% block centralSection %}{% endblock %}
@@ -259,15 +249,15 @@
     <div class="container">
         <div class="row section">
             <div class="col l6 s12">
-                <h5 class="white-text">Footer Content</h5>
-                <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+                <h6 class="white-text">免責事項</h6>
+                <p class="grey-text text-lighten-5">当サイトは「 国土数値情報ダウンロードサービス 」のデータを利用しています。</p>
+                <p class="grey-text text-lighten-5">当サイト掲載のデータ等を利用するときは官報、公報、国土交通省のホームページ等で内容をご確認ください。当サイト掲載のデータ等を利用することにより生じた利用者又は第三者の損害については、利用者がその全責任を負うものとし、当サイト掲載の全ての法人及び個人は一切の責任を負いません。</p>
+                <p class="grey-text text-lighten-5">価格表示について、林地の場合は[円/10a]とする</p>
             </div>
             <div class="col l4 offset-l2 s12">
-                <h5 class="white-text">Links</h5>
-                <ul>
-                    <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                    <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-                </ul>
+                <h6 class="white-text">リンク</h6>
+                <div><a href='https://play.google.com/store/apps/developer?id=AOBO+Co.,+Ltd&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img style="width:155px; height:100%;" alt='Google Play で手に入れよう' src='https://play.google.com/intl/en_us/badges/images/generic/ja_badge_web_generic.png'/></a></div>
+                <div><a href="https://itunes.apple.com/jp/developer/aobo-co-ltd/id310846199"><img  style="margin-left:10px;width:135px;height:40px;" alt='App store で手に入れよう' src="https://linkmaker.itunes.apple.com/assets/shared/badges/ja-jp/appstore-lrg.svg"/></a></div>
             </div>
         </div>
     </div>
@@ -285,6 +275,7 @@
 <script type="text/javascript" src="{{ base_url() }}/js/perfect-scrollbar.min.js"></script>
 <script type="text/javascript" src="{{ base_url() }}/js/plugins.min.js"></script>
 <script type="text/javascript" src="{{ base_url() }}/js/chart.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/js/jquery.cookie.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAiRVRkYdBj1J2emeLKjOEKS5Hb4WwCI0" async defer></script>
 {% block javascript %}
     {# put common javascript here #}
