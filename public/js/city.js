@@ -228,5 +228,5 @@ window.onload = function () {
             }
         }
     );
-
+    showNotice();
 }

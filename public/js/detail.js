@@ -33,6 +33,7 @@ function detailMap () {
     detailMap.setStreetView(panorama);
 }
 window.onload = function () {
+    showNotice();
     detailMap();
     var years = document.getElementById("year").value;
     var priceType = document.getElementById("price_type").value;
@@ -98,5 +99,4 @@ window.onload = function () {
             }
         }
     });
-
 }

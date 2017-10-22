@@ -114,8 +114,10 @@ class SearchController
     }
 
     public function getCityList($target, $prefecture) {
+        $this->logger->info("getCityList#get data from session");
         $result = $this->session->get($prefecture . $target . "city", NULL);
         if ($result == NULL) {
+            $this->logger->info("getCityList#create data for session");
             $cities = $this->db->query("select distinct city from " . $target . " where address like '" . $prefecture . "%' order by city");
             $result = array();
             while ($row = mysqli_fetch_assoc($cities)) {
@@ -130,8 +132,12 @@ class SearchController
     public function getTopStationListForTarget($target, $prefecture, $city) {
         $stationsDesc = NULL;
         if (is_null($city) && is_null($prefecture)) {
+            $this->logger->info("getTopStationListForTarget#get data from session" . $prefecture . "/" . $city);
             $stationsDesc = $this->session->get(SearchController::ALL_COUNTRY . $target . "topStation", NULL);
             if ($stationsDesc == NULL) {
+
+                $this->logger->info("getTopStationListForTarget#create data for session");
+
                 $stationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from " . $target ." where price1 <> 0 group by near_station order by price0";
                 //The top 10 stations
                 $stationsDesc = array();
@@ -192,7 +198,7 @@ class SearchController
     public function getLowStationListForTarget($target, $prefecture) {
         $stationAsc = NULL;
         if (is_null($prefecture)) {
-            $stationAsc = $this->session->get(SearchController::ALL_COUNTRY . $target, NULL);
+            $stationAsc = $this->session->get(SearchController::ALL_COUNTRY . $target . "lowStation",  NULL);
             if ($stationAsc == NULL) {
                 $stationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from " . $target ." where price1 <> 0 group by near_station order by price0";
                 //The low 10 stations
@@ -207,11 +213,11 @@ class SearchController
                     $stationAsc[] = $landPrice;
                 }
                 $stationLow10->close();
-                $this->session->set(SearchController::ALL_COUNTRY . $target , $stationAsc);
+                $this->session->set(SearchController::ALL_COUNTRY . $target . "lowStation" , $stationAsc);
             }
 
         } else {
-            $stationAsc = $this->session->get($prefecture . $target , NULL);
+            $stationAsc = $this->session->get($prefecture . $target . "lowStation" , NULL);
             if ($stationAsc == NULL) {
                 $stationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from " . $target . " where price1 <> 0 and address like '" . $prefecture . "%' group by near_station order by price0";
                 $stationLow10 = $this->db->query($stationQuery . " limit 10");
@@ -226,7 +232,7 @@ class SearchController
                     $stationAsc[] = $landPrice;
                 }
                 $stationLow10->close();
-                $this->session->set($prefecture . $target , $stationAsc);
+                $this->session->set($prefecture . $target . "lowStation" , $stationAsc);
             }
         }
         //

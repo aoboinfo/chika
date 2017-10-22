@@ -84,7 +84,7 @@ class TopController extends SearchController
         $surveyTop10Pref = $this->session->get(SearchController::ALL_COUNTRY . "surveyTopPref", NULL);
 
         if ($surveyTop10Pref == NULL) {
-            $survey10Query = "select prefecture, round(avg(price)) as pre_price, round(avg(price) * 3.305785) as tubo_price from survey_his where year = 2016 group by prefecture order by pre_price";
+            $survey10Query = "select prefecture, round(avg(price)) as pre_price, round(avg(price) * 3.305785) as tubo_price from survey_his where year = 2017 group by prefecture order by pre_price";
             //
             $top10SurveyPrefectureQry = $this->db->query($survey10Query . " desc limit 10");
             $surveyTop10Pref = array();

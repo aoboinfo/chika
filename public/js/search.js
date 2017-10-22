@@ -29,3 +29,7 @@ $(document).ready(function() {
         this.setAttribute("href", newSearchURL(-10));
     });
 });
+
+window.onload = function () {
+    showNotice();
+}

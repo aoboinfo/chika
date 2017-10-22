@@ -52,7 +52,7 @@ var changeRateDataSets = [//global data for two type bars
         borderWidth:1,
         data:null
     }, {
-        label:'地価調査(H28)',
+        label:'地価調査(H29)',
         backgroundColor:'',
         borderColor:'',
         borderWidth:1,
@@ -68,7 +68,7 @@ var landPriceDataSets = [
         borderWidth:1,
         data:null
     }, {
-        label:'地価調査(H28)',
+        label:'地価調査(H29)',
         backgroundColor:'',
         borderColor:'',
         borderWidth:1,
@@ -316,8 +316,8 @@ function showNotice() {
                         $("span#notice_count").addClass("new badge");
                     }
                     jsonObj.result.forEach(function (value) {
-                        alert(value.notice);
-                        $("div#notice_content").append("<li><a href='#'>" + value.notice + "</a></li>")
+                        //alert(value.notice);
+                        $("ul#notifications-dropdown").append("<li><a href='#!'>" + value.notice + "</a></li>")
                     });
                 }
             }
