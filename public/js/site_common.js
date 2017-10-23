@@ -5,6 +5,7 @@
  * Draw price change rate.
  */
 window.priceType = 2;
+window.noticeCount = 0;
 window.msg = [
     "該当データがありませんでした！入力情報を見直してから、もう一度検索してください！",
     "検索結果が１００件を超えましたため、表示できません。入力情報を絞って、もう一度試してください！",
@@ -298,6 +299,7 @@ function showNotice() {
 
                 if (jsonObj.result.length > 0) {
                     //alert(jsonObj.result.length);
+                    window.noticeCount = jsonObj.result.length;
                     var noticeCount = $.cookie(window.NOTICE_COUNT_KEY);
                     var noticeDisplayedCount = 0;
                     if (noticeCount == null) {
@@ -307,13 +309,11 @@ function showNotice() {
                     }
                     if (noticeDisplayedCount == 0) {//no red flag
                         $("small#notice_count").hide();
-                        $("span#notice_count").removeClass("new badge");
-                        $("span#notice_count").text(jsonObj.result.length);
+                        $("small#notice_count").removeClass("new badge");
                     } else {//show red flag
-                        $.cookie(window.NOTICE_COUNT_KEY, jsonObj.result.length, {expires: 365 * 2});
-                        $("span#notice_count").show();
-                        $("span#notice_count").text(jsonObj.result.length);
-                        $("span#notice_count").addClass("new badge");
+                        $("small#notice_count").show();
+                        $("small#notice_count").text(jsonObj.result.length);
+                        $("small#notice_count").addClass("new badge");
                     }
                     jsonObj.result.forEach(function (value) {
                         //alert(value.notice);
@@ -325,6 +325,12 @@ function showNotice() {
     );
 }
 $(document).ready(function () {
+    $("a#notice_link").mouseenter(function () {
+        if ($("small#notice_count").is(':hidden')) {
+            return;
+        }
+        $.cookie(window.NOTICE_COUNT_KEY, window.noticeCount, {expires: 365 * 2});
+    });
     $("a#linkArea").click( function () {
             $("a#targetArea").text($(this).text());
         }
