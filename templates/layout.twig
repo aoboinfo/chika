@@ -4,17 +4,17 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="robots" content="all">
     <meta name="robots" content="index,follow,archive">
-    <meta name="description" content="毎年、政府に公表された地価公示、地価調査データを地図、都道府県、ジャンルから調べることができます。詳細情報、土地価格の遷移も一目瞭然です。">
-    <meta name="keywords" content="地価,路線価,固定資産税,相続税,地価調査,地価公示,地図,マップ,GIS,評価,資産評価">
+    <meta name="description" content="毎年、政府に公表された日本全国の地価公示、地価調査データを市町村、用途地域、利用現況から簡単に検索できます、地価推移も一目瞭然！">
+    <meta name="keywords" content="地価,地価平均,路線価,市町村,固定資産税,相続税,地価調査,地価公示,地図,マップ,GIS,評価,資産評価,地価推移">
     <meta name="author" content="株式会社AOBO"/>
     <meta name="copyright" content="©株式会社AOBO"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="msapplication-tap-highlight" content="no">
     <!-- Facebook Metadata /-->
-    <meta property="og:title" content="政府に公表された地価公示、地価調査データを地図、都道府県、ジャンルから調べることができます"/>
-    <meta property="og:url" content="http://chika.163zd.net/">
-    <meta property="og:site_name" content="日本全国地価情報"/>
+    <meta property="og:title" content="毎年、政府に公表された日本全国の地価公示、地価調査データを市町村、用途地域、利用現況から簡単に検索できます、地価推移も一目瞭然！"/>
+    <meta property="og:url" content="http://landprice.163zd.net/">
+    <meta property="og:site_name" content="日本地価情報"/>
     <meta property="og:type" content="website"/>
 
     <meta property="og:image" content="{{ base_url() }}/img/chikaMap.png"/>
@@ -49,6 +49,14 @@
     </style>
 </head>
 <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.10&appId=1889001464645371';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 <!-- Start Page Loading -->
 <div id="loader-wrapper">
     <div id="loader"></div>
@@ -150,6 +158,11 @@
                             <!-- this block is used for different section -->
                             {% block category %}{% endblock %}
                             <!-- Search modal section -->
+                            <div class="row">
+                                <div class="col s12 m4 l4">
+                                    &nbsp;
+                                </div>
+                                <div class="col s12 m8 l8">
                             <div class="card">
                             <div id="modalSearch" class="modal bottom-sheet">
                                 <div class="modal-content">
@@ -174,6 +187,8 @@
                                     </table>
                                 </div>
                             </div>
+                            </div>
+                                </div>
                             </div>
                         </div>
                         <!-- The right 1/3 section area  -->
@@ -256,11 +271,14 @@
                 <h6 class="white-text">リンク</h6>
                 <div><a href='https://play.google.com/store/apps/developer?id=AOBO+Co.,+Ltd&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img style="width:155px; height:100%;" alt='Google Play で手に入れよう' src='https://play.google.com/intl/en_us/badges/images/generic/ja_badge_web_generic.png'/></a></div>
                 <div><a href="https://itunes.apple.com/jp/developer/aobo-co-ltd/id310846199"><img  style="margin-left:10px;width:135px;height:40px;" alt='App store で手に入れよう' src="https://linkmaker.itunes.apple.com/assets/shared/badges/ja-jp/appstore-lrg.svg"/></a></div>
-                <div><a style="color:white" href="http://www.aobo-corp.com/">株式会社AOBO</a></div>
-                <div><a style="color:white" href="http://www.163zd.net/">漢語辞典</a></div>
+                <div style="margin-left: 10px;" class="fb-share-button" data-href="http://landprice.163zd.net/" data-layout="button_count" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flandprice.163zd.net%2F&amp;src=sdkpreparse">シェア</a></div>
+                <div style="margin:10px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://landprice.163zd.net">Tweet</a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                    </div>
+
             </div>
         </div>
-    </div>
+     </div>
     <div class="footer-copyright">
         <div class="container">
             Copyright © 2017 <a class="grey-text text-lighten-4" href="http://www.aobo-corp.com" target="_blank">AOBO Co., Ltd</a> All rights reserved.
@@ -281,5 +299,16 @@
     {# put common javascript here #}
     <script type="text/javascript" src="{{ base_url() }}/js/site_common.js"></script>
 {% endblock %}
+<script src="https://apis.google.com/js/platform.js" async defer>
+    {lang: 'ja'}
+</script>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-57013702-2', 'auto');
+    ga('send', 'pageview');
+</script>
 </body>
 </html>

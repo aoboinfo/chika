@@ -76,7 +76,7 @@ class TopController extends SearchController
                 $postedLow10Pref[] = $landPrice;
             }
             $low10PrefecturyQry->close();
-            $this->session->set(SearchController::ALL_COUNTRY . "postLowPref", $postedTop10Pref);
+            $this->session->set(SearchController::ALL_COUNTRY . "postLowPref", $postedLow10Pref);
         }
         $postedLow10Pref = $this->session->get(SearchController::ALL_COUNTRY . "postLowPref", NULL);
 

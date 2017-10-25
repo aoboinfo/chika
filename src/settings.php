@@ -8,7 +8,7 @@ return [
         'view' => [
             'template_path' => __DIR__ . '/../templates/',
             'twig' => [
-               // 'cache' => __DIR__ . '/../cache/twig',
+                //'cache' => __DIR__ . '/../cache/twig',
                 'debug' => true,
             ],
         ],
@@ -29,7 +29,7 @@ return [
         'logger' => [
             'name' => 'Land price',
             'path' => __DIR__ . '/../logs/app.log',
-            'level' => \Monolog\Logger::DEBUG,
+            'level' => \Monolog\Logger::ERROR,
         ],
     ],
 ];
