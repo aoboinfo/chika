@@ -29,13 +29,11 @@
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Let browser know website is optimized for mobile -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
     <title>{% block title %}{% endblock %}</title>
 
     <!-- CORE CSS-->
-    <link href="{{ base_url() }}/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="{{ base_url() }}/css/style.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+    <link href="{{ base_url() }}/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection">
     <!-- Custome CSS-->
     <link href="{{ base_url() }}/css/price.css" type="text/css" rel="stylesheet" media="screen,projection">
 
@@ -216,7 +214,7 @@
         <aside id="right-sidebar-nav">
             <ul id="chat-out" class="side-nav rightside-navigation">
                 <li class="li-hover">
-                    <a href="#" data-activates="chat-out" class="chat-close-collapse right"><i class="mdi-navigation-close"></i></a>
+                    <a href="#" data-activates="chat-out" class="chat-close-collapse right"><i class="material-icons right" style="margin-top:10px;">cancel</i></a>
                 </li>
                 <li class="li-hover">
                     <ul class="chat-collapsible" data-collapsible="expandable">
