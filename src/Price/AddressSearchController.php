@@ -30,6 +30,7 @@ class AddressSearchController extends SearchController
                       lat,
                       lng,
                       seqNo,
+                      usage_id,
                       city,
                       acreage,
                       current_use,
@@ -54,21 +55,25 @@ class AddressSearchController extends SearchController
                       about_near,
                       near_station,
                       distance_station,
+                      city_usage,
+                      city_fire,
                       city_plan,
+                      city_forest,
+                      city_park,
                       build_coverage,
                       floor_area_ratio FROM ";
         $detailQuery = "";
         $historyQuery = "select year, price from ";
-        $arountCommonQuery = "select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station from ";
+        $aroundCommonQuery = "select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station from ";
         $aroundQuery = "";
         if ($priceType == 0) {
             $detailQuery = $detailQuery . $commQuery . SearchController::POST_TABLE . " WHERE address = '" . $address . "'";
-            $aroundQuery = $arountCommonQuery . SearchController::POST_VIEW . " WHERE address LIKE '" . $prefecture  . "%' AND city = '";
+            $aroundQuery = $aroundCommonQuery . SearchController::POST_VIEW . " WHERE address LIKE '" . $prefecture  . "%' AND city = '";
             $historyQuery = $historyQuery . "posted_his ";
 
         } else {
             $detailQuery = $detailQuery . $commQuery . SearchController::SURVEY_TABLE . " WHERE address = '" . $address . "'";
-            $aroundQuery = $arountCommonQuery . SearchController::SURVEY_VIEW . " WHERE address LIKE '" . $prefecture . "%' AND city = '";
+            $aroundQuery = $aroundCommonQuery . SearchController::SURVEY_VIEW . " WHERE address LIKE '" . $prefecture . "%' AND city = '";
             $historyQuery = $historyQuery . "survey_his ";
         }
         $itemDetail = $this->db->query($detailQuery);
@@ -83,6 +88,7 @@ class AddressSearchController extends SearchController
             $detail->setLat($row["lat"]);
             $detail->setLng($row["lng"]);
             $detail->setSeqNo($row["seqNo"]);
+            $detail->setUsage($row["usage_id"]);
             $detail->setCity($row["city"]);
             $detail->setAcreage($row["acreage"]);
             $detail->setCurrentUsage($row["current_use"]);
@@ -108,6 +114,10 @@ class AddressSearchController extends SearchController
             $detail->setStation($row["near_station"]);
             $detail->setDistanceFromStation($row["distance_station"]);
             $detail->setCityPlan($row["city_plan"]);
+            $detail->setUsagePlan($row["city_usage"]);
+            $detail->setFirePlan($row["city_fire"]);
+            $detail->setForestPlan($row["city_forest"]);
+            $detail->setParkPlan($row["city_park"]);
             $detail->setBuildCoverage($row["build_coverage"]);
             $detail->setFloorAreaRatio($row["floor_area_ratio"]);
         }
@@ -161,7 +171,8 @@ class AddressSearchController extends SearchController
                 "aroundUp" => $aroundRecordsUp,
                 "aroundDown" => $aroundRecordsDown,
                 "historyYear" => json_encode($historyYear),
-                "historyPrice" => json_encode($historyPrice)
+                "historyPrice" => json_encode($historyPrice),
+                "targetYear"=>$this->getTargetYear()
             ]
         );
 

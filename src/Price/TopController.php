@@ -157,6 +157,17 @@ class TopController extends SearchController
             $surveyPriceOfAll->close();
             $this->session->set(SearchController::ALL_COUNTRY . "topSurveyPrices" , $topSurveyPrice);
         }
+        $noticeQuery = $this->db->query("SELECT notice, update_flag, created FROM notice ORDER by created DESC limit 1");
+        $latestNotice = $noticeQuery->fetch_assoc();
+        $noticeQuery->close();
+        if ($latestNotice['update_flag'] == 1) {
+            return $this->view->render($response, 'updating.twig',
+                [
+                    "notice"=> $latestNotice['notice'],
+                    "date" => date('Y年m月d日 H:i:s', strtotime($latestNotice['created']))
+                ]
+            );
+        }
 
 
         //render the top page
@@ -174,7 +185,8 @@ class TopController extends SearchController
                 "surveyTopPref" => $surveyTop10Pref,
                 "surveyLowPref" => $surveyLow10Pref,
                 "topPostPrices" => $topPostPrice,
-                "topSurveyPrices" => $topSurveyPrice
+                "topSurveyPrices" => $topSurveyPrice,
+                "targetYear"=>$this->getTargetYear()
             ]
         );
     }

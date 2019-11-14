@@ -270,4 +270,26 @@ class SearchController
         }
         return $result;
     }
+    public function getTargetYear() {
+        $year1 = $this->session->get("year_01", "");
+        $year2 = $this->session->get("year_02", "");
+        if ($year1 == "") {
+            $noticeQuery = $this->db->query("SELECT year_01, year_02 FROM notice ORDER by created DESC limit 1");
+            $noticeRec = $noticeQuery->fetch_assoc();
+            $this->session->set("year_01", $noticeRec['year_01']);
+            $this->session->set("year_02", $noticeRec['year_02']);
+            $year = [
+                "year01"=> $noticeRec['year_01'],
+                "year02"=> $noticeRec['year_02']
+            ];
+            $noticeQuery->close();
+            return $year;
+        } else {
+            $year = [
+                "year01"=> $year1,
+                "year02"=> $year2
+            ];
+            return $year;
+        }
+    }
 }

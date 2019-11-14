@@ -19,7 +19,14 @@ class LandPrice
     protected $distanceFromStation;
     protected $structure;
     protected $currentUsage;
-    protected $cityPlan;
+    //
+    protected $cityPlan; //都市計画区分
+    //new added 2019/11/14
+    protected $usagePlan; //用途区分
+    protected $firePlan; //防火区分
+    protected $forestPlan; //森林区分
+    protected $parkPlan; //公園区分
+    //new added end.
     //
     protected $priceOfTubo; //坪単価
     protected $id;
@@ -51,12 +58,68 @@ class LandPrice
     //
     protected $city;
     protected $seqNo;
+    //2019/11/07
+    protected $usage;
     //only getter
     protected $systemNo;
     protected $waterLabel;
     protected $gasLabel;
     protected $sewageLabel;
     protected $structureLabel;
+    //2019/11/07
+    protected $usageLabel;
+
+    /**
+     * @return mixed
+     */
+    public function getUsageLabel()
+    {
+        /*000：住宅地 003：宅地見込地 005：商業地 007：準工業地 009：工業地 010：市街化調整区域内の現況宅地 013：市街化調整区域内の現況林地*/
+        $ret = "";
+        switch ($this->usage) {
+            case "000":
+                $ret = "住宅地";
+                break;
+            case "003":
+                $ret = "宅地見込地";
+                break;
+            case "005":
+                $ret = "商業地";
+                break;
+            case "007":
+                $ret = "準工業地";
+                break;
+            case "009":
+                $ret = "工業地";
+                break;
+            case "010":
+                $ret = "市街化調整区域内の現況宅地";
+                break;
+            case "020":
+                $ret = "林地";
+                break;
+            default:
+                $ret = "市街化調整区域内の現況林地";
+        }
+        return $ret;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUsage()
+    {
+        return $this->usage;
+    }
+
+    /**
+     * @param mixed $usage
+     */
+    public function setUsage($usage)
+    {
+        $this->usage = $usage;
+    }
+
 
     private function startsWith($haystack, $needle)
     {
@@ -747,7 +810,68 @@ class LandPrice
     {
         $this->currentUsage = $currentUsage;
     }
+//new added from here
+    /**
+     * @return mixed
+     */
+    public function getUsagePlan()
+    {
+        return $this->usagePlan;
+    }
 
+    /**
+     * @param mixed $usagePlan
+     */
+    public function setUsagePlan($usagePlan)
+    {
+        $this->usagePlan = $usagePlan;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getFirePlan()
+    {
+        return $this->firePlan;
+    }
 
+    /**
+     * @param mixed $firePlan
+     */
+    public function setFirePlan($firePlan)
+    {
+        $this->firePlan = $firePlan;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForestPlan()
+    {
+        return $this->forestPlan;
+    }
+
+    /**
+     * @param mixed $forestPlan
+     */
+    public function setForestPlan($forestPlan)
+    {
+        $this->forestPlan = $forestPlan;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParkPlan()
+    {
+        return $this->parkPlan;
+    }
+
+    /**
+     * @param mixed $parkPlan
+     */
+    public function setParkPlan($parkPlan)
+    {
+        $this->parkPlan = $parkPlan;
+    }
 }

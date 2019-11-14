@@ -177,7 +177,8 @@ class PrefectureController extends SearchController
                 "surveyTopCity" => $surveyedTop10City,
                 "surveyLowCity" => $surveyedLow10City,
                 "topPostPrices" => $topPostPrice,
-                "topSurveyPrices" => $topSurveyPrice
+                "topSurveyPrices" => $topSurveyPrice,
+                "targetYear"=>$this->getTargetYear()
             ]
         );
     }
@@ -259,7 +260,8 @@ class PrefectureController extends SearchController
                 "postedPrices" => $postResultOfCity,
                 "surveyPrices" => $surveyResultOfCity,
                 "postStations" => $postStations,
-                "surveyStations" => $surveyStations
+                "surveyStations" => $surveyStations,
+                "targetYear"=>$this->getTargetYear()
             ]
         );
     }
