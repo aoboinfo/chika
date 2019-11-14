@@ -10,7 +10,7 @@
         <div class="card-move-up cyan darken-4 waves-effect waves-block waves-light">
             <div class="move-up">
                 <h5 class="margin white-text">{{ pageLabel }}</h5>
-                <p style="color:white;" class="caption">{{ listing.aboutNear }}</p>
+                <p style="color:white;">周辺の土地の利用の現況: {{ listing.aboutNear }}</p>
             </div>
             <div class="row">
                 <div class="col s12 m6 l6">
@@ -23,6 +23,7 @@
                         地価調査
                     {% endif %}
                     </td></tr>
+                    <tr><th>用途</th><td>{{ listing.usageLabel }}</td></tr>
                     <tr><th>標準地番号</th><td>{{ listing.systemNo }}</td></tr>
                     <tr><th>価格(円/m²)</th><td>{{ listing.price }}</td></tr>
                     <tr><th>地積(m²)	</th><td>{{ listing.acreage }}</td></tr>
@@ -33,22 +34,25 @@
                     <tr><th>給排水状況</th><td>{{ listing.waterLabel }}　{{ listing.gasLabel }}　{{ listing.sewageLabel }}</td></tr>
                     <tr><th>形状</th><td>{{ listing.config }}</td></tr>
                     <tr><th>間口、奥行比率(%)</th><td>{{ listing.frontRatio }}、{{ listing.depthRatio }}</td></tr>
+                    <tr><th>地上、地下階層</th><td>{{ listing.numOfFloors }}、{{ listing.numOfBasefloors }}</td></tr>
                 </tbody>
                 </table>
                 </div>
                 <div class="col s12 m6 l6">
                 <table id="searchResult" class="bordered white-text">
                 <tbody>
-                    <tr><th>地上、地下階層</th><td>{{ listing.numOfFloors }}、{{ listing.numOfBasefloors }}</td></tr>
                     <tr><th>前面道路、方位、幅員(m)</th><td>{{ listing.frontRoads }}、{{ listing.roadDirection }}、{{ listing.roadWidth }}</td></tr>
                     <tr><th>前面道路の駅前状況</th><td>{{ listing.roadFrontStatus }}</td></tr>
                     <tr><th>前面道路の舗装状況</th><td>{{ listing.roadPavement }}</td></tr>
-                    <tr><th>側道区分</th><td>{{ listing.sideRoad }}</td></tr>
-                    <tr><th>側道方位</th><td>{{ listing.sideRroadDirection }}</td></tr>
+                    <tr><th>側道区分、側道方位</th><td>{{ listing.sideRoad }}&nbsp;、{{ listing.sideRroadDirection }}</td></tr>
                     <tr><th>交通施設との近接状況</th><td>{{ listing.aboutTransportArea }}</td></tr>
+                    <tr><th>都市計画法-用途区分</th><td>{{ listing.usagePlan }}</td></tr>
+                    <tr><th>都市計画法-防火区分</th><td>{{ listing.firePlan }}</td></tr>
+                    <tr><th>都市計画法-都市計画区分</th><td>{{ listing.cityPlan }}</td></tr>
+                    <tr><th>都市計画法-森林区分</th><td>{{ listing.forestPlan }}</td></tr>
+                    <tr><th>都市計画法-公園区分</th><td>{{ listing.parkPlan }}</td></tr>
                     <tr><th>建ぺい率(%)</th><td>{{ listing.buildCoverage }}</td></tr>
                     <tr><th>容積率(%)</th><td>{{ listing.floorAreaRatio }}</td></tr>
-                    <tr><th>都市計画区域区分)</th><td>{{ listing.cityPlan }}</td></tr>
                     <tr><th>備考</th><td>{{ listing.useDesc }}</td></tr>
                 </tbody>
                 </table>

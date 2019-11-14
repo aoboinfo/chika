@@ -126,14 +126,12 @@
                         <div id="map-canvas"></div>
                     </div>
                     <div class="card-content">
-                        <a class="btn-floating activator btn-move-up waves-effect waves-light darken-2 right">
-                            <i class="mdi-maps-pin-drop"></i>
-                        </a>
+                        <a class="btn-floating activator btn-move-up waves-effect waves-light darken-2 right"><i class="material-icons activator">add_circle</i></a>
                         <h4 class="card-title grey-text text-darken-4"><a href="#" class="grey-text text-darken-4">{{ prefecture }}/{{ city }}</a>
                         </h4>
                     </div>
                     <div class="card-reveal">
-                        <span class="card-title grey-text text-darken-4">{{ prefecture }}/{{ city }} <i class="mdi-navigation-close right"></i></span>
+                        <span class="card-title grey-text text-darken-4">{{ prefecture }}/{{ city }} <a id="modalClose" href="javascript:void(0);" class="waves-effect waves-green btn-flat right modal-action modal-close"><i class="material-icons">close</i></a></span>
                         <div id="postArea">
                             {% if postedPrices|length > 0 %}
                                 <span class="card-title text-darken-4 center-align">-- 地価公示 --</span>

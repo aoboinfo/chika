@@ -31,9 +31,9 @@
     <!-- Let browser know website is optimized for mobile -->
     <title>{% block title %}{% endblock %}</title>
 
-    <!-- CORE CSS-->
-    <link href="{{ base_url() }}/css/style.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+    <!-- CORE CSS must not change the order of css file-->
     <link href="{{ base_url() }}/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+    <link href="{{ base_url() }}/css/style.min.css" type="text/css" rel="stylesheet" media="screen,projection">
     <!-- Custome CSS-->
     <link href="{{ base_url() }}/css/price.css" type="text/css" rel="stylesheet" media="screen,projection">
 
@@ -111,6 +111,8 @@
 <!-- START MAIN -->
 <div id="main">
     <!-- START WRAPPER -->
+    <input type="hidden" name="year01" value="{{ targetYear.year01 }}">
+    <input type="hidden" name="year02" value="{{ targetYear.year02 }}">
     <div class="wrapper">
         <!-- START LEFT SIDEBAR NAV-->
         <aside id="left-sidebar-nav">
@@ -292,7 +294,7 @@
 <script type="text/javascript" src="{{ base_url() }}/js/chart.min.js"></script>
 <script type="text/javascript" src="{{ base_url() }}/js/jquery.cookie.js"></script>
 <! -- The API must not be public in any place: for example Github -->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=API KEY" async defer></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAiRVRkYdBj1J2emeLKjOEKS5Hb4WwCI0" async defer></script>
 {% block javascript %}
     {# put common javascript here #}
     <script type="text/javascript" src="{{ base_url() }}/js/site_common.js"></script>
