@@ -41,9 +41,9 @@ window.onload = function () {
     detailDataSets[0].backgroundColor = 'rgb(255, 99, 132)';
     detailDataSets[0].borderColor = 'rgb(255, 99, 132)';
     if (priceType == '0') {
-        detailDataSets[0].label="地価公示(H29)";
+        detailDataSets[0].label="地価公示(" + $('input[name="year01"]').val() + ")";
     } else {
-        detailDataSets[0].label="地価調査(H28)";
+        detailDataSets[0].label="地価調査(" + $('input[name="year02"]').val() + ")";
     }
     detailDataSets[0].data = JSON.parse(document.getElementById("price").value);
 
@@ -93,6 +93,9 @@ window.onload = function () {
                         // Here, `this` is the char instance
                         // The following returns the full string
                         var year = this._data.labels[tooltipItem[0].index];
+                        if (year > 2018) {
+                            return '令和' + (year - 2018) + '年';
+                        }
                         return '平成' + (year - 1988) + '年';
                     }
                 }

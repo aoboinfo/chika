@@ -16,6 +16,9 @@ window.NG = "NG";
 window.OK = "OK";
 window.NOTICE_COUNT_KEY = "new_notice_of_price";
 //
+//var year01 = $['input[name="year01"]'].val();
+//var year02 = $['input[name="year02"]'].val();
+//
 window.chartColors = {
     red: 'rgb(255, 99, 132)',
     orange: 'rgb(255, 159, 64)',
@@ -78,6 +81,9 @@ var landPriceDataSets = [
 ];
 
 function drawPriceChangeRate(targetUrl, chartObj) {
+    //changeRateDataSets[0].label = $['input[name="year01"]'].val();
+    //landPriceDataSets[0].label = $['input[name="year01"]'].val();
+
     $.ajax (
         {
             url : targetUrl,
@@ -85,6 +91,8 @@ function drawPriceChangeRate(targetUrl, chartObj) {
             success: function (result) {
                 changeRateDataSets[0].data = result.postRates;
                 changeRateDataSets[1].data = result.surveyRates;
+                changeRateDataSets[0].label = "地価公示(" + $('input[name="year01"]').val() + ")";
+                changeRateDataSets[1].label = "地価調査(" + $('input[name="year02"]').val() + ")";
                 var rateChart = new Chart(chartObj.getContext("2d"), {
                         type: 'bar',
                         data: {
@@ -131,6 +139,8 @@ function drawAvgPrice(type, targetUrl, chartObj) {
             success: function (result) {
                 landPriceDataSets[0].data = result.postPrices;
                 landPriceDataSets[1].data = result.surveyPrices;
+                landPriceDataSets[0].label = "地価公示(" + $('input[name="year01"]').val() + ")";
+                landPriceDataSets[1].label = "地価調査(" + $('input[name="year02"]').val() + ")";
                 var chart = new Chart(chartObj.getContext("2d"), {
                     // The type of chart we want to create
                     type: type,
@@ -177,6 +187,9 @@ function drawAvgPrice(type, targetUrl, chartObj) {
                                     // Here, `this` is the char instance
                                     // The following returns the full string
                                     var year = this._data.labels[tooltipItem[0].index];
+                                    if (year > 2018) {
+                                        return '令和' + (year - 2018) + '年';
+                                    }
                                     return '平成' + (year - 1988) + '年';
                                 }
                             }
@@ -265,8 +278,8 @@ function showMap(targetUrl) {
                     center: new google.maps.LatLng(lats/i, lngs/i),
                     zoom:13,
                     mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    mapTypeControl: false,
-                    scrollwheel: false,
+                    mapTypeControl: true,
+                    scrollwheel: true,
                     draggable: true,
                     styles: [{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#e0efef"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"hue":"#1900ff"},{"color":"#c0e8e8"}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":100},{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"visibility":"on"},{"lightness":700}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#7dcdcd"}]}],
                     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
