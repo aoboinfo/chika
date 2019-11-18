@@ -48,6 +48,102 @@ class PostedPriceService
         $this->router = $router;
         $this->logger = $logger;
     }
+    private function startsWith($haystack, $needle)
+    {
+        return $needle === "" || strpos($haystack, $needle) === 0;
+    }
+
+    private function endsWith($haystack, $needle)
+    {
+        return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+    }
+
+    public function detail($request, $response, $params) {
+        $this->logger->info("TEST");
+        $landID = $request->getParsedBodyParam('id');
+        $userID = $request->getParsedBodyParam('user');
+        $userQuery = $this->db->query("SELECT * FROM mapuser WHERE map_user='" . $userID . "'");
+        $ret = [];
+        if ($userQuery->num_rows == 0) {
+            $ret = ["Result"=>"NG", "msg"=>""];
+        }
+        $detailSQL = "SELECT a.lat,a.lng,a.usage_id,a.seqNo,a.city,a.address,a.acreage,a.current_use,a.use_desc,a.build_structure,a.water,a.gas,a.sewage,a.config,a.front_ratio,a.depth_ratio,a.num_of_floors,a.num_of_basefloors,a.front_roads,a.road_direction,a.road_width,a.road_front_status,a.road_pavement,a.side_road,a.side_road_direction,a.about_transport_area,a.about_near,a.near_station,a.distance_station,a.city_usage,a.city_fire,a.city_plan,a.city_forest,a.city_park,a.build_coverage,a.floor_area_ratio,FORMAT(b.price,0) as price";
+        $subSql ="SELECT year, price FROM ";
+        if ($this->startsWith($landID,"L1")) {
+            $detailSQL = $detailSQL . " FROM posted_price AS a INNER JOIN posted_his AS b ON a.id = b.id AND a.year = b.year";
+            $subSql = $subSql . "posted_his";
+        } else {
+            $detailSQL = $detailSQL . " FROM surveyed_price AS a INNER JOIN survey_his AS b ON a.id = b.id AND a.year = b.year";
+            $subSql = $subSql . "survey_his";
+        }
+        $detailSQL .= " WHERE a.id='" . $landID . "'";
+        $subSql .= " WHERE id = '". $landID."' ORDER BY year";
+        //
+        $detailQuery = $this->db->query($detailSQL);
+        $detailRec = $detailQuery->fetch_assoc();
+        $landPrice = new LandPrice();
+        $landPrice->setUsage($detailRec['usage_id']);
+        $landPrice->setWater($detailRec['water']);
+        $landPrice->setGas($detailRec['gas']);
+        $landPrice->setSewage($detailRec['sewage']);
+        $landPrice->setStructure($detailRec['build_structure']);
+        $detailQuery->close();
+        $history = array();
+        $historyQuery = $this->db->query($subSql);
+        $oldPrice = 0;
+        while ($hisRow = $historyQuery->fetch_assoc()) {
+            $currentPrice = (int)$hisRow['price'];
+            $priceRate = 0;
+            if ($oldPrice == 0) {
+                $priceRate = 0;
+            } else {
+                $priceRate = round(($currentPrice - $oldPrice)*100/(int)$oldPrice, 2);
+            }
+            $oldPrice = $currentPrice;
+            $hisItem = [
+                "year" => $hisRow['year'],
+                "price" => $hisRow['price'],
+                "rate" => $priceRate
+            ];
+            $history[] = $hisItem;
+        }
+        $res = $response->withJson([
+            "landNo"=>$detailRec['seqNo'],
+            "address"=>$detailRec['address'],
+            "city"=>$detailRec['city'],
+            "price"=>$detailRec['price'],
+            "acreage"=>$detailRec['acreage'],
+            "station"=>$detailRec['near_station'],
+            "structure"=>$detailRec['build_structure'],
+            "usage"=>$detailRec['current_use'],
+            "facility"=> $landPrice->getWaterLabel() . " " . $landPrice->getGasLabel() . " " . $landPrice->getSewageLabel(),
+            "config"=>$detailRec['config'],
+            "typeRatio"=>$detailRec['front_ratio'] . " " . $detailRec['depth_ratio'],
+            "floor"=>$detailRec['num_of_floors'],
+            "subfloor"=>$detailRec['num_of_basefloors'],
+            "road"=>$detailRec['front_roads'],
+            "roadDir"=>$detailRec['road_direction'],
+            "roadWidth"=>$detailRec['road_width'],
+            "pavement"=>$detailRec['road_pavement'],
+            "sideRoad"=>$detailRec['side_road'],
+            "sideRoadDir"=>$detailRec['side_road_direction'],
+            "buildingCover"=>$detailRec['build_coverage'],
+            "floorRatio"=>$detailRec['floor_area_ratio'],
+            "cityUsage"=>$detailRec['city_usage'],
+            "cityFire"=>$detailRec['city_fire'],
+            "plan"=>$detailRec['city_plan'],
+            "cityForest"=>$detailRec['city_forest'],
+            "cityPark" => $detailRec['city_park'],
+            "remark"=>$detailRec['use_desc'],
+            "latLng"=>$detailRec['lat'] . " " . $detailRec['lng'],
+            "road_front_status"=>$detailRec['road_front_status'],
+            "about_transport_area"=>$detailRec['about_transport_area'],
+            "about_near"=>$detailRec['about_near'],
+            "his"=>$history
+        ])->withHeader('Content-type', 'application/json;charset=utf-8');
+        return $res;
+    }
+
     public function historyPriceOf ($request, $response, $params) {
        // $cities = $this->db->query("select distinct city from posted_price where address like '" . $params['prefecture'] . "%'");
         $prefecture = $request->getAttribute('prefecture');
@@ -105,13 +201,19 @@ class PostedPriceService
         $result = ["labels"=>$labels, "postPrices"=>$postPrices, "surveyPrices"=>$surveyPrices];
         //
         $res = $response->withJson($result)
-            ->withHeader('Content-type', 'application/json');
+            ->withHeader('Content-type', 'application/json;charset=utf-8');
         return $res;
     }
     //Price information for changeRate.
     public function changeRate ($request, $response, $params) {
         $prefecture = $request->getAttribute('prefecture');
         $cityName = $request->getAttribute('city');
+        //
+        $noticeQuery = $this->db->query("select current_year from notice order by created desc LIMIT 1");
+        $row = $noticeQuery->fetch_assoc();
+        $currentYear = $row['current_year'];
+        $theYearBefore = (int)$currentYear - 1;
+        $noticeQuery->close();
         //
         $changeRatePost = null;
         $changeRateSurvey = null;
@@ -122,9 +224,9 @@ class PostedPriceService
             $changeRateSurvey = $this->db->query($surveyChangeRateQuery . " where a.year = 2017 and b.year = 2016 and b.price <> 0 group by a.prefecture order by a.prefecture");
         } else if (!is_null($prefecture) && is_null($cityName)) {//for prefecture
             $postChangeRateQuery = "select c.city as label, format(100*(avg(a.price) - avg(b.price))/avg(b.price), 2) as rate from posted_his as a inner join posted_his as b on a.id = b.id
-                                      inner join posted_price as c on c.id = a.id where a.year = 2017 and b.year = 2016 and b.price <> 0 and c.address like '" . $prefecture . "%' group by c.city order by c.city";
+                                      inner join posted_price as c on c.id = a.id where a.year = " . $currentYear . " and b.year = " . $theYearBefore . " and b.price <> 0 and c.address like '" . $prefecture . "%' group by c.city order by c.city";
             $surveyChangeRateQuery = "select c.city as label, format(100*(avg(a.price) - avg(b.price))/avg(b.price), 2) as rate from survey_his as a inner join survey_his as b on a.id = b.id
-                                      inner join surveyed_price as c on c.id = a.id where a.year = 2017 and b.year = 2016 and b.price <> 0 and c.address like '" . $prefecture . "%' group by c.city order by c.city";
+                                      inner join surveyed_price as c on c.id = a.id where a.year = " . $currentYear . " and b.year = " . $theYearBefore . " and b.price <> 0 and c.address like '" . $prefecture . "%' group by c.city order by c.city";
             $changeRatePost = $this->db->query($postChangeRateQuery);
             $changeRateSurvey = $this->db->query($surveyChangeRateQuery);
         } else {//for city
@@ -337,7 +439,7 @@ class PostedPriceService
     public function showNotice($request, $response, $params) {
         $noticeQuery = $this->db->query("select notice, DATE_FORMAT(created, '%Y年%m月%d日') as day from notice order by created desc");
         $result = array();
-        while ($row = mysqli_fetch_assoc($noticeQuery)) {
+        while ($row = $noticeQuery->fetch_assoc()) {
             $record = ["notice"=>$row["notice"],
                 "created"=> $row["day"]];
             $result[] = $record;
