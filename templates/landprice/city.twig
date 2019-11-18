@@ -145,7 +145,7 @@
                                     <th data-field="distance">駅から距離(m)</th>
                                     <th data-field="structure">建物構造</th>
                                     <th data-field="usage">利用現況</th>
-                                    <th data-field="cityPlan">用途地域</th>
+                                    <th data-field="cityPlan">用途</th>
                                     </thead>
                                     <tbody>
                                     {% for price in postedPrices %}
@@ -164,7 +164,7 @@
                                             <td>{{ price.distanceFromStation }}m</td>
                                             <td>{{ price.structure }}</td>
                                             <td>{{ price.currentUsage }}</td>
-                                            <td>{{ price.cityPlan }}</td>
+                                            <td>{{ price.usageLabel }}</td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
@@ -184,7 +184,7 @@
                                     <th data-field="distance">駅から距離(m)</th>
                                     <th data-field="structure">建物構造</th>
                                     <th data-field="usage">利用現況</th>
-                                    <th data-field="cityPlan">用途地域</th>
+                                    <th data-field="cityPlan">用途</th>
                                     </thead>
                                     <tbody>
                                     {% for price in surveyPrices %}
@@ -203,7 +203,7 @@
                                             <td>{{ price.distanceFromStation }}m</td>
                                             <td>{{ price.structure }}</td>
                                             <td>{{ price.currentUsage }}</td>
-                                            <td>{{ price.cityPlan }}</td>
+                                            <td>{{ price.usageLabel }}</td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>

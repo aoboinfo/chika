@@ -19,7 +19,7 @@
         <li class="li-hover"><div class="divider"></div></li>
         <li class="no-padding">
             <ul class="collapsible collapsible-accordion">
-                <li class="bold"><a class="collapsible-header waves-effect waves-cyan">公示：用途地域</a>
+                <li class="bold"><a class="collapsible-header waves-effect waves-cyan">公示：都市計画法-用途区分</a>
                     <div class="collapsible-body">
                         <ul id="post_cityPlans"></ul>
                     </div>
@@ -41,7 +41,7 @@
         <li class="li-hover"><div class="divider"></div></li>
         <li class="no-padding">
             <ul class="collapsible collapsible-accordion">
-                <li class="bold"><a class="collapsible-header waves-effect waves-cyan">調査：用途地域</a>
+                <li class="bold"><a class="collapsible-header waves-effect waves-cyan">調査：都市計画法-用途区分</a>
                     <div class="collapsible-body">
                         <ul id="survey_cityPlans"></ul>
                     </div>
@@ -235,7 +235,7 @@
                         <th data-field="distance">駅から距離(m)</th>
                         <th data-field="structure">建物構造</th>
                         <th data-field="usage">利用現況</th>
-                        <th data-field="cityPlan">用途地域</th>
+                        <th data-field="cityPlan">用途</th>
                         </thead>
                         <tbody>
                         {% for postTop in topPostPrices %}
@@ -252,7 +252,7 @@
                                 <td>{{ postTop.distanceFromStation }}</td>
                                 <td>{{ postTop.structure }}</td>
                                 <td>{{ postTop.currentUsage }}</td>
-                                <td>{{ postTop.cityPlan }}</td>
+                                <td>{{ postTop.usageLabel }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -276,7 +276,7 @@
                         <th data-field="distance">駅から距離(m)</th>
                         <th data-field="structure">建物構造</th>
                         <th data-field="usage">利用現況</th>
-                        <th data-field="cityPlan">用途地域</th>
+                        <th data-field="cityPlan">用途</th>
                         </thead>
                         <tbody>
                         {% for surveyTop in topSurveyPrices %}
@@ -293,7 +293,7 @@
                                 <td>{{ surveyTop.distanceFromStation }}</td>
                                 <td>{{ surveyTop.structure }}</td>
                                 <td>{{ surveyTop.currentUsage }}</td>
-                                <td>{{ surveyTop.cityPlan }}</td>
+                                <td>{{ surveyTop.usageLabel }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
