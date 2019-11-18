@@ -24,5 +24,6 @@ $app->get('/listingCityPlanAndUsage/{prefecture}/[{city}]', 'Service\PostedPrice
 $app->get('/notice/message/', 'Service\PostedPriceService:showNotice')->setName('show-notice');
 //
 $app->post('/search/address/', 'Service\PostedPriceService:detailForAddress')->setName('search-input');
+$app->post('/landPrice/detail', 'Service\PostedPriceService:detail')->setName('land-detail');
 
 //They must be initialized in dependencies.
