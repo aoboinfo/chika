@@ -33,8 +33,7 @@ class SearchController
     //
     const ALL_COUNTRY = "ALL_COUNTRY";
     //
-    const BASIC_QUERY_STR = "select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from ";
-
+    const BASIC_QUERY_STR = "select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, usage_id from ";
     //
     protected $leftOptions = [];
 
@@ -291,5 +290,13 @@ class SearchController
             ];
             return $year;
         }
+    }
+
+    public function getCurrentYear() {
+        $noticeQuery = $this->db->query("select current_year from notice order by created desc LIMIT 1");
+        $row = $noticeQuery->fetch_assoc();
+        $currentYear = $row['current_year'];
+        $noticeQuery->close();
+        return $currentYear;
     }
 }

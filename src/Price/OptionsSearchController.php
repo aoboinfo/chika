@@ -64,6 +64,8 @@ class OptionsSearchController extends SearchController
         } else {
             $queryString = $this->createCityplanSQLString($prefecture, $city, $priceType, $value, $offset);
         }
+        $this->logger->info("find options:" . $queryString);
+        //
         $queryOfStation = $this->db->query($queryString);
         $resultOfOption = array();
         while ($row = mysqli_fetch_assoc($queryOfStation)) {
@@ -75,7 +77,7 @@ class OptionsSearchController extends SearchController
             $landPrice->setDistanceFromStation($row["distance_station"]);
             $landPrice->setCurrentUsage($row["current_use"]);
             $landPrice->setStructure($row["build_structure"]);
-            $landPrice->setCityPlan($row["city_plan"]);
+            $landPrice->setUsage($row["usage_id"]);
             $landPrice->setType($this->getPriceName());
             $resultOfOption[] = $landPrice;
         }
@@ -95,11 +97,11 @@ class OptionsSearchController extends SearchController
         if ($priceType == 0) {
             $usages = $this->optionsList(SearchController::POST_TABLE, $prefecture, $city, "0");
             $cityPlans = $this->optionsList(SearchController::POST_TABLE, $prefecture, $city, "1");
-            $this->setLeftOptions(["公示：利用現況","公示：用途地域"]);
+            $this->setLeftOptions(["公示：利用現況","公示：都市計画法-用途区分"]);
         } else {
             $usages = $this->optionsList(SearchController::SURVEY_TABLE, $prefecture, $city, "0");
             $cityPlans = $this->optionsList(SearchController::SURVEY_TABLE, $prefecture, $city, "1");
-            $this->setLeftOptions(["調査：利用現況","調査：用途地域"]);
+            $this->setLeftOptions(["調査：利用現況","調査：都市計画法-用途区分"]);
         }
         //
         return $this->view->render($response, 'searchResult.twig',

@@ -21,6 +21,7 @@ class TopController extends SearchController
         $surveyStationsAsc = $this->getLowStationListForTarget(SearchController::SURVEY_VIEW, NULL);
         //
         //posted average price/year
+        $currentYear = $this->getCurrentYear();
 
         $averagePrices = $this->session->get(SearchController::ALL_COUNTRY . "avgPrices", NULL);
         if ($averagePrices == NULL) {
@@ -51,7 +52,7 @@ class TopController extends SearchController
         $postedTop10Pref = $this->session->get(SearchController::ALL_COUNTRY . "postTopPref", NULL);
 
         if ($postedTop10Pref == NULL) {
-            $postedQuery10 = "select prefecture, round(avg(price)) as pre_price, round(avg(price) * 3.305785) as tubo_price  from posted_his where year = 2017 group by prefecture order by pre_price";
+            $postedQuery10 = "select prefecture, round(avg(price)) as pre_price, round(avg(price) * 3.305785) as tubo_price  from posted_his where year = '" . $currentYear . "' group by prefecture order by pre_price";
             //top 10 prefecture
             $top10PrefectureQry = $this->db->query($postedQuery10 . " desc limit 10");
             $postedTop10Pref = array();
@@ -84,7 +85,7 @@ class TopController extends SearchController
         $surveyTop10Pref = $this->session->get(SearchController::ALL_COUNTRY . "surveyTopPref", NULL);
 
         if ($surveyTop10Pref == NULL) {
-            $survey10Query = "select prefecture, round(avg(price)) as pre_price, round(avg(price) * 3.305785) as tubo_price from survey_his where year = 2017 group by prefecture order by pre_price";
+            $survey10Query = "select prefecture, round(avg(price)) as pre_price, round(avg(price) * 3.305785) as tubo_price from survey_his where year = '" . $currentYear . "' group by prefecture order by pre_price";
             //
             $top10SurveyPrefectureQry = $this->db->query($survey10Query . " desc limit 10");
             $surveyTop10Pref = array();
@@ -117,7 +118,7 @@ class TopController extends SearchController
         //
         $topPostPrice = $this->session->get(SearchController::ALL_COUNTRY . "topPostPrices" , NULL);
         if ($topPostPrice == NULL) {
-            $postedPriceOfAll = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from post_price order by price0 desc limit 6");
+            $postedPriceOfAll = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure,usage_id from post_price order by price0 desc limit 6");
             $topPostPrice = array();
             while ($row = mysqli_fetch_assoc($postedPriceOfAll)) {
                 $landPrice = new LandPrice();
@@ -129,17 +130,16 @@ class TopController extends SearchController
                 $landPrice->setDistanceFromStation($row["distance_station"]);
                 $landPrice->setCurrentUsage($row["current_use"]);
                 $landPrice->setStructure($row["build_structure"]);
-                $landPrice->setCityPlan($row["city_plan"]);
+                $landPrice->setUsage($row["usage_id"]);
                 $topPostPrice[] = $landPrice;
             }
             $postedPriceOfAll->close();
             $this->session->set(SearchController::ALL_COUNTRY . "topPostPrices", $topPostPrice);
         }
-
         //
         $topSurveyPrice = $this->session->get(SearchController::ALL_COUNTRY . "topSurveyPrices" , NULL);
         if ($topSurveyPrice == NULL) {
-            $surveyPriceOfAll = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from survey_price order by price0 desc limit 6");
+            $surveyPriceOfAll = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure,usage_id from survey_price order by price0 desc limit 6");
             $topSurveyPrice = array();
             while ($row = mysqli_fetch_assoc($surveyPriceOfAll)) {
                 $landPrice = new LandPrice();
@@ -151,7 +151,7 @@ class TopController extends SearchController
                 $landPrice->setDistanceFromStation($row["distance_station"]);
                 $landPrice->setCurrentUsage($row["current_use"]);
                 $landPrice->setStructure($row["build_structure"]);
-                $landPrice->setCityPlan($row["city_plan"]);
+                $landPrice->setUsage($row["usage_id"]);
                 $topSurveyPrice[] = $landPrice;
             }
             $surveyPriceOfAll->close();

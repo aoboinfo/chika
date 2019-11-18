@@ -35,7 +35,7 @@ class StationSearchController extends SearchController
             //
             $stationAsc = $this->getLowStationListForTarget($target, $prefecture);
             //the listings for the station
-            $queryOfStation = $this->db->query("select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, distance_station, current_use, build_structure, city_plan from " . $target . " where near_station = '" . $station . "' order by price0 desc");
+            $queryOfStation = $this->db->query("select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, distance_station, current_use, build_structure, usage_id from " . $target . " where near_station = '" . $station . "' order by price0 desc");
             $resultOfStation = array();
 
             while ($row = mysqli_fetch_assoc($queryOfStation)) {
@@ -47,7 +47,7 @@ class StationSearchController extends SearchController
                 $landPrice->setDistanceFromStation($row["distance_station"]);
                 $landPrice->setCurrentUsage($row["current_use"]);
                 $landPrice->setStructure($row["build_structure"]);
-                $landPrice->setCityPlan($row["city_plan"]);
+                $landPrice->setUsage($row["usage_id"]);
                 $landPrice->setType($priceName);
                 $resultOfStation[] = $landPrice;
             }
@@ -78,7 +78,7 @@ class StationSearchController extends SearchController
             $stationAsc = $this->getLowStationListForTarget($target, $prefecture);
             //
 
-            $queryOfStation = $this->db->query("select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, distance_station, current_use, build_structure, city_plan from " . $target . " where near_station = '" . $station . "' and address like '" . $prefecture . "%' order by price0 desc");
+            $queryOfStation = $this->db->query("select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, distance_station, current_use, build_structure, usage_id from " . $target . " where near_station = '" . $station . "' and address like '" . $prefecture . "%' order by price0 desc");
             $resultOfStation = array();
             while ($row = mysqli_fetch_assoc($queryOfStation)) {
                 $landPrice = new LandPrice();
@@ -89,7 +89,7 @@ class StationSearchController extends SearchController
                 $landPrice->setDistanceFromStation($row["distance_station"]);
                 $landPrice->setCurrentUsage($row["current_use"]);
                 $landPrice->setStructure($row["build_structure"]);
-                $landPrice->setCityPlan($row["city_plan"]);
+                $landPrice->setUsage($row["usage_id"]);
                 $landPrice->setType($priceName);
                 $resultOfStation[] = $landPrice;
             }
@@ -116,7 +116,7 @@ class StationSearchController extends SearchController
 
             $stationsDesc = $this->getTopStationListForTarget($target, $prefecture, $city);
             //
-            $listOfStation = $this->db->query("select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, distance_station, current_use, build_structure, city_plan from " . $target . " where near_station = '" . $station . "' and city = '" . $city . "' and address like '" . $prefecture . "%' order by price0 desc");
+            $listOfStation = $this->db->query("select price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, distance_station, current_use, build_structure, usage_id from " . $target . " where near_station = '" . $station . "' and city = '" . $city . "' and address like '" . $prefecture . "%' order by price0 desc");
 
             $resultOfStation = array();
 
@@ -129,7 +129,7 @@ class StationSearchController extends SearchController
                 $landPrice->setDistanceFromStation($row["distance_station"]);
                 $landPrice->setCurrentUsage($row["current_use"]);
                 $landPrice->setStructure($row["build_structure"]);
-                $landPrice->setCityPlan($row["city_plan"]);
+                $landPrice->setUsage($row["usage_id"]);
                 $landPrice->setType($priceName);
                 $resultOfStation[] = $landPrice;
             }

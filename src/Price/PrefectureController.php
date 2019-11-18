@@ -120,7 +120,7 @@ class PrefectureController extends SearchController
         //
         $topPostPrice = $this->session->get($prefecture . "topPostPrices", NULL);
         if ($topPostPrice == NULL) {
-            $postedPriceOfPrefecture = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from post_price where address like '" . $prefecture . "%' order by price0 desc limit 6");
+            $postedPriceOfPrefecture = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, usage_id from post_price where address like '" . $prefecture . "%' order by price0 desc limit 6");
             $topPostPrice = array();
             while ($row = mysqli_fetch_assoc($postedPriceOfPrefecture)) {
                 $landPrice = new LandPrice();
@@ -132,7 +132,7 @@ class PrefectureController extends SearchController
                 $landPrice->setDistanceFromStation($row["distance_station"]);
                 $landPrice->setCurrentUsage($row["current_use"]);
                 $landPrice->setStructure($row["build_structure"]);
-                $landPrice->setCityPlan($row["city_plan"]);
+                $landPrice->setUsage($row["usage_id"]);
                 $topPostPrice[] = $landPrice;
             }
             $postedPriceOfPrefecture->close();
@@ -141,7 +141,7 @@ class PrefectureController extends SearchController
         //
         $topSurveyPrice = $this->session->get($prefecture . "topSurveyPrices", NULL);
         if ($topSurveyPrice == NULL) {
-            $surveyPriceOfPrefecture = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from survey_price where address like '" . $prefecture . "%' order by price0 desc limit 6");
+            $surveyPriceOfPrefecture = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, usage_id from survey_price where address like '" . $prefecture . "%' order by price0 desc limit 6");
             $topSurveyPrice = array();
             while ($row = mysqli_fetch_assoc($surveyPriceOfPrefecture)) {
                 $landPrice = new LandPrice();
@@ -153,7 +153,7 @@ class PrefectureController extends SearchController
                 $landPrice->setDistanceFromStation($row["distance_station"]);
                 $landPrice->setCurrentUsage($row["current_use"]);
                 $landPrice->setStructure($row["build_structure"]);
-                $landPrice->setCityPlan($row["city_plan"]);
+                $landPrice->setUsage($row["usage_id"]);
                 $topSurveyPrice[] = $landPrice;
             }
             $surveyPriceOfPrefecture->close();
@@ -187,8 +187,8 @@ class PrefectureController extends SearchController
         $prefecture = $params['prefecture'];
         $city = $params['city'];
         //map contents
-        $postedItemsOfCity = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from post_price where city = '" . $city . "' and address like '" . $prefecture . "%' order by price0 desc");
-        $surveyItemsOfCity = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, city_plan from survey_price where city = '" . $city . "' and address like '" . $prefecture . "%' order by price0 desc");
+        $postedItemsOfCity = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, usage_id from post_price where city = '" . $city . "' and address like '" . $prefecture . "%' order by price0 desc");
+        $surveyItemsOfCity = $this->db->query("select id, price0, FORMAT(100*(price0-price1)/nullif(price1, 0), 1) as rate, address, near_station, distance_station, current_use, build_structure, usage_id from survey_price where city = '" . $city . "' and address like '" . $prefecture . "%' order by price0 desc");
         $postResultOfCity = array();
         while ($row = mysqli_fetch_assoc($postedItemsOfCity)) {
             $landPrice = new LandPrice();
@@ -200,7 +200,7 @@ class PrefectureController extends SearchController
             $landPrice->setDistanceFromStation($row["distance_station"]);
             $landPrice->setCurrentUsage($row["current_use"]);
             $landPrice->setStructure($row["build_structure"]);
-            $landPrice->setCityPlan($row["city_plan"]);
+            $landPrice->setUsage($row["usage_id"]);
             $postResultOfCity[] = $landPrice;
         }
         $postedItemsOfCity->close();
@@ -216,7 +216,7 @@ class PrefectureController extends SearchController
             $landPrice->setDistanceFromStation($row["distance_station"]);
             $landPrice->setCurrentUsage($row["current_use"]);
             $landPrice->setStructure($row["build_structure"]);
-            $landPrice->setCityPlan($row["city_plan"]);
+            $landPrice->setUsage($row["usage_id"]);
             $surveyResultOfCity[] = $landPrice;
 
         }
