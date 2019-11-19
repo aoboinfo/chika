@@ -131,12 +131,10 @@ class SearchController
     public function getTopStationListForTarget($target, $prefecture, $city) {
         $stationsDesc = NULL;
         if (is_null($city) && is_null($prefecture)) {
-            $this->logger->info("getTopStationListForTarget#get data from session" . $prefecture . "/" . $city);
+            $this->logger->info("getTopStationListForTarget#get data from session 0" . $prefecture . "/" . $city . "/target:" . $target);
             $stationsDesc = $this->session->get(SearchController::ALL_COUNTRY . $target . "topStation", NULL);
             if ($stationsDesc == NULL) {
-
-                $this->logger->info("getTopStationListForTarget#create data for session");
-
+                $this->logger->info("getTopStationListForTarget#create data for session 1");
                 $stationQuery = "select near_station, price0, concat('¥', FORMAT(price0,0)) as price_jp, concat('¥', FORMAT(round(price0*3.305785), 0)) as price_tubo, FORMAT(100*(price0-price1)/price1, 1) as rate from " . $target ." where price1 <> 0 group by near_station order by price0";
                 //The top 10 stations
                 $stationsDesc = array();
